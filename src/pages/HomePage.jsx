@@ -4,8 +4,8 @@ import PosterCard from '../components/PosterCard'
 const HomePage = () => {
     return (
         <div className='col-12'>
-            <h1>I poster più Belli che ci siano</h1>
-            <div className="row gy-4">
+            <h1>NavBar da inserire</h1>
+            <div className="row gy-4 p-3">
                 <PosterCard />
             </div>
         </div>
