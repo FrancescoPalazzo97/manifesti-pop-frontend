@@ -8,7 +8,7 @@ function App() {
     <GlobalProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<DefaultLayout />}>
+          <Route element={<DefaultLayout />}>
             <Route index element={<HomePage />} />
           </Route>
         </Routes>
