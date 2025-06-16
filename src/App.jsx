@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DefaultLayout from "./layouts/DefaultLayout";
 import HomePage from "./pages/HomePage";
 import { GlobalProvider } from "./contexts/GlobalContext";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
