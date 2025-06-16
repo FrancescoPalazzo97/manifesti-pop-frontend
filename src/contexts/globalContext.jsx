@@ -1,11 +1,11 @@
-import { createContext, useState, useEffect, useContext, Children } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 const GlobalContext = createContext();
 
-const GlobalProvider = ({ Children }) => {
+const GlobalProvider = ({ children }) => {
 
     return <GlobalContext.Provider value={{}}>
-        {Children}
+        {children}
     </GlobalContext.Provider>
 }
 
