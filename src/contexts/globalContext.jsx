@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext, Children } from "react"
 
 const GlobalContext = createContext();
 
-const GlobalProvider = ({ childre }) => {
+const GlobalProvider = ({ Children }) => {
 
     return <GlobalContext.Provider value={{}}>
         {Children}
