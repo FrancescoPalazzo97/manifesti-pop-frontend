@@ -1,110 +1,38 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const PosterCard = () => {
+const PosterCard = ({ id, title, artist, size, price, image }) => {
+
+    const newSize = () => {
+        if (size === 'sm') {
+            return 'Small'
+        }
+        if (size === 'md') {
+            return 'Medium'
+        }
+        else (size === 'lg')
+        return 'Large'
+    }
+
     return (
         <>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
+            < Link to={`/product/${id}`} className='text-decoration-none'>
+                <div className="card h-100 w-100 d-flex flex-column">
+                    <div className="img-container">
+                        <img src={image} className="fix-img" alt={title} />
+                    </div>
+                    <div className="card-body text-center flex-grow-1 d-flex flex-column justify-content-between">
+                        <h5 className="card-title fw-bold">{title}</h5>
+                        <p className="card-text text-muted">{artist}</p>
+                        <p className="card-text text-muted">Taglia: {newSize()}</p>
+                        <p className="fw-bold"><strong>{price}€</strong></p>
                     </div>
                 </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow ">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-3">
-                <div className="card card border-dark shadow ">
-                    <img src="https://shop.ciaodiscotecaitaliana.com/cdn/shop/files/poster_mare_mare_luca_carboni_manifesto.jpg?v=1709800849"
-                        className="card-img-top"
-                        alt="Poster Mare Mare Luca Carboni" />
-                    <div className="card-body text-center">
-                        <h5 className="card-title fw-bold">Titolo Poster</h5>
-                        <p className="card-text text-muted">Artista - Dimensione</p>
-                        <p className="fw-bold text-primary">€XX,XX</p>
-                    </div>
-                </div>
-            </div>
-
-
-
+            </Link >
         </>
 
     )
 }
 
 export default PosterCard
+
