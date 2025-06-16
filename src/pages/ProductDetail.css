@@ -1,0 +1,20 @@
+/* Sfondo rosa pastello per tutta la pagina prodotto */
+.product-detail-container {
+  background-color: #fce4ec; /* rosa pastello */
+  min-height: 100vh;         
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* Bottone rosa personalizzato */
+.btn-rosa {
+  background-color: #e83e8c;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-rosa:hover {
+  background-color: #d63384;
+}
