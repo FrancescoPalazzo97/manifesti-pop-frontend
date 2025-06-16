@@ -1,0 +1,16 @@
+/* stile per le card in PosterCard.jsx */
+
+.img-container {
+    height: 800px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fix-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
