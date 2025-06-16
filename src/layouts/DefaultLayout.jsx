@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 const DefaultLayout = () => {
   return (
     <>
-      <main className="container">
+      <main className=".container-fluid">
         <div className="row">
           <Outlet />
         </div>
