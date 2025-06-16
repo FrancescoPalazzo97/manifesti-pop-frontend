@@ -10,6 +10,8 @@ function App() {
         <Routes>
           <Route element={<DefaultLayout />}>
             <Route index element={<HomePage />} />
+             <Route path="product" element={<ProductDetail />} /> {/* qui la rotta dettaglio prodotti */}
+            
           </Route>
         </Routes>
       </BrowserRouter>
