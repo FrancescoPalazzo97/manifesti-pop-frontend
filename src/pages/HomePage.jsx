@@ -35,6 +35,7 @@ const HomePage = () => {
                             size={poster.size}
                             price={poster.price}
                             image={poster.image_url}
+                            slug={poster.slug}
                         />
                     </div>
                 ))}
