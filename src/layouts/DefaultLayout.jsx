@@ -7,7 +7,7 @@ const DefaultLayout = () => {
   return (
     <>
       <Navbar />
-      <main className=".container-fluid">
+      <main className="container-fluid">
         <div className="row">
           <Outlet />
         </div>
