@@ -1,14 +1,17 @@
 import React from "react";
 import "./navbar.css";
+import { NavLink } from "react-router-dom";
 
 const navbar = () => {
   return (
     <>
       <nav className="d-flex justify-content-between align-items-center p-2 navbar-bg-color">
-        <div className="d-flex align-items-center">
-          <img src="/logo-header.png" alt="" className="img-size" />
-          <div className="ms-3 title-style">BoolShop</div>
-        </div>
+        <NavLink to="/" className="text-decoration-none text-white">
+          <div className="d-flex align-items-center">
+            <img src="/logo-header.png" alt="" className="img-size" />
+            <div className="ms-3 title-style">Manifesti Pop</div>
+          </div>
+        </NavLink>
         <div>
           <ul className="list-unstyled d-flex">
             <li className="mx-3">Home</li>
@@ -29,7 +32,7 @@ const navbar = () => {
               placeholder="Search"
               aria-label="Search"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-dark" type="submit">
               Search
             </button>
           </form>
