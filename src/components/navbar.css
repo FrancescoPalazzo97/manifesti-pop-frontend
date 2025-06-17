@@ -13,3 +13,7 @@ ul li {
 ul li a {
     color: black;
 }
+
+.navbar-bg-color {
+    background-color: #d13b3b;
+}
