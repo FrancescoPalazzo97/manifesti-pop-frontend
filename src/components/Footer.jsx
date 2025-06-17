@@ -1,4 +1,4 @@
-import React from "react";
+import Logo from "./Logo";
 
 const Footer = () => {
   return (
@@ -48,11 +48,12 @@ const Footer = () => {
             </ul>
           </div>
           <div className="col-3">
-            <img
+            <Logo where={`footer`} />
+            {/* <img
               className="img-fluid"
               src="/public/logo-manifesti-pop.png"
               alt="logo footer"
-            />
+            /> */}
           </div>
         </div>
       </footer>

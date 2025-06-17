@@ -1,7 +1,7 @@
 import "./navbar.css";
 import { NavLink } from "react-router-dom";
-//import { Navbar, Nav, Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { Navbar, Nav, Container, Form, FormControl, Button } from "react-bootstrap";
+import Logo from "./Logo";
 
 const navbar = () => {
 
@@ -44,12 +44,7 @@ const navbar = () => {
 
       <Navbar expand="lg" className="navbar-bg-color">
         <Container fluid>
-          <NavLink to="/" className="text-decoration-none text-white">
-            <div className="d-flex align-items-center">
-              <img src="/logo-header.png" alt="" className="img-size" />
-              <div className="ms-3 title-style">Manifesti Pop</div>
-            </div>
-          </NavLink>
+          <Logo where={`navbar`} />
 
           {/* Bottone toggle per dispositivi mobili */}
           <Navbar.Toggle aria-controls="navbarTogglerDemo02" />

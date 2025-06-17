@@ -3,8 +3,6 @@ import DiscountLabel from './DiscountLabel';
 
 const PosterCard = ({ poster }) => {
 
-    console.log(poster)
-
     const { title, artist, size, price, image_url, slug, discount } = poster;
 
     const newSize = () => {
