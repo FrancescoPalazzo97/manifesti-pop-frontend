@@ -57,8 +57,8 @@ const HomePage = () => {
             ) : (
                 <>
                     <div className="col-12">
-                        <div className="row py-5 px-3">
-                            <div className="col-12 trasparent-bg">
+                        <div className="row gy-4 p-3">
+                            <div className="col-12">
                                 <h2 className='fw-bold'>{mostSold.message}</h2>
                             </div>
                             <div className="col-12">
@@ -86,12 +86,14 @@ const HomePage = () => {
                                 >
                                     {mostSold.data.map(poster => (
                                         <SwiperSlide key={`most-sold-${poster.id}`}>
-                                            <PosterCard poster={poster} slider={true} />
+                                            <div className="col">
+                                                <PosterCard poster={poster} slider={true} />
+                                            </div>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
                             </div>
-                            <div className="col-12 trasparent-bg">
+                            <div className="col-12">
                                 <h2 className='fw-bold'>{mostRecent.message}</h2>
                             </div>
                             <div className="col-12">
@@ -119,7 +121,9 @@ const HomePage = () => {
                                 >
                                     {mostRecent.data.map(poster => (
                                         <SwiperSlide key={`most-recent-${poster.id}`}>
-                                            <PosterCard poster={poster} slider={true} />
+                                            <div className="col">
+                                                <PosterCard poster={poster} slider={true} />
+                                            </div>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
