@@ -1,46 +1,112 @@
-import React from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 import PosterCard from "../components/PosterCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 const HomePage = () => {
-    const [posters, setPosters] = useState([]);
+    const mostSoldAPI = `http://localhost:3000/posters/most-sold`
+    const mostRecentAPI = `http://localhost:3000/posters/most-recent`
+    // const [posters, setPosters] = useState([]);
+    const [mostSold, setMostsold] = useState([]);
+    const [mostRecent, setMostRecent] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const fetchPoster = () => {
-        axios
-            .get("http://localhost:3000/posters")
-            .then((resp) => {
-                setPosters(resp.data);
+    const getMostSold = () => {
+        axios.get(mostSoldAPI)
+            .then(res => {
+                setMostsold(res.data);
             })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+    }
+
+    const getMostRecent = () => {
+        axios.get(mostRecentAPI)
+            .then(res => {
+                setMostRecent(res.data);
+            })
+            .catch(err => {
+                console.log(`Errore: ${err}`)
+            })
+    }
 
     useEffect(() => {
-        fetchPoster();
+        getMostSold();
+        getMostRecent();
     }, []);
+
+    useEffect(() => {
+        if (mostRecent.length > 0 && mostSold.length > 0) {
+            setLoading(false)
+            console.log(mostSold, mostRecent)
+        }
+        console.log(mostSold, mostRecent)
+    }, [mostRecent, mostSold])
 
     return (
         <>
-            <div className="col-12 d-flex flex-column align-items-center justify-content-center text-center p-4 gap-3">
-                <h1 className="display-4">Manifesti POP</h1>
-                <h5 className="text-muted">
-                    I manifesti POP sono opere d'arte che celebrano la cultura popolare;
-                    questi manifesti catturano l'essenza della società contemporanea, per
-                    comunicare messaggi di critica sociale o semplicemente per celebrare
-                    la bellezza della vita quotidiana.
-                </h5>
-            </div>
-            <div className="col-12">
-                <div className="row gy-4 p-3 align-items-stretch">
-                    {posters.map(poster => (
-                        <div className="col-lg-3 col-md-6 col-sm-12" key={poster.id}>
-                            <PosterCard poster={poster} />
-                        </div>
-                    ))}
-                </div>
-            </div>
+            {loading ? (
+                <>Caricamento...</>
+            ) : (
+                <>
+                    <Swiper
+                        slidesPerView={4}
+                        spaceBetween={30}
+                        grabCursor={true}
+                        navigation={true}
+                        breakpoints={{
+                            320: {
+                                slidesPerView: 1,
+                                spaceBetween: 10,
+                            },
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 4,
+                                spaceBetween: 30,
+                            }
+                        }}
+                        modules={[Pagination, Navigation]}
+                        className="mySwiper"
+                    >
+                        {mostSold.map(poster => (
+                            <SwiperSlide key={`most-sold-${poster.id}`}>
+                                <PosterCard poster={poster} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+
+                    <Swiper
+                        slidesPerView={4}
+                        spaceBetween={30}
+                        grabCursor={true}
+                        navigation={true}
+                        breakpoints={{
+                            320: {
+                                slidesPerView: 1,
+                                spaceBetween: 10,
+                            },
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 4,
+                                spaceBetween: 30,
+                            }
+                        }}
+                        modules={[Pagination, Navigation]}
+                        className="mySwiper"
+                    >
+                        {mostRecent.map(poster => (
+                            <SwiperSlide key={`most-recent-${poster.id}`}>
+                                <PosterCard poster={poster} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </>
+            )}
         </>
     );
 };

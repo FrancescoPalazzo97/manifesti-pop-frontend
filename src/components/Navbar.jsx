@@ -60,8 +60,8 @@ const navbar = () => {
           {/* Menu collassabile */}
           <Navbar.Collapse id="navbarTogglerDemo02">
             <Nav className="me-auto mb-2 mb-lg-0 ms-lg-5">
-              {links.map(link => (
-                <NavLink to="" className="text-light nav-link">{link}</NavLink>
+              {links.map((link, i) => (
+                <NavLink key={`navlink-${i}`} to="" className="text-light nav-link">{link}</NavLink>
               ))}
             </Nav>
 
