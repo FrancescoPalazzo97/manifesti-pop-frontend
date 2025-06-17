@@ -1,4 +1,5 @@
 import Slider from "../components/Slider";
+import HeroSpace from "../components/HeroSpace";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -49,23 +50,25 @@ const HomePage = () => {
                 <>Caricamento...</>
             ) : (
                 <>
-                    <div className="col-12">
-                        <div className="row gy-4 p-3">
-                            <div className="col-12">
-                                <h2 className='fw-bold pt-5'>{mostSold.message}</h2>
-                            </div>
-                            <div className="col-12">
-                                <Slider postersData={mostSold.data} />
-                            </div>
-                            <div className="col-12">
-                                <h2 className='fw-bold'>{mostRecent.message}</h2>
-                            </div>
-                            <div className="col-12">
-                                <Slider postersData={mostRecent.data} />
-                            </div>
+                    <div className="row p-0">
+                        <div className="col-12 p-0">
+                            <HeroSpace />
                         </div>
                     </div>
-
+                    <div className="row gy-4 p-3">
+                        <div className="col-12">
+                            <h2 className='fw-bold pt-5'>{mostSold.message}</h2>
+                        </div>
+                        <div className="col-12">
+                            <Slider postersData={mostSold.data} />
+                        </div>
+                        <div className="col-12">
+                            <h2 className='fw-bold'>{mostRecent.message}</h2>
+                        </div>
+                        <div className="col-12">
+                            <Slider postersData={mostRecent.data} />
+                        </div>
+                    </div>
                 </>
             )}
         </>
