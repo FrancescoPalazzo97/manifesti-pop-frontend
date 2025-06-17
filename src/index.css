@@ -14,3 +14,12 @@
     width: 100%;
     object-fit: cover;
 }
+.bg-footer {
+    background-color: #d13b3b;
+};
+
+.logo-footer {
+    width: 400px;
+    height: 100px;
+}   
+
