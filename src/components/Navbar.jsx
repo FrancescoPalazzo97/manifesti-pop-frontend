@@ -5,6 +5,14 @@ import Logo from "./Logo";
 
 const navbar = () => {
 
+  const links = [
+    `Più recenti`,
+    `Più venduti`,
+    `Artisti`,
+    `Whishlist`,
+    (<i className="fa-solid fa-cart-shopping text-white"></i>)
+  ]
+
   return (
     <>
       {/* ------------------- LASCIO QUELLO PRECEDENTE ---------------------------------------------------*/}
@@ -52,11 +60,9 @@ const navbar = () => {
           {/* Menu collassabile */}
           <Navbar.Collapse id="navbarTogglerDemo02">
             <Nav className="me-auto mb-2 mb-lg-0 ms-lg-5">
-              <NavLink to="" className="text-light nav-link">Artisti</NavLink>
-              <NavLink to="" className="text-light nav-link">Whishlist</NavLink>
-              <NavLink to="" className="me-2 nav-link">
-                <i className="fa-solid fa-cart-shopping text-white"></i>
-              </NavLink>
+              {links.map(link => (
+                <NavLink to="" className="text-light nav-link">{link}</NavLink>
+              ))}
             </Nav>
 
             {/* Form di ricerca */}
