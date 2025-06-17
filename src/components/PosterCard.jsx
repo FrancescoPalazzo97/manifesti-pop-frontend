@@ -16,9 +16,9 @@ const PosterCard = ({ title, artist, size, price, image, slug }) => {
                     <img src={image} className="fix-img" alt={title} />
                 </div>
                 <div className="card-body text-center flex-grow-1 d-flex flex-column justify-content-between">
-                    <h5 className="card-title fw-bold">{title}</h5>
-                    <p className="card-text text-muted">{artist}</p>
-                    <p className="card-text text-muted">Taglia: {newSize()}</p>
+                    <h5 className="card-title fw-bold margin-card-text">{title}</h5>
+                    <p className="card-text text-muted margin-card-text">{artist}</p>
+                    <p className="card-text text-muted ">Taglia: {newSize()}</p>
                     <p className="fw-bold"><strong>{price}€</strong></p>
                 </div>
             </div>

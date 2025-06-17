@@ -25,18 +25,6 @@ body {
     object-fit: cover;
 }
 
-.bg-footer {
-    background-color: #d13b3b;
-}
-
-;
-
-.logo-footer {
-    width: 400px;
-    height: 100px;
-}
-
-
 .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -48,6 +36,21 @@ body {
 
 .margin-card-text {
     margin-bottom: 5px;
+}
+
+/* ------------------------------------------------------------------- */
+
+/* stiler per il footer */
+
+.bg-footer {
+    background-color: #d13b3b;
+}
+
+;
+
+.logo-footer {
+    width: 400px;
+    height: 100px;
 }
 
 /* ------------------------------------------------------------------- */
