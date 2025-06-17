@@ -1,13 +1,6 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import PosterCard from "../components/PosterCard";
+import Slider from "../components/Slider";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 
 const HomePage = () => {
     const mostSoldAPI = `http://localhost:3000/posters/most-sold`
@@ -59,74 +52,16 @@ const HomePage = () => {
                     <div className="col-12">
                         <div className="row gy-4 p-3">
                             <div className="col-12">
-                                <h2 className='fw-bold'>{mostSold.message}</h2>
+                                <h2 className='fw-bold pt-5'>{mostSold.message}</h2>
                             </div>
                             <div className="col-12">
-                                <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={30}
-                                    grabCursor={true}
-                                    navigation={true}
-                                    breakpoints={{
-                                        320: {
-                                            slidesPerView: 1,
-                                            spaceBetween: 10,
-                                        },
-                                        640: {
-                                            slidesPerView: 2,
-                                            spaceBetween: 20,
-                                        },
-                                        768: {
-                                            slidesPerView: 4,
-                                            spaceBetween: 30,
-                                        }
-                                    }}
-                                    modules={[Pagination, Navigation]}
-                                    className="mySwiper"
-                                >
-                                    {mostSold.data.map(poster => (
-                                        <SwiperSlide key={`most-sold-${poster.id}`}>
-                                            <div className="col">
-                                                <PosterCard poster={poster} slider={true} />
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
+                                <Slider postersData={mostSold.data} />
                             </div>
                             <div className="col-12">
                                 <h2 className='fw-bold'>{mostRecent.message}</h2>
                             </div>
                             <div className="col-12">
-                                <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={30}
-                                    grabCursor={true}
-                                    navigation={true}
-                                    breakpoints={{
-                                        320: {
-                                            slidesPerView: 1,
-                                            spaceBetween: 10,
-                                        },
-                                        640: {
-                                            slidesPerView: 2,
-                                            spaceBetween: 20,
-                                        },
-                                        768: {
-                                            slidesPerView: 4,
-                                            spaceBetween: 30,
-                                        }
-                                    }}
-                                    modules={[Pagination, Navigation]}
-                                    className="mySwiper"
-                                >
-                                    {mostRecent.data.map(poster => (
-                                        <SwiperSlide key={`most-recent-${poster.id}`}>
-                                            <div className="col">
-                                                <PosterCard poster={poster} slider={true} />
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
+                                <Slider postersData={mostRecent.data} />
                             </div>
                         </div>
                     </div>
