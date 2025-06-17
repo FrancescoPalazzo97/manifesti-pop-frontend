@@ -1,6 +1,5 @@
 import React from 'react'
 import PosterCard from '../components/PosterCard'
-import Navbar from '../components/Navbar'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -27,7 +26,6 @@ const HomePage = () => {
 
     return (
         <div className='col-12'>
-            <Navbar />
             <div className="row gy-4 p-3 align-items-stretch">
                 {posters.map((poster) => (
                     <div className="col-3 " key={poster.id}>
