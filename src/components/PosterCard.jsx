@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const PosterCard = ({ id, title, artist, size, price, image }) => {
+const PosterCard = ({ id, title, artist, size, price, image, slug }) => {
 
     const newSize = () => {
         if (size === 'sm') {
@@ -16,7 +16,7 @@ const PosterCard = ({ id, title, artist, size, price, image }) => {
 
     return (
         <>
-            < Link to={`/product/${id}`} className='text-decoration-none'>
+            < Link to={`/product/${slug}`} className='text-decoration-none'>
                 <div className="card h-100 w-100 d-flex flex-column">
                     <div className="img-container">
                         <img src={image} className="fix-img" alt={title} />
