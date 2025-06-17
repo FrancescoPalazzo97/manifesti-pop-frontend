@@ -5,17 +5,13 @@
 }
 
 .text-rosa {
-  color: #d63384;
+  color: #d13b3b;
 }
 
-.btn-rosa {
+.btn-red {
   background-color: #d63384;
   color: white;
   border: none;
-}
-
-.btn-rosa:hover {
-  background-color: #c2186b;
 }
 
 .btn-pill {
