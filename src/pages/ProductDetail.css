@@ -1,22 +1,23 @@
-/* Sfondo rosa pastello per tutta la pagina prodotto */
 .product-detail-container {
-  background-color: #fce4ec; /* rosa pastello */
-  min-height: 100vh;         
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding: 2rem 0;
+  background-color: #fff8f3;
+  min-height: 100vh;
 }
 
-/* Bottone rosa personalizzato */
+.text-rosa {
+  color: #d63384;
+}
+
 .btn-rosa {
-  background-color: #e83e8c;
+  background-color: #d63384;
   color: white;
   border: none;
-  transition: background-color 0.3s ease;
-  font-weight: 600;
 }
 
 .btn-rosa:hover {
-  background-color: #d63384;
+  background-color: #c2186b;
 }
 
-
+.btn-pill {
+  border-radius: 50px !important;
+}
