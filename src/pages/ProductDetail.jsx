@@ -3,6 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetail.css';
 
+const newSize = (size) => {
+  if (size === 'sm') return 'Small';
+  if (size === 'md') return 'Medium';
+  if (size === 'lg') return 'Large';
+  return 'Sconosciuta';
+};
+
 function ProductDetail() {
   // Recupera lo slug dalla URL tramite React Router
   const { slug } = useParams();
@@ -10,7 +17,6 @@ function ProductDetail() {
   // Stati per il prodotto, le recensioni, e la taglia selezionata
   const [prodotto, setProdotto] = useState(null);
   const [recensioni, setRecensioni] = useState([]);
-  const [tagliaSelezionata, setTagliaSelezionata] = useState(null);
 
   // Effetto che si attiva al cambio dello slug
   useEffect(() => {
@@ -35,7 +41,8 @@ function ProductDetail() {
           slug: dati.slug,
           disponibile: dati.available,
           stock: dati.stock_quantity,
-          artista: dati.artist
+          artista: dati.artist,
+          taglia: newSize(dati.size)
         };
 
         setProdotto(prodottoAdattato);
@@ -46,13 +53,11 @@ function ProductDetail() {
       });
   }, [slug]);
 
+
   // Mostra un messaggio di caricamento se il prodotto non è ancora pronto
   if (!prodotto) {
     return <div className="text-center mt-5">Caricamento in corso...</div>;
   }
-
-  // Opzioni di taglia disponibili 
-  const taglie = ["S", "M", "L"];
 
   return (
     <div className="product-detail-container">
@@ -82,22 +87,11 @@ function ProductDetail() {
 
             {/* Selettore taglia */}
             <div className="mb-3">
-              <strong>✨ Scegli la tua taglia:</strong>
-              <div className="d-flex gap-2 mt-2">
-                {taglie.map(taglia => (
-                  <button
-                    key={taglia}
-                    className={`btn btn-pill ${tagliaSelezionata === taglia ? 'btn-dark' : 'btn-outline-dark'}`}
-                    onClick={() => setTagliaSelezionata(taglia)}
-                  >
-                    {taglia}
-                  </button>
-                ))}
-              </div>
+              <strong>✨ Taglia Manifesto: {prodotto.taglia}</strong>
             </div>
 
             {/* Pulsanti azione */}
-            <button className="btn btn-rosa mt-4 w-100 shadow-sm">
+            <button className="btn btn-red mt-4 w-100 shadow-sm">
               🛒 Aggiungi al carrello
             </button>
             <button className="btn btn-outline-secondary mt-2 w-100">
