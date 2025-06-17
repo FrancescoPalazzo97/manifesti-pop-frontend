@@ -1,4 +1,14 @@
-/* stile per le card in PosterCard.jsx */
+/* font del sito */
+
+body {
+    font-family: "Poiret One", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* ------------------------------------------------------------------- */
+
+/* stile per le card in PosterCard.jsx/Homepage.jsx */
 
 .img-container {
     height: 800px;
@@ -14,3 +24,18 @@
     width: 100%;
     object-fit: cover;
 }
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0px 10px 20px rgba(0, 0, 0.5, 0.5);
+    transform: scale(1.02);
+}
+
+.margin-card-text {
+    margin-bottom: 5px;
+}
+
+/* ------------------------------------------------------------------- */
