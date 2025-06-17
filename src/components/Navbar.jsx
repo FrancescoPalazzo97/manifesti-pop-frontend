@@ -13,13 +13,13 @@ const navbar = () => {
           </div>
         </NavLink>
         <div>
-          <ul className="list-unstyled d-flex">
+          <ul className="list-unstyled text-white d-flex align-items-center m-0">
             <li className="mx-3">Home</li>
             <li className="mx-3">Artist</li>
             <li className="mx-3">Whishlist</li>
             <li className="mx-3">
               <a href="#" className="me-2">
-                <i className="fa-solid fa-cart-shopping "></i>
+                <i className="fa-solid fa-cart-shopping text-white"></i>
               </a>
             </li>
           </ul>
