@@ -4,7 +4,8 @@ import axios from "axios";
 const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
-  return <GlobalContext.Provider value={{}}>{children}</GlobalContext.Provider>;
+  const [filter, setFilter] = useState("");
+  return <GlobalContext.Provider value={{ filter, setFilter }}>{children}</GlobalContext.Provider>;
 };
 
 const useGlobalContext = () => {
