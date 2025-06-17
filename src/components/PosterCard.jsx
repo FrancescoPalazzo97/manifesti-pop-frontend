@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import DiscountLabel from './DiscountLabel';
 
-const PosterCard = ({ poster }) => {
+const PosterCard = ({ poster, slider }) => {
 
     const { title, artist, size, price, image_url, slug, discount } = poster;
 
@@ -19,7 +19,7 @@ const PosterCard = ({ poster }) => {
     }
 
     return (
-        <Link to={`/posters/${slug}`} className='text-decoration-none'>
+        <Link to={`/posters/${slug}`} className={`text-decoration-none`}>
             <div className="card d-flex flex-column position-relative">
                 <DiscountLabel discount={discount} />
                 <div className="img-container">

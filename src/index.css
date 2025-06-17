@@ -25,6 +25,11 @@ body {
     object-fit: cover;
 }
 
+.swiper-wrapper {
+    padding: 40px 0;
+    z-index: 1;
+}
+
 .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

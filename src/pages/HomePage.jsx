@@ -56,72 +56,77 @@ const HomePage = () => {
                 <>Caricamento...</>
             ) : (
                 <>
-                    <div className="col-12 mt-5">
-                        <h2 className='fw-bold'>{mostSold.message}</h2>
+                    <div className="col-12">
+                        <div className="row py-5 px-3">
+                            <div className="col-12 trasparent-bg">
+                                <h2 className='fw-bold'>{mostSold.message}</h2>
+                            </div>
+                            <div className="col-12">
+                                <Swiper
+                                    slidesPerView={4}
+                                    spaceBetween={30}
+                                    grabCursor={true}
+                                    navigation={true}
+                                    breakpoints={{
+                                        320: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 10,
+                                        },
+                                        640: {
+                                            slidesPerView: 2,
+                                            spaceBetween: 20,
+                                        },
+                                        768: {
+                                            slidesPerView: 4,
+                                            spaceBetween: 30,
+                                        }
+                                    }}
+                                    modules={[Pagination, Navigation]}
+                                    className="mySwiper"
+                                >
+                                    {mostSold.data.map(poster => (
+                                        <SwiperSlide key={`most-sold-${poster.id}`}>
+                                            <PosterCard poster={poster} slider={true} />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
+                            <div className="col-12 trasparent-bg">
+                                <h2 className='fw-bold'>{mostRecent.message}</h2>
+                            </div>
+                            <div className="col-12">
+                                <Swiper
+                                    slidesPerView={4}
+                                    spaceBetween={30}
+                                    grabCursor={true}
+                                    navigation={true}
+                                    breakpoints={{
+                                        320: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 10,
+                                        },
+                                        640: {
+                                            slidesPerView: 2,
+                                            spaceBetween: 20,
+                                        },
+                                        768: {
+                                            slidesPerView: 4,
+                                            spaceBetween: 30,
+                                        }
+                                    }}
+                                    modules={[Pagination, Navigation]}
+                                    className="mySwiper"
+                                >
+                                    {mostRecent.data.map(poster => (
+                                        <SwiperSlide key={`most-recent-${poster.id}`}>
+                                            <PosterCard poster={poster} slider={true} />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-12 py-5 px-5">
-                        <Swiper
-                            slidesPerView={4}
-                            spaceBetween={30}
-                            grabCursor={true}
-                            navigation={true}
-                            breakpoints={{
-                                320: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 10,
-                                },
-                                640: {
-                                    slidesPerView: 2,
-                                    spaceBetween: 20,
-                                },
-                                768: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 30,
-                                }
-                            }}
-                            modules={[Pagination, Navigation]}
-                            className="mySwiper"
-                        >
-                            {mostSold.data.map(poster => (
-                                <SwiperSlide key={`most-sold-${poster.id}`}>
-                                    <PosterCard poster={poster} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                    <div className="col-12 mt-5">
-                        <h2 className='fw-bold'>{mostRecent.message}</h2>
-                    </div>
-                    <div className="col-12 pt-5 px-5">
-                        <Swiper
-                            slidesPerView={4}
-                            spaceBetween={30}
-                            grabCursor={true}
-                            navigation={true}
-                            breakpoints={{
-                                320: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 10,
-                                },
-                                640: {
-                                    slidesPerView: 2,
-                                    spaceBetween: 20,
-                                },
-                                768: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 30,
-                                }
-                            }}
-                            modules={[Pagination, Navigation]}
-                            className="mySwiper"
-                        >
-                            {mostRecent.data.map(poster => (
-                                <SwiperSlide key={`most-recent-${poster.id}`}>
-                                    <PosterCard poster={poster} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+
                 </>
             )}
         </>
