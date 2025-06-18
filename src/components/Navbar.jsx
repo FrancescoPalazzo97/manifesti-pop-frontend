@@ -14,13 +14,18 @@ import { useGlobalContext } from "../contexts/GlobalContext";
 
 const navbar = () => {
   const links = [
-    `Più recenti`,
-    `Più venduti`,
-    `Artisti`,
-    `Whishlist`,
-    <NavLink to={`/cart`}>
-      <i className="fa-solid fa-cart-shopping text-white"></i>
-    </NavLink>,
+    {
+      to: "/posters-list",
+      content: <i className="text-white">Tutti i Manifesti</i>,
+    },
+    {
+      to: "/wishlist",
+      content: <i className="fa-solid fa-heart" style={{ color: "#ffffff" }}></i>,
+    },
+    {
+      to: "/cart",
+      content: <i className="fa-solid fa-cart-shopping text-white"></i>,
+    },
   ];
 
   const { filter, setFilter } = useGlobalContext();
@@ -80,30 +85,16 @@ const navbar = () => {
               {links.map((link, i) => (
                 <NavLink
                   key={`navlink-${i}`}
-                  to=""
+                  to={link.to}
                   className="text-light nav-link"
                 >
-                  {link}
+                  {link.content}
                 </NavLink>
               ))}
             </Nav>
 
             {/* Form di ricerca */}
-            <Form className="d-flex" role="search" onSubmit={handleSubmit}>
-              <FormControl
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-                value={filter}
-                onChange={(e) => {
-                  setFilter(e.target.value);
-                }}
-              />
-              <Button className="btn btn-dark" type="submit">
-                Search
-              </Button>
-            </Form>
+
           </Navbar.Collapse>
         </Container>
       </Navbar>
