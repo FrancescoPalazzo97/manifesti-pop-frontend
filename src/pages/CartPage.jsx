@@ -84,7 +84,9 @@ const CartPage = () => {
               <h6>Totale</h6>
               <span>110.00&euro;</span>
             </div>
-            <button>acquista ora</button>
+            <button className="btn btn-outline-secondary mt-2 w-100">
+              💳 Acquista Ora
+            </button>
           </div>
         </div>
       </div>
