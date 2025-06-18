@@ -6,6 +6,7 @@ const LinkSection = ({ linkToSection }) => {
 
     return (
         <Link
+            className="fs-5"
             to={`#${id}`}
             onClick={(e) => {
                 e.preventDefault();
