@@ -2,6 +2,7 @@ import Slider from "../components/Slider";
 import HeroSpace from "../components/HeroSpace";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import LinkSection from "../components/LinkSection";
 
 const HomePage = () => {
     const mostSoldAPI = `http://localhost:3000/posters/most-sold`
@@ -10,6 +11,17 @@ const HomePage = () => {
     const [mostSold, setMostsold] = useState(null);
     const [mostRecent, setMostRecent] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const linksToSections = [
+        {
+            id: `most-sold-posters`,
+            text: `Poster più venduti`
+        },
+        {
+            id: `most-recent-posters`,
+            text: `Poster più recenti`
+        }
+    ]
 
     const getMostSold = () => {
         axios.get(mostSoldAPI)
@@ -55,14 +67,23 @@ const HomePage = () => {
                             <HeroSpace />
                         </div>
                     </div>
-                    <div className="row gy-4 p-3">
+                    <div className="row">
                         <div className="col-12">
+                            {linksToSections.map(linkToSection => (
+                                <LinkSection linkToSection={linkToSection} />
+                            ))}
+                        </div>
+                    </div>
+                    <div id="most-sold-posters" className="row gy-4 p-3">
+                        <div className="col-12 mt-5">
                             <h2 className='fw-bold pt-5'>{mostSold.message}</h2>
                         </div>
                         <div className="col-12">
                             <Slider postersData={mostSold.data} />
                         </div>
-                        <div className="col-12">
+                    </div>
+                    <div id="most-recent-posters" className="row gy-4 p-3">
+                        <div className="col-12 mt-5">
                             <h2 className='fw-bold'>{mostRecent.message}</h2>
                         </div>
                         <div className="col-12">
@@ -70,7 +91,8 @@ const HomePage = () => {
                         </div>
                     </div>
                 </>
-            )}
+            )
+            }
         </>
     );
 };
