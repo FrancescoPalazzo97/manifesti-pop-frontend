@@ -8,9 +8,7 @@ const DefaultLayout = () => {
     <>
       <Navbar />
       <main className="container-fluid">
-        <div className="row">
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
       <Footer />
     </>
