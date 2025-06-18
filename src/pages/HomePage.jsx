@@ -70,7 +70,10 @@ const HomePage = () => {
                     <div className="row">
                         <div className="col-12">
                             {linksToSections.map(linkToSection => (
-                                <LinkSection linkToSection={linkToSection} />
+                                <LinkSection
+                                    key={linkToSection.id}
+                                    linkToSection={linkToSection}
+                                />
                             ))}
                         </div>
                     </div>

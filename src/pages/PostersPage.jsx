@@ -1,6 +1,9 @@
 import { useGlobalContext } from "../contexts/GlobalContext";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import PosterCard from "../components/PosterCard";
 
-const HomePage = () => {
+const PostersPage = () => {
     const [posters, setPosters] = useState([]);
     const [filteredPoster, setFilteredPoster] = useState(posters);
     const { filter, setFilter } = useGlobalContext();
@@ -55,4 +58,6 @@ const HomePage = () => {
             </div>
         </>
     )
-}
+};
+
+export default PostersPage;
