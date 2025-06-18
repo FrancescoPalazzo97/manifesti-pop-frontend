@@ -3,6 +3,7 @@ import DefaultLayout from "./layouts/DefaultLayout";
 import HomePage from "./pages/HomePage";
 import { GlobalProvider } from "./contexts/GlobalContext";
 import ProductDetail from "./pages/ProductDetail";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -12,15 +13,11 @@ function App() {
           <Route element={<DefaultLayout />}>
             <Route index element={<HomePage />} />
             <Route path="/posters/:slug" element={<ProductDetail />} />
-
-
-
-            
+            <Route path="/cart" element={<CartPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
     </GlobalProvider>
-
   );
 }
 

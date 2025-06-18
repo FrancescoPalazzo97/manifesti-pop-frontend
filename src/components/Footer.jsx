@@ -5,7 +5,7 @@ const Footer = () => {
     <>
       <footer className="container-fluid bg-footer p-5">
         <div className="row d-flex justify-content-around text-white">
-          <div className="col-3">
+          <div className="col-3 d-none d-lg-block">
             <h4>CHI SIAMO</h4>
             <p>
               Manifesti Pop è uno spazio dedicato a chi ama collezionare
