@@ -1,27 +1,34 @@
 import React, { useState } from "react";
 import "./navbar.css";
-import { NavLink } from "react-router-dom";
-import { Navbar, Nav, Container, Form, FormControl, Button } from "react-bootstrap";
+import { Link, NavLink } from "react-router-dom";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Form,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import Logo from "./Logo";
 import { useGlobalContext } from "../contexts/GlobalContext";
 
-
 const navbar = () => {
-
   const links = [
     `Più recenti`,
     `Più venduti`,
     `Artisti`,
     `Whishlist`,
-    (<i className="fa-solid fa-cart-shopping text-white"></i>)
-  ]
+    <NavLink to={`/cart`}>
+      <i className="fa-solid fa-cart-shopping text-white"></i>
+    </NavLink>,
+  ];
 
   const { filter, setFilter } = useGlobalContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(filter);
-  }
+  };
 
   return (
     <>
@@ -71,7 +78,13 @@ const navbar = () => {
           <Navbar.Collapse id="navbarTogglerDemo02">
             <Nav className="me-auto mb-2 mb-lg-0 ms-lg-5">
               {links.map((link, i) => (
-                <NavLink key={`navlink-${i}`} to="" className="text-light nav-link">{link}</NavLink>
+                <NavLink
+                  key={`navlink-${i}`}
+                  to=""
+                  className="text-light nav-link"
+                >
+                  {link}
+                </NavLink>
               ))}
             </Nav>
 
@@ -83,21 +96,22 @@ const navbar = () => {
                 className="me-2"
                 aria-label="Search"
                 value={filter}
-                onChange={e => { setFilter(e.target.value) }}
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
               />
-              <Button className="btn btn-dark" type="submit">Search</Button>
+              <Button className="btn btn-dark" type="submit">
+                Search
+              </Button>
             </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>
     </>
   );
-}
-
+};
 
 // const navbar = () => {
-
-
 
 //     return (
 //         <>
