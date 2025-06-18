@@ -1,12 +1,22 @@
 import { useGlobalContext } from "../contexts/GlobalContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import PosterCard from "../components/PosterCard";
 
+
+function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+
 const PostersPage = () => {
     const [posters, setPosters] = useState([]);
+    const [query, setQuery] = useState("");
     const [filteredPoster, setFilteredPoster] = useState(posters);
-    const { filter, setFilter } = useGlobalContext();
 
     const fetchPoster = () => {
         axios
@@ -24,14 +34,38 @@ const PostersPage = () => {
     }, []);
 
     useEffect(() => {
-        setFilteredPoster(
-            posters.filter((poster) => poster.title.toLowerCase().includes(filter.toLowerCase()))
-        )
-    }, [posters, filter]);
+        setFilteredPoster(posters);
+    }, [posters]);
+
+    const debouncedSearch = useRef(
+        debounce((value) => {
+            const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(value)}`;
+            axios
+                .get(url)
+                .then((res) => setFilteredPoster(res.data.data))
+                .catch((err) => console.error("Errore:", err));
+        }, 500)
+    ).current;
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (query == "") {
+            return setFilteredPoster(posters);
+        }
+
+        debouncedSearch(query); // attiva la funzione solo se non viene richiamata di nuovo entro 500ms
+    };
+
+    // useEffect(() => {
+    //     setFilteredPoster(
+    //         posters.filter((poster) => poster.title.toLowerCase().includes(filter.toLowerCase()))
+    //     )
+    // }, [posters, filter]);
 
 
     const empty = (array) => {
-        if (array.length == 0) return <p className="fs-2 fw-bold">😭Articolo non trovato😭</p>
+        if (array.length == 0) return <p>😭Articolo non trovato😭</p>
     }
 
     return (
@@ -44,6 +78,21 @@ const PostersPage = () => {
                     comunicare messaggi di critica sociale o semplicemente per celebrare
                     la bellezza della vita quotidiana.
                 </h5>
+
+            </div>
+
+            <form action="" className="d-flex justify-content-between px-4" onSubmit={handleSubmit}>
+                <div className="d-flex">
+                    <input type="text" className="me-2 p-2" style={{ borderRadius: '20px', border: "1px solid black" }} placeholder="Ricerca" value={query}
+                        onChange={(e) => setQuery(e.target.value)} />
+                    <button type="submit" className="btn btn-primary" style={{ borderRadius: "20px" }}>Cerca</button>
+                </div>
+                <div>
+
+                </div>
+            </form>
+
+            <div className="p-4 d-flex justify-content-center">
                 {empty(filteredPoster)}
             </div>
 
