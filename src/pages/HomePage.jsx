@@ -67,7 +67,7 @@ const HomePage = () => {
                             <HeroSpace />
                         </div>
                     </div>
-                    <div className="row">
+                    <div id="links-section" className="row">
                         <div className="col-12">
                             {linksToSections.map(linkToSection => (
                                 <LinkSection
@@ -77,7 +77,7 @@ const HomePage = () => {
                             ))}
                         </div>
                     </div>
-                    <div id="most-sold-posters" className="row gy-4 p-3">
+                    <div id="most-sold-posters" className="row p-3">
                         <div className="col-12 mt-5">
                             <h2 className='fw-bold pt-5'>{mostSold.message}</h2>
                         </div>

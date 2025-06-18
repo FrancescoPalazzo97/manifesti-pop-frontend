@@ -25,6 +25,22 @@ body {
     object-fit: cover;
 }
 
+#links-section {
+    text-align: center;
+    margin: 10px 0;
+}
+
+#links-section a {
+    text-decoration: none;
+    color: black;
+    margin-right: 1rem;
+}
+
+#links-section a:hover {
+    color: rgb(63, 63, 63);
+    text-decoration: underline;
+}
+
 .swiper-wrapper {
     padding: 40px 0;
 }
@@ -60,15 +76,17 @@ body {
 .button-hover:hover {
     transform: scale(1.09);
 }
+
 .button-hover {
     transition: transform 0.3s ease;
     cursor: pointer;
 }
 
-.card-price{
+.card-price {
     height: 250px;
 }
-.img-cart{
+
+.img-cart {
     height: 240px;
 }
 
