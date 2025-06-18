@@ -1,52 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import './ProductDetail.css';
+import React, { useEffect, useState } from 'react';  // Importo React e hook useEffect e useState
+import { useParams } from 'react-router-dom';       // Importo useParams per leggere parametri URL (slug)
+import axios from 'axios';                           // Importo axios per fare chiamate HTTP
+import './ProductDetail.css';                        // Importo CSS specifico per questo componente
+
+//  Importo il context globale per poter usare la wishlist e le sue funzioni
+import { useGlobalContext } from '../contexts/GlobalContext';
 
 function ProductDetail() {
-  // Recupera lo slug dalla URL tramite React Router
+  //  Estraggo lo slug dalla URL, es: /product/slug-del-prodotto
   const { slug } = useParams();
 
-  // Stati per il prodotto, le recensioni, e la taglia selezionata
+  //  Estraggo dal context la funzione addToWishlist per aggiungere un prodotto ai preferiti
+  const { addToWishlist } = useGlobalContext();
+
+  //  Stato locale per il prodotto, inizialmente null perché non caricato
   const [prodotto, setProdotto] = useState(null);
+  //  Stato locale per le recensioni, inizialmente array vuoto
   const [recensioni, setRecensioni] = useState([]);
 
+  //  Funzione helper che traduce i codici taglia in parole leggibili
   const newSize = (size) => {
     const sizes = {
-      sm: `Smal`,
-      md: `Medium`,
-      lg: `Large`
-    }
-    return sizes[size];
+      sm: 'Small',  // small
+      md: 'Medium', // medium
+      lg: 'Large',  // large
+    };
+    return sizes[size]; // restituisce la parola corrispondente
   };
 
+  //  Funzione helper per formattare il prezzo a due decimali (es. 10 -> 10.00)
   const productPrice = (num) => {
-    return parseFloat(num).toFixed(2)
-  }
+    return parseFloat(num).toFixed(2);
+  };
 
-  // Effetto che si attiva al cambio dello slug
+  //  useEffect: eseguito al montaggio del componente e ogni volta che cambia lo slug
   useEffect(() => {
+    // Controllo che lo slug esista
     if (!slug) {
-      console.warn("⚠️ Slug non disponibile");
-      return;
+      console.warn('⚠️ Slug non disponibile');
+      return; // esco se non ho lo slug
     }
 
-    // Effettua la richiesta al backend per ottenere i dettagli del poster
+    //  Chiamata GET con axios al backend per prendere i dati del prodotto tramite slug
     axios.get(`http://localhost:3000/posters/${slug}`)
       .then(response => {
-        setProdotto(response.data);
-        console.log("🎯 Dati ricevuti:", prodotto);
-        setRecensioni(dati.reviews || []);
+        const dati = response.data;        // estraggo i dati dalla risposta
+        setProdotto(dati);                 // aggiorno lo stato prodotto
+        setRecensioni(dati.reviews || []); // aggiorno recensioni, se non ci sono assegno array vuoto
       })
       .catch(error => {
-        console.error("❌ Errore nel caricamento dati:", error);
+        console.error('❌ Errore nel caricamento dati:', error);
       });
-  }, [slug]);
+  }, [slug]); // dipendenza: ogni volta che cambia slug, rifaccio la chiamata
 
-
-  // Mostra un messaggio di caricamento se il prodotto non è ancora pronto
+  //  Se prodotto non è ancora caricato, mostro un messaggio di caricamento semplice
   if (!prodotto) return <div className="text-center mt-5">Caricamento in corso...</div>;
 
+  //  Funzione chiamata al click sul bottone wishlist, aggiunge il prodotto ai preferiti tramite context
+  const handleAddToWishlist = () => {
+    addToWishlist(prodotto);
+  };
 
   return (
     <div className="row">
@@ -55,49 +68,124 @@ function ProductDetail() {
           <div className="container">
             <div className="row align-items-center g-5">
 
-              {/* Colonna immagine */}
+              {/*  Colonna immagine prodotto */}
               <div className="col-md-6 text-center">
                 <img
-                  src={prodotto.image_url}
-                  alt={prodotto.title}
-                  className="img-fluid rounded shadow-lg"
+                  src={prodotto.image_url}    // URL immagine prodotto
+                  alt={prodotto.title}        // Alt testo con titolo prodotto
+                  className="img-fluid rounded shadow-lg"  // stile bootstrap e ombra
                 />
               </div>
 
-              {/* Colonna dettagli prodotto */}
+              {/*  Colonna dettagli prodotto */}
               <div className="col-md-6">
-                <h1 className="mb-3 fw-bold text-rosa">{prodotto.title}</h1>
-                <h4 className="mb-3">€ {productPrice(prodotto.price)}</h4>
-                <p className="text-muted">{prodotto.description}</p>
-                <p><strong>Artista:</strong> {prodotto.artist}</p>
-                <p><strong>Disponibilità:</strong> {prodotto.stock_quantity} pezzi</p>
+                <h1 className="mb-3 fw-bold text-rosa">{prodotto.title}</h1> {/* Titolo */}
+                <h4 className="mb-3">€ {productPrice(prodotto.price)}</h4>  {/* Prezzo formattato */}
+                <p className="text-muted">{prodotto.description}</p>        {/* Descrizione */}
+                <p><strong>Artista:</strong> {prodotto.artist}</p>          {/* Artista */}
+                <p><strong>Disponibilità:</strong> {prodotto.stock_quantity} pezzi</p> {/* Stock */}
 
-                {/* Selettore taglia */}
+                {/*  Info taglia manifesto */}
                 <div className="mb-3">
                   <strong>✨ Taglia Manifesto: {newSize(prodotto.size)}</strong>
                 </div>
 
-                {/* Pulsanti azione */}
-                <button className="btn btn-red mt-4 w-100 shadow-sm">
-                  🛒 Aggiungi al carrello
-                </button>
-                <button className="btn btn-outline-secondary mt-2 w-100">
-                  💳 Scegli pagamento
-                </button>
+                {/*  Pulsanti azione con flexbox e gap */}
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  {/* Bottone rosso pieno Aggiungi al carrello */}
+                  <button
+                    className="btn"
+                    style={{
+                      flex: '1',                      // occupa uguale spazio
+                      backgroundColor: '#dc3545',    // rosso 
+                      color: 'white',
+                      border: 'none',
+                      padding: '10px 0',
+                      borderRadius: '6px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                      transition: 'background-color 0.3s ease',
+                    }}
+                    // Cambio colore al passaggio mouse
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#bb2d3b'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#dc3545'}
+                  >
+                    🛒 Aggiungi al carrello
+                  </button>
+
+                  {/* Bottone pagamento grigio chiaro con bordo arrotondato */}
+                  {/* <button
+                    className="btn"
+                    style={{
+                      flex: '1',
+                      backgroundColor: 'transparent',
+                      color: '#6c757d',              // grigio bootstrap
+                      border: '2px solid #6c757d',
+                      padding: '10px 0',
+                      borderRadius: '6px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.3s ease, color 0.3s ease',
+                    }}
+                    // Cambio colore e sfondo al passaggio mouse
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#6c757d';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#6c757d';
+                    }}
+                  >
+                    💳 Scegli pagamento
+                  </button> */}
+
+                  {/* Bottone wishlist giallo con bordo e hover */}
+                  <button
+                    onClick={handleAddToWishlist} // onClick aggiunge ai preferiti
+                    className="btn"
+                    style={{
+                      flex: '1',
+                      backgroundColor: 'transparent',
+                      color: '#ffc107',            // giallo 
+                      border: '2px solid #ffc107',
+                      padding: '10px 0',
+                      borderRadius: '6px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.3s ease, color 0.3s ease',
+                    }}
+                    // Cambio colore e sfondo al passaggio mouse
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#ffc107';
+                      e.currentTarget.style.color = '#212529';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#ffc107';
+                    }}
+                  >
+                    ⭐ Aggiungi ai preferiti
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Sezione recensioni */}
+            {/*  Sezione recensioni */}
             <div className="mt-5">
               <h3 className="mb-4">🗣️ Cosa dicono i fan?</h3>
+              {/* Se non ci sono recensioni mostro messaggio */}
               {recensioni.length === 0 ? (
                 <p className="text-muted">Nessuna recensione disponibile 😢</p>
               ) : (
+                // Mappo recensioni e le mostro in box con bordo e sfondo chiaro
                 recensioni.map((recensione, i) => (
                   <div key={i} className="border p-3 rounded mb-3 bg-light">
-                    <strong>{recensione.user_name || 'Utente Anonimo'}</strong>
-                    <p className="mb-1">⭐️ {recensione.vote}/5</p>
-                    <p className="mb-0 text-muted">{recensione.text}</p>
+                    <strong>{recensione.user_name || 'Utente Anonimo'}</strong> {/* Nome utente */}
+                    <p className="mb-1">⭐️ {recensione.vote}/5</p>            {/* Voto */}
+                    <p className="mb-0 text-muted">{recensione.text}</p>      {/* Testo recensione */}
+                    {/* Data formattata in italiano, se presente */}
                     {recensione.created_at && (
                       <small className="text-muted d-block mt-1">
                         {new Date(recensione.created_at).toLocaleDateString('it-IT')}

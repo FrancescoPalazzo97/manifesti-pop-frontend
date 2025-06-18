@@ -1,19 +1,47 @@
+/* Contenitore principale dettaglio prodotto */
 .product-detail-container {
-  padding: 2rem 0;
-  background-color: #fff8f3;
-  min-height: 100vh;
+  padding: 2rem 0; /* spazio verticale */
 }
 
+/* Colonna immagine - rende l'immagine responsiva, arrotondata e con ombra */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem; /* angoli arrotondati */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* ombra leggera */
+}
+
+/* Titolo prodotto in rosa con grassetto e margine */
 .text-rosa {
-  color: #d13b3b;
+  color: #d6336c; /* rosa intenso */
+  font-weight: 700;
 }
 
-.btn-red {
-  background-color: #d63384;
-  color: white;
-  border: none;
+/* Bottoni personalizzati possono anche stare qui, ma li ho fatti inline */
+
+/* Sezione recensioni */
+.mt-5 {
+  margin-top: 3rem;
 }
 
-.btn-pill {
-  border-radius: 50px !important;
+.border {
+  border: 1px solid #dee2e6; /* bordo grigio chiaro */
 }
+
+.p-3 {
+  padding: 1rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.bg-light {
+  background-color: #f8f9fa; /* sfondo molto chiaro */
+}
+
+.text-muted {
+  color: #6c757d; /* testo grigio */
+}
+
+
