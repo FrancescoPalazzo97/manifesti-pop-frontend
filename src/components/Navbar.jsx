@@ -13,20 +13,6 @@ import Logo from "./Logo";
 import { useGlobalContext } from "../contexts/GlobalContext";
 
 const navbar = () => {
-  const links = [
-    {
-      to: "/posters-list",
-      content: <i className="text-white">Tutti i Manifesti</i>,
-    },
-    {
-      to: "/wishlist",
-      content: <i className="fa-solid fa-heart" style={{ color: "#ffffff" }}></i>,
-    },
-    {
-      to: "/cart",
-      content: <i className="fa-solid fa-cart-shopping text-white"></i>,
-    },
-  ];
 
   const { filter, setFilter } = useGlobalContext();
 
@@ -72,8 +58,8 @@ const navbar = () => {
         </div>
       </nav> */}
 
-      <Navbar expand="lg" className="navbar-bg-color">
-        <Container fluid>
+      <Navbar expand="lg" className=" p-0 margin-navbar">
+        <Container fluid className=" navbar-bg-color navbar-fixed">
           <Logo where={`navbar`} />
 
           {/* Bottone toggle per dispositivi mobili */}
@@ -81,20 +67,30 @@ const navbar = () => {
 
           {/* Menu collassabile */}
           <Navbar.Collapse id="navbarTogglerDemo02">
-            <Nav className="me-auto mb-2 mb-lg-0 ms-lg-5">
-              {links.map((link, i) => (
-                <NavLink
-                  key={`navlink-${i}`}
-                  to={link.to}
-                  className="text-light nav-link"
-                >
-                  {link.content}
-                </NavLink>
-              ))}
+            {/* Nav sinistra */}
+            <Nav className="mb-2 mb-lg-0 ms-lg-5">
+              <NavLink to="/posters-list" className="text-light nav-link">
+                <i className="text-white">Tutti i Manifesti</i>
+              </NavLink>
             </Nav>
-
-            {/* Form di ricerca */}
-
+            {/* Nav destra */}
+            <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
+              <NavLink to="/wishlist" className="text-light nav-link">
+                <i className="fa-solid fa-heart" style={{ color: "#ffffff" }}></i>
+              </NavLink>
+              <NavLink to="/cart" className="text-light nav-link">
+                <i className="fa-solid fa-cart-shopping text-white"></i>
+              </NavLink>
+            </Nav>
+            {/* Form di ricerca (commentato) */}
+            {/* <FormControl
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            /> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>

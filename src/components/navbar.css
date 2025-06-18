@@ -17,3 +17,15 @@ ul li a {
 .navbar-bg-color {
     background-color: #d13b3b;
 }
+
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050;
+}
+
+.margin-navbar {
+    margin-bottom: 80px;
+}
