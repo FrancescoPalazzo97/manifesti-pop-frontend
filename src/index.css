@@ -123,3 +123,52 @@ footer {
 .border-card-cart {
     border-bottom: 1px solid grey !important;
 }
+
+/* ------------------ PosterPage ------------------------- */
+
+.form-position {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+select {
+    border: 1px solid #d13b3b;
+    border-radius: 20px;
+    background-color: transparent;
+
+}
+
+input[type="range"]::-moz-range-track {
+    height: 6px;
+    background: #d13b3b;
+    border-radius: 5px;
+}
+
+
+input[type="range"]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #d13b3b;
+    cursor: pointer;
+}
+
+.form-position input {
+    color: #d13b3b;
+}
+
+@media screen and (max-width: 900px) {
+    .form-position {
+        flex-direction: column;
+        gap: 20px;
+        max-width: 300px;
+        align-items: center;
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+    }
+}
