@@ -141,7 +141,7 @@ select {
 
 }
 
-label {
+.price label {
     width: 2rem;
 }
 

@@ -70,6 +70,9 @@ const CartPage = () => {
     citta: "",
   });
 
+  // Stato per mostrare/nascondere la form
+  const [mostraForm, setMostraForm] = useState(false);
+
   // Gestione cambi input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -230,75 +233,84 @@ const CartPage = () => {
                 <h6>Totale</h6>
                 <span>{total.toFixed(2)}&euro;</span>
               </div>
-              <button className="btn btn-outline-secondary mt-2 w-100">
+              <button
+                className="btn btn-outline-secondary mt-2 w-100"
+                onClick={() => setMostraForm(true)}
+                type="button"
+              >
                 💳 Acquista Ora
               </button>
             </div>
-            <form onSubmit={handleSubmit}>
-              <div className="my-3">
-                <label className="form-label">Nome e Cognome</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="nomeCompleto"
-                  placeholder="Inserisci nome e cognome"
-                  value={form.nomeCompleto}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="my-3">
-                <label className="form-label">Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  placeholder="Inserisci la tua mail"
-                  value={form.email}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Via</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="via"
-                  placeholder="ex. Via Roma"
-                  value={form.via}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Numero Civico</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="numeroCivico"
-                  placeholder="ex. 123"
-                  value={form.numeroCivico}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Città</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="citta"
-                  placeholder="ex. Milano"
-                  value={form.citta}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <button type="submit" className="btn btn-outline-secondary w-100">
-                🚀 Procedi all'acquisto
-              </button>
-            </form>
+            {mostraForm && (
+              <form onSubmit={handleSubmit}>
+                <div className="my-3">
+                  <label className="form-label">Nome e Cognome</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="nomeCompleto"
+                    placeholder="Inserisci nome e cognome"
+                    value={form.nomeCompleto}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="my-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    placeholder="Inserisci la tua mail"
+                    value={form.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Via</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="via"
+                    placeholder="ex. Via Roma"
+                    value={form.via}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Numero Civico</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="numeroCivico"
+                    placeholder="ex. 123"
+                    value={form.numeroCivico}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Città</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="citta"
+                    placeholder="ex. Milano"
+                    value={form.citta}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-outline-secondary w-100"
+                >
+                  🚀 Procedi all'acquisto
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
