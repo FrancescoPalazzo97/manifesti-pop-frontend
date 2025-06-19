@@ -32,12 +32,9 @@ const CartPage = () => {
     }));
   };
 
-
-
-
   const calculateSubtotal = () => {
     return cart.reduce((acc, poster) => {
-      return acc + (poster.price * (quantities[poster.id] || 1));
+      return acc + poster.price * (quantities[poster.id] || 1);
     }, 0);
   };
 
@@ -63,14 +60,17 @@ const CartPage = () => {
       {cart.length === 0 ? (
         <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
       ) : (
-        <div className="row gx-5">
+        <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
               const quantity = quantities[poster.id] || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
               return (
-                <div key={poster.id} className="card border-card-cart border-0 rounded-0 py-4">
+                <div
+                  key={poster.id}
+                  className="card border-card-cart border-0 rounded-0 pb-4"
+                >
                   <div className="row g-0">
                     <div className="col-md-4 col-sm-4">
                       <img
@@ -82,11 +82,14 @@ const CartPage = () => {
                     <div className="col-md-8 col-sm-8 position-relative">
                       <div className="card-body">
                         <h2 className="card-title">{poster.title}</h2>
-                        <p className="card-text mt-4">Prezzo: {poster.price}€</p>
+                        <p className="card-text mt-4">
+                          Prezzo: {poster.price}€
+                        </p>
                         <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                           <button
-                            className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
-                              }`}
+                            className={`border-0 bg-white ${
+                              isMinusDisabled ? "disabled-class" : ""
+                            }`}
                             disabled={isMinusDisabled}
                             onClick={() => handleMinus(poster.id)}
                           >
@@ -96,12 +99,20 @@ const CartPage = () => {
                               <i className="fa-solid fa-minus text-danger button-hover"></i>
                             )}
                           </button>
-                          <span style={{ width: '40px' }} className="text-center">{quantity}</span>
+                          <span
+                            style={{ width: "40px" }}
+                            className="text-center"
+                          >
+                            {quantity}
+                          </span>
                           {console.log(quantity)}
                           <button
-                            onClick={() => handlePlus(poster.id, poster.stock_quantity)}
-                            className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
-                              }`}
+                            onClick={() =>
+                              handlePlus(poster.id, poster.stock_quantity)
+                            }
+                            className={`border-0 bg-white ${
+                              isPlusDisabled ? "disabled-class" : ""
+                            }`}
                             disabled={isPlusDisabled}
                           >
                             {isPlusDisabled ? (
