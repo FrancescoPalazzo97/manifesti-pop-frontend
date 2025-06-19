@@ -29,3 +29,24 @@ ul li a {
 .margin-navbar {
     margin-bottom: 80px;
 }
+
+/* Effetto hover sulle icone (cuore e carrello) */
+.icon-hover i {
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.icon-hover:hover i {
+  transform: scale(1.2);
+  color: #ffe600;
+  cursor: pointer;
+}
+
+.nav-link i {
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: inline-block;
+}
+
+.nav-link:hover i {
+  transform: scale(1.1); /* ingrandisce leggermente */
+  color: #ffcc00; /* colore evidenziato  */
+}

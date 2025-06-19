@@ -70,17 +70,18 @@ const navbar = () => {
             {/* Nav sinistra */}
             <Nav className="mb-2 mb-lg-0 ms-lg-5">
               <NavLink to="/posters-list" className="text-light nav-link">
-                <i className="text-white">Tutti i Manifesti</i>
+                <i className="text-white ">Tutti i Manifesti</i>
               </NavLink>
             </Nav>
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
-              <NavLink to="/wishlist" className="text-light nav-link">
-                <i className="fa-solid fa-heart" style={{ color: "#ffffff" }}></i>
+              <NavLink to="/wishlist" className="text-light nav-link icon-hover">
+              <i className="fa-solid fa-heart"></i>
               </NavLink>
-              <NavLink to="/cart" className="text-light nav-link">
-                <i className="fa-solid fa-cart-shopping text-white"></i>
+              <NavLink to="/cart" className="text-light nav-link icon-hover">
+              <i className="fa-solid fa-cart-shopping"></i>
               </NavLink>
+
             </Nav>
             {/* Form di ricerca (commentato) */}
             {/* <FormControl
