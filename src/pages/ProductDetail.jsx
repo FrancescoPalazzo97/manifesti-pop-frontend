@@ -174,7 +174,7 @@ function ProductDetail() {
 
             {/*  Sezione recensioni */}
             <div className="mt-5">
-              <h3 className="mb-4">🗣️ Cosa dicono i fan?</h3>
+              <h3 className="mb-4"> Cosa dicono i fan?</h3>
               {/* Se non ci sono recensioni mostro messaggio */}
               {recensioni.length === 0 ? (
                 <p className="text-muted">Nessuna recensione disponibile 😢</p>
