@@ -54,23 +54,38 @@ ul li a {
   position: relative; /* serve per contenere elementi posizionati assolutamente dentro */
 }
 
+
+
 .cart-badge {
   position: absolute;
   top: -6px;
   right: -10px;
-  background-color: #ffffff; /* giallo brillante */
+
+  background-color: #ffffff; /* sfondo bianco */
   border: solid 1px black;
   color: #000;
-  border-radius: 50%;
-  padding: 2px 6px;
+
+  /* "pillola" dinamica */
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
   font-size: 12px;
   font-weight: bold;
+  line-height: 1;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 999px; /* cerchio width = height */
+
+  pointer-events: none;
 
   /* Disabilita qualsiasi interazione con l’elemento, quindi non riceve click o hover */
-  pointer-events: none; /* non interferisce con i click */
-
-    -webkit-user-select: none; /* Safari iOS */
+  -webkit-user-select: none; /* Safari iOS */
   -moz-user-select: none;    /* Firefox */
   -ms-user-select: none;     /* IE/Edge */
-  user-select: none;  
+  user-select: none;
 }
