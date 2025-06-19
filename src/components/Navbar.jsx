@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import Logo from "./Logo";
 import { useGlobalContext } from "../contexts/GlobalContext";
+import FreeShipment from "./FreeShipment";
 
 const NavbarComponent = () => {
   // cambiamo cartItems in cart, perché nel context si chiama 'cart'
@@ -88,7 +89,7 @@ const NavbarComponent = () => {
                 className="text-light nav-link icon-hover position-relative"
               >
                 <i className="fa-solid fa-cart-shopping"></i>
-                 {/*
+                {/*
                     // Mostra il badge numerico sopra l'icona del carrello solo se ci sono elementi nel carrello.
                     // cart.length indica quanti poster sono stati aggiunti.
                     // React aggiorna automaticamente questo numero quando cambia lo stato globale 'cart'.
@@ -112,6 +113,9 @@ const NavbarComponent = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <div className="banner-fixed">
+        <FreeShipment />
+      </div>
     </>
   );
 };
