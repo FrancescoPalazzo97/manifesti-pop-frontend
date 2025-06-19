@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const CartPage = () => {
   const { cart, removeFromCart } = useGlobalContext();
@@ -48,6 +50,47 @@ const CartPage = () => {
   }
 
   const total = subtotal + shipmentCost;
+
+  // Stato per la form address e dati utente
+  const [form, setForm] = useState({
+    nomeCompleto: "",
+    email: "",
+    via: "",
+    numeroCivico: "",
+    citta: "",
+  });
+
+  // Gestione cambi input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Gestione submit form
+  const handleSubmit = (e) => {
+    let array = {
+      name: form.nomeCompleto,
+      email: form.email,
+      address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
+      shipment_costs: shipmentCost,
+      posters: cart.map((poster) => ({
+        id: poster.id,
+        quantity: quantities[poster.id] || 1,
+      })),
+    };
+    e.preventDefault();
+    // Unifica nome e cognome
+    console.log("Dati ordine da inviare:", array);
+    axios
+      .post("http://localhost:3000/order", array)
+      .then((res) => {
+        alert("Ordine effettuato con successo!");
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error("Errore nell'invio dell'ordine:", err);
+      });
+  };
 
   return (
     <>
@@ -153,6 +196,71 @@ const CartPage = () => {
                 💳 Acquista Ora
               </button>
             </div>
+            <form onSubmit={handleSubmit}>
+              <div className="my-3">
+                <label className="form-label">Nome e Cognome</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="nomeCompleto"
+                  placeholder="Inserisci nome e cognome"
+                  value={form.nomeCompleto}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="my-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  placeholder="Inserisci la tua mail"
+                  value={form.email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Via</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="via"
+                  placeholder="ex. Via Roma"
+                  value={form.via}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Numero Civico</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="numeroCivico"
+                  placeholder="ex. 123"
+                  value={form.numeroCivico}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Città</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="citta"
+                  placeholder="ex. Milano"
+                  value={form.citta}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-outline-secondary w-100">
+                🚀 Procedi all'acquisto
+              </button>
+            </form>
           </div>
         </div>
       )}
