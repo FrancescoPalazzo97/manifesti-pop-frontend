@@ -55,12 +55,9 @@ const PostersPage = () => {
         <>
             <div className="col-12 d-flex flex-column align-items-center justify-content-center text-center p-4 gap-3">
                 <h1 className="display-4">Manifesti POP</h1>
-                <h5 className="text-muted">
-                    I manifesti POP sono opere d'arte che celebrano la cultura popolare;
-                    questi manifesti catturano l'essenza della società contemporanea, per
-                    comunicare messaggi di critica sociale o semplicemente per celebrare
-                    la bellezza della vita quotidiana.
-                </h5>
+                <h4 className="text-muted">
+                    Lista di tutti i Manifesti.
+                </h4>
             </div>
 
             <div className="px-4 form-container">
