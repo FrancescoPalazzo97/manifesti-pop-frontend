@@ -1,5 +1,6 @@
 /* font del sito */
 
+
 body {
     font-family: "Poiret One", sans-serif;
     font-weight: 900;
@@ -91,3 +92,19 @@ body {
 }
 
 /* ------------------------------------------------------------------- */
+
+/* stile per il carrello */
+
+.disable-class {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.disabled-icon {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.border-card-cart {
+    border-bottom: 1px solid grey !important;
+}

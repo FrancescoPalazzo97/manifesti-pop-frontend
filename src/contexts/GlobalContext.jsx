@@ -13,6 +13,22 @@ const GlobalProvider = ({ children }) => {
   //  Lista dei preferiti (wishlist)
   const [wishlist, setWishlist] = useState([]);
 
+  //lista i poster nel carrello
+  const [cart, setCart] = useState([]);
+
+  //funzione per aggiungere un poster al carrello
+  const addCart = (poster) => {
+    const isAlreadyIn = cart.find(item => item.id === poster.id);
+    if (!isAlreadyIn) {
+      setCart(prev => [...prev, poster]);
+    }
+  }
+
+  //funzione per rimuovere i poster dal carrello
+  const removeFromCart = (posterId) => {
+    setCart(prev => prev.filter(item => item.id !== posterId));
+  };
+
   // Funzione per aggiungere un poster ai preferiti
   const addToWishlist = (poster) => {
     const isAlreadyIn = wishlist.find(item => item.id === poster.id);
@@ -32,7 +48,10 @@ const GlobalProvider = ({ children }) => {
       setFilter,
       wishlist,
       addToWishlist,
-      removeFromWishlist
+      removeFromWishlist,
+      cart,
+      addCart,
+      removeFromCart,
     }}>
       {children}
     </GlobalContext.Provider>
