@@ -139,20 +139,53 @@ select {
 
 }
 
-input[type="range"]::-moz-range-track {
-    height: 6px;
-    background: #d13b3b;
-    border-radius: 5px;
+label {
+    width: 2rem;
 }
 
+.custom-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #ccc;
+    border-radius: 4px;
+    outline: none;
+}
 
-input[type="range"]::-moz-range-thumb {
-    height: 16px;
-    width: 16px;
+/* Track */
+.custom-range::-webkit-slider-runnable-track {
+    background: #d13b3b;
+    /* colore del binario */
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* Thumb */
+.custom-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #d13b3b;
+    /* colore del pallino */
     border-radius: 50%;
-    background: #fff;
-    border: 2px solid #d13b3b;
     cursor: pointer;
+    margin-top: -6px;
+}
+
+.custom-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #d13b3b;
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.custom-range::-moz-range-track {
+    background: #d13b3b;
+    height: 8px;
+    border-radius: 4px;
 }
 
 .form-position input {
