@@ -1,8 +1,6 @@
-import { useGlobalContext } from "../contexts/GlobalContext";
-import { useState, useEffect, useRef, use } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import PosterCard from "../components/PosterCard";
-
 
 function debounce(func, delay) {
     let timeout;
@@ -12,18 +10,18 @@ function debounce(func, delay) {
     };
 }
 
-
 const PostersPage = () => {
     const [posters, setPosters] = useState([]);
     const [query, setQuery] = useState("");
-    const [filteredPoster, setFilteredPoster] = useState(posters);
-    const [maxPrice, setMaxPrice] = useState(100);
+    const [filteredPoster, setFilteredPoster] = useState([]);
+    const [maxPrice, setMaxPrice] = useState(200);
 
     const fetchPoster = () => {
         axios
             .get("http://localhost:3000/posters")
             .then((resp) => {
                 setPosters(resp.data);
+                setFilteredPoster(resp.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -33,10 +31,6 @@ const PostersPage = () => {
     useEffect(() => {
         fetchPoster();
     }, []);
-
-    useEffect(() => {
-        setFilteredPoster(posters);
-    }, [posters]);
 
     const debouncedSearch = useRef(
         debounce((value, priceValue) => {
@@ -48,26 +42,10 @@ const PostersPage = () => {
         }, 500)
     ).current;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (query == "") {
-            return setFilteredPoster(posters);
-        }
-
-        debouncedSearch(query, maxPrice); // attiva la funzione solo se non viene richiamata di nuovo entro 500ms
-    };
-
-    // useEffect(() => {
-    //     setFilteredPoster(
-    //         posters.filter((poster) => poster.title.toLowerCase().includes(filter.toLowerCase()))
-    //     )
-    // }, [posters, filter]);
-
-
-    const empty = (array) => {
-        if (array.length == 0) return <p>😭Articolo non trovato😭</p>
-    }
+    useEffect(() => {
+        const term = query.trim(); // oppure "all" se il backend lo richiede
+        debouncedSearch(term, maxPrice);
+    }, [query, maxPrice]);
 
     return (
         <>
@@ -79,10 +57,9 @@ const PostersPage = () => {
                     comunicare messaggi di critica sociale o semplicemente per celebrare
                     la bellezza della vita quotidiana.
                 </h5>
-
             </div>
 
-            <form action="" className="d-flex flex-column px-4" onSubmit={handleSubmit}>
+            <div className="px-4">
                 <div className="d-flex justify-content-between mb-3">
                     <input
                         type="text"
@@ -94,30 +71,26 @@ const PostersPage = () => {
                     />
 
                     <div className="d-flex align-items-center">
-
+                        <label htmlFor="price" className="me-3">Prezzo massimo: {maxPrice}€</label>
                         <input
                             type="range"
                             id="price"
                             min={0}
-                            max={100}
+                            max={200}
                             step={1}
                             value={maxPrice}
-                            onChange={(e) => setMaxPrice((e.target.value))}
+                            onChange={(e) => setMaxPrice(parseInt(e.target.value))}
                         />
-                        <label htmlFor="price" className="ms-3">Prezzo massimo: {maxPrice}€</label>
+
                     </div>
-
-
-                    <input type="text" name="" id="" />
                 </div>
-                <div className="text-center">
-                    <button type="submit" className="btn btn-primary" style={{ borderRadius: "20px" }}>Cerca</button>
-                </div>
-            </form>
-
-            <div className="p-4 d-flex justify-content-center">
-                {empty(filteredPoster)}
             </div>
+
+            {filteredPoster.length === 0 && (
+                <div className="px-4 d-flex justify-content-center">
+                    <p>😭 Articolo non trovato 😭</p>
+                </div>
+            )}
 
             <div className="col-12">
                 <div className="row gy-4 p-3 align-items-stretch">
@@ -129,7 +102,7 @@ const PostersPage = () => {
                 </div>
             </div>
         </>
-    )
+    );
 };
 
 export default PostersPage;
