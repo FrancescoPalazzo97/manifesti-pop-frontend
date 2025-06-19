@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import "./navbar.css";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Navbar,
   Nav,
   Container,
-  Form,
-  FormControl,
-  Button,
 } from "react-bootstrap";
 import Logo from "./Logo";
 import { useGlobalContext } from "../contexts/GlobalContext";
 
-const navbar = () => {
+const NavbarComponent = () => {
+  // cambiamo cartItems in cart, perché nel context si chiama 'cart'
+  // Qui usiamo la funzione useGlobalContext() per accedere allo stato globale condiviso.
+  // Con il destructuring facciamo:
+  // - filter: la stringa usata come filtro di ricerca,
+  // - setFilter: la funzione per aggiornare quel filtro,
+  // - cart: l'array che contiene i poster aggiunti al carrello.
+  //  'cart' perché è il nome esatto usato nel context globale.
 
-  const { filter, setFilter } = useGlobalContext();
+  const { filter, setFilter, cart } = useGlobalContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,13 +80,26 @@ const navbar = () => {
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
               <NavLink to="/wishlist" className="text-light nav-link icon-hover">
-              <i className="fa-solid fa-heart"></i>
-              </NavLink>
-              <NavLink to="/cart" className="text-light nav-link icon-hover">
-              <i className="fa-solid fa-cart-shopping"></i>
+                <i className="fa-solid fa-heart"></i>
               </NavLink>
 
+              <NavLink
+                to="/cart"
+                className="text-light nav-link icon-hover position-relative"
+              >
+                <i className="fa-solid fa-cart-shopping"></i>
+                 {/*
+                    // Mostra il badge numerico sopra l'icona del carrello solo se ci sono elementi nel carrello.
+                    // cart.length indica quanti poster sono stati aggiunti.
+                    // React aggiorna automaticamente questo numero quando cambia lo stato globale 'cart'.
+                    // Il badge è stilizzato in CSS per apparire come un piccolo cerchio rosso in alto a destra.
+                */}
+                {cart && cart.length > 0 && (
+                  <span className="cart-badge">{cart.length}</span>
+                )}
+              </NavLink>
             </Nav>
+
             {/* Form di ricerca (commentato) */}
             {/* <FormControl
               type="search"
@@ -99,46 +116,4 @@ const navbar = () => {
   );
 };
 
-// const navbar = () => {
-
-//     return (
-//         <>
-//             <nav className="d-flex justify-content-between align-items-center p-2 navbar-bg-color">
-//                 <NavLink to="/" className="text-decoration-none text-white">
-//                     <div className="d-flex align-items-center">
-//                         <img src="/logo-header.png" alt="" className="img-size" />
-//                         <div className="ms-3 title-style">Manifesti Pop</div>
-//                     </div>
-//                 </NavLink>
-//                 <div>
-//                     <ul className="list-unstyled text-white d-flex align-items-center m-0">
-//                         <li className="mx-3">Home</li>
-//                         <li className="mx-3">Artist</li>
-//                         <li className="mx-3">Whishlist</li>
-//                         <li className="mx-3">
-//                             <a href="#" className="me-2">
-//                                 <i className="fa-solid fa-cart-shopping text-white"></i>
-//                             </a>
-//                         </li>
-//                     </ul>
-//                 </div>
-//                 <div className="d-flex align-items-center">
-//                     <form className="d-flex" role="search" >
-//                         <input
-//                             className="form-control me-2"
-//                             type="search"
-//                             placeholder="Search"
-//                             aria-label="Search"
-
-//                         />
-//                         <button className="btn btn-dark" type="submit">
-//                             Search
-//                         </button>
-//                     </form>
-//                 </div>
-//             </nav>
-//         </>
-//     );
-// };
-
-export default navbar;
+export default NavbarComponent;
