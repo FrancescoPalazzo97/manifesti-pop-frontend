@@ -19,14 +19,14 @@ const PosterCard = ({ poster, slider }) => {
 
   return (
     <Link to={`/posters/${slug}`} className={`text-decoration-none`}>
-      <div className="card poster-card d-flex flex-column position-relative">
+      <div className="card poster-card d-flex flex-column position-relative border-0 rounded-4">
         <DiscountLabel discount={discount} />
-        <div className="img-container">
-          <img src={image_url} className="fix-img rounded-top-1" alt={title} />
+        <div className="img-container ">
+          <img src={image_url} className="fix-img rounded-4" alt={title} />
         </div>
-        <div className="card-body text-center d-flex flex-column justify-content-between">
+        <div className="card-body text-center d-flex flex-column justify-content-between mt-2 border-card">
           <h5 className="card-title fw-bold margin-card-text">{title}</h5>
-          <p className="card-text text-muted margin-card-text">{artist}</p>
+          <p className="card-text text-muted margin-card-text">Artista: {artist}</p>
           <p className="card-text text-muted ">Taglia: {newSize()}</p>
           {discountedPrice ? (
             <p>
