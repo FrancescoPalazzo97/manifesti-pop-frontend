@@ -22,7 +22,7 @@ const PosterCard = ({ poster, slider }) => {
       <div className="card poster-card d-flex flex-column position-relative">
         <DiscountLabel discount={discount} />
         <div className="img-container">
-          <img src={image_url} className="fix-img" alt={title} />
+          <img src={image_url} className="fix-img rounded-top-1" alt={title} />
         </div>
         <div className="card-body text-center d-flex flex-column justify-content-between">
           <h5 className="card-title fw-bold margin-card-text">{title}</h5>
