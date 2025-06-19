@@ -15,6 +15,7 @@ const PostersPage = () => {
     const [query, setQuery] = useState("");
     const [filteredPoster, setFilteredPoster] = useState([]);
     const [maxPrice, setMaxPrice] = useState(200);
+    const [size, setSize] = useState('');
 
     const fetchPoster = () => {
         axios
@@ -33,8 +34,11 @@ const PostersPage = () => {
     }, []);
 
     const debouncedSearch = useRef(
-        debounce((value, priceValue) => {
-            const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(value)}&minPrice=0&maxPrice=${priceValue}`;
+        debounce((value, priceValue, sizeValue) => {
+            let url = `http://localhost:3000/posters/search?term=${encodeURIComponent(value)}&minPrice=0&maxPrice=${priceValue}`;
+            if (sizeValue) {
+                url += `&size=${sizeValue}`;
+            }
             axios
                 .get(url)
                 .then((res) => setFilteredPoster(res.data.data))
@@ -44,8 +48,8 @@ const PostersPage = () => {
 
     useEffect(() => {
         const term = query.trim(); // oppure "all" se il backend lo richiede
-        debouncedSearch(term, maxPrice);
-    }, [query, maxPrice]);
+        debouncedSearch(term, maxPrice, size);
+    }, [query, maxPrice, size]);
 
     return (
         <>
@@ -69,6 +73,13 @@ const PostersPage = () => {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
+
+                    <select name="size" id="size" value={size} onChange={(e) => setSize(e.target.value)}>
+                        <option value="">Tutte le taglie</option>
+                        <option value="sm">sm</option>
+                        <option value="md">md</option>
+                        <option value="lg">lg</option>
+                    </select>
 
                     <div className="d-flex align-items-center">
                         <label htmlFor="price" className="me-3">Prezzo massimo: {maxPrice}€</label>
