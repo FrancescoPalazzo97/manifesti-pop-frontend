@@ -1,8 +1,10 @@
 import { useGlobalContext } from "../contexts/GlobalContext"; // Prendo dati e funzioni dal context globale
-import React from "react";
 
 const WishlistPage = () => {
-  const { wishlist, removeFromWishlist } = useGlobalContext(); // Estraggo wishlist e funzione per rimuovere
+
+  const { wishlistData } = useGlobalContext(); // Estraggo wishlist e funzione per rimuovere
+
+  const { wishlist, removeFromWishlist } = wishlistData;
 
   return (
     <>

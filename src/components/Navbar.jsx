@@ -7,6 +7,7 @@ import {
   Container,
 } from "react-bootstrap";
 import Logo from "./Logo";
+import Counter from "./Counter";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import FreeShipment from "./FreeShipment";
 
@@ -80,7 +81,8 @@ const NavbarComponent = () => {
             </Nav>
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
-              <NavLink to="/wishlist" className="text-light nav-link icon-hover">
+              <NavLink to="/wishlist" className="text-light nav-link icon-hover position-relative">
+                <Counter />
                 <i className="fa-solid fa-heart"></i>
               </NavLink>
 

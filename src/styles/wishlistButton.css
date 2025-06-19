@@ -1,0 +1,14 @@
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px
+}
+
+.wishlist-button-container i {
+    font-size: 30px;
+}
+
+.red {
+    color: red;
+}
