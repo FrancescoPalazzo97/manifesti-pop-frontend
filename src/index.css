@@ -139,6 +139,10 @@ select {
 
 }
 
+label {
+    width: 2rem;
+}
+
 .custom-range {
     -webkit-appearance: none;
     width: 100%;
