@@ -91,6 +91,21 @@ body {
     height: 240px;
 }
 
+/* Layout per sticky footer */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
 /* ------------------------------------------------------------------- */
 
 /* stile per il carrello */
