@@ -20,7 +20,7 @@ ul li a {
 
 .navbar-fixed {
   position: fixed;
-  top: 0;
+  top: 45px;
   left: 0;
   width: 100%;
   z-index: 1050;
@@ -28,14 +28,14 @@ ul li a {
 
 .banner-fixed {
   position: fixed;
-  top: 80px;
+  top: 0px;
   left: 0;
   width: 100%;
   z-index: 1050;
 }
 
 .margin-navbar {
-  margin-bottom: 134px;
+  margin-bottom: 125px;
 }
 
 /* Effetto hover sulle icone (cuore e carrello) */
