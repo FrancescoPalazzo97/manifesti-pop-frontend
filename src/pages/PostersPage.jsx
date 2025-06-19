@@ -63,26 +63,32 @@ const PostersPage = () => {
                 </h5>
             </div>
 
-            <div className="px-4">
-                <div className="d-flex justify-content-between mb-3">
+            <div className="px-4 form-container">
+                <div className="form-position">
                     <input
                         type="text"
                         className="me-2 p-2"
-                        style={{ borderRadius: '20px', border: "1px solid black" }}
+                        style={{ borderRadius: '20px', border: "1px solid #d13b3b" }}
                         placeholder="Ricerca"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
 
-                    <select name="size" id="size" value={size} onChange={(e) => setSize(e.target.value)}>
+                    <select
+                        name="size"
+                        id="size"
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}>
+
                         <option value="">Tutte le taglie</option>
                         <option value="sm">sm</option>
                         <option value="md">md</option>
                         <option value="lg">lg</option>
+
                     </select>
 
                     <div className="d-flex align-items-center">
-                        <label htmlFor="price" className="me-3">Prezzo massimo: {maxPrice}€</label>
+                        <label htmlFor="price" className="me-3">max: {maxPrice}€</label>
                         <input
                             type="range"
                             id="price"
