@@ -1,33 +1,33 @@
 .img-size {
-    width: 80px;
+  width: 80px;
 }
 
 .title-style {
-    font-size: 28px;
+  font-size: 28px;
 }
 
 ul li {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 ul li a {
-    color: black;
+  color: black;
 }
 
 .navbar-bg-color {
-    background-color: #d13b3b;
+  background-color: #d13b3b;
 }
 
 .navbar-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1050;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1050;
 }
 
 .margin-navbar {
-    margin-bottom: 80px;
+  margin-bottom: 80px;
 }
 
 /* Effetto hover sulle icone (cuore e carrello) */
@@ -37,7 +37,6 @@ ul li a {
 
 .icon-hover:hover i {
   transform: scale(1.2);
-  color: #ffe600;
   cursor: pointer;
 }
 
@@ -47,6 +46,6 @@ ul li a {
 }
 
 .nav-link:hover i {
-  transform: scale(1.1); /* ingrandisce leggermente */
-  color: #ffcc00; /* colore evidenziato  */
+  transform: scale(1.1);
+  /* ingrandisce leggermente */
 }
