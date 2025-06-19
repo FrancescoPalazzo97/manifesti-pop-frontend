@@ -55,34 +55,38 @@ const PostersPage = () => {
         <>
             <div className="col-12 d-flex flex-column align-items-center justify-content-center text-center p-4 gap-3">
                 <h1 className="display-4">Manifesti POP</h1>
-                <h5 className="text-muted">
-                    I manifesti POP sono opere d'arte che celebrano la cultura popolare;
-                    questi manifesti catturano l'essenza della società contemporanea, per
-                    comunicare messaggi di critica sociale o semplicemente per celebrare
-                    la bellezza della vita quotidiana.
-                </h5>
+                <h4 className="text-muted">
+                    Lista di tutti i Manifesti.
+                </h4>
             </div>
 
-            <div className="px-4">
-                <div className="d-flex justify-content-between mb-3">
+            <div className="px-4 form-container">
+                <div className="form-position">
                     <input
                         type="text"
                         className="me-2 p-2"
-                        style={{ borderRadius: '20px', border: "1px solid black" }}
+                        style={{ borderRadius: '20px', border: "1px solid #d13b3b" }}
                         placeholder="Ricerca"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
 
-                    <select name="size" id="size" value={size} onChange={(e) => setSize(e.target.value)}>
+                    <select
+                        name="size"
+                        id="size"
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}
+                    >
+
                         <option value="">Tutte le taglie</option>
                         <option value="sm">sm</option>
                         <option value="md">md</option>
                         <option value="lg">lg</option>
+
                     </select>
 
                     <div className="d-flex align-items-center">
-                        <label htmlFor="price" className="me-3">Prezzo massimo: {maxPrice}€</label>
+                        <label htmlFor="price" className="me-3">max: {maxPrice}€</label>
                         <input
                             type="range"
                             id="price"
@@ -91,6 +95,7 @@ const PostersPage = () => {
                             step={1}
                             value={maxPrice}
                             onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                            className="custom-range"
                         />
 
                     </div>

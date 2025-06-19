@@ -21,7 +21,14 @@
   font-weight: 700;
 }
 
-/* Bottoni personalizzati possono anche stare qui, ma li ho fatti inline */
+/* Feedback visivo per i bottoni quando vengono cliccati */
+/* Quando un bottone con classe btn viene premuto */
+.btn:active {
+  transform: scale(0.95); /* riduce il bottone del 5% */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* effetto incavo */
+  opacity: 0.8; /* leggera trasparenza */
+  transition: all 0.1s ease; /* transizione veloce e fluida */
+}
 
 /* Sezione recensioni */
 .mt-5 {

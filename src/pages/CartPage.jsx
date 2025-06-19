@@ -34,9 +34,19 @@ const CartPage = () => {
     }));
   };
 
+  // Funzione per calcolare il prezzo scontato di un singolo prodotto
+  // Se il prodotto ha uno sconto, applico la percentuale di sconto al prezzo originale
+  // Altrimenti ritorno il prezzo normale
+  const getDiscountedPrice = (poster) => {
+    if (!poster.discount) return poster.price;
+    return poster.price * (1 - poster.discount / 100);
+  };
+
   const calculateSubtotal = () => {
     return cart.reduce((acc, poster) => {
-      return acc + poster.price * (quantities[poster.id] || 1);
+      // Uso il prezzo scontato invece del prezzo normale per il calcolo
+      const finalPrice = getDiscountedPrice(poster);
+      return acc + finalPrice * (quantities[poster.id] || 1);
     }, 0);
   };
 
@@ -109,6 +119,10 @@ const CartPage = () => {
               const quantity = quantities[poster.id] || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
+
+              // Calcolo il prezzo finale (scontato o normale) per questo prodotto
+              const finalPrice = getDiscountedPrice(poster);
+
               return (
                 <div
                   key={poster.id}
@@ -125,8 +139,32 @@ const CartPage = () => {
                     <div className="col-md-8 col-sm-8 position-relative">
                       <div className="card-body">
                         <h2 className="card-title">{poster.title}</h2>
+
+                        {/* Mostro il prezzo con la stessa logica del ProductDetail */}
+                        {/* Se c'è uno sconto, mostro prezzo originale barrato e prezzo scontato */}
+                        {/* Altrimenti mostro solo il prezzo normale */}
                         <p className="card-text mt-4">
-                          Prezzo: {poster.price}€
+                          Prezzo:{" "}
+                          {poster.discount ? (
+                            <>
+                              <span
+                                style={{
+                                  textDecoration: "line-through",
+                                  color: "gray",
+                                  marginRight: "10px",
+                                }}
+                              >
+                                {poster.price}€
+                              </span>
+                              <span
+                                style={{ color: "red", fontWeight: "bold" }}
+                              >
+                                {finalPrice.toFixed(2)}€
+                              </span>
+                            </>
+                          ) : (
+                            <>{poster.price}€</>
+                          )}
                         </p>
                         <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                           <button

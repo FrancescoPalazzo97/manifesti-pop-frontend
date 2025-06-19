@@ -26,8 +26,16 @@ ul li a {
   z-index: 1050;
 }
 
+.banner-fixed {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  z-index: 1050;
+}
+
 .margin-navbar {
-  margin-bottom: 80px;
+  margin-bottom: 134px;
 }
 
 /* Effetto hover sulle icone (cuore e carrello) */
@@ -48,4 +56,54 @@ ul li a {
 .nav-link:hover i {
   transform: scale(1.1);
   /* ingrandisce leggermente */
+}
+
+.position-relative {
+  position: relative;
+  /* serve per contenere elementi posizionati assolutamente dentro */
+}
+
+
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+
+  background-color: #ffffff;
+  /* sfondo bianco */
+  border: solid 1px black;
+  color: #000;
+
+  /* "pillola" dinamica */
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 999px;
+  /* cerchio width = height */
+
+  pointer-events: none;
+
+  /* Disabilita qualsiasi interazione con l’elemento, quindi non riceve click o hover */
+  -webkit-user-select: none;
+  /* Safari iOS */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+}
+
+.freeshipment {
+  background-color: rgb(255, 255, 162);
 }
