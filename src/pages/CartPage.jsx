@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const CartPage = () => {
-  const { cart, removeFromCart } = useGlobalContext();
+  const { cart, removeFromCart, clearCart } = useGlobalContext();
 
   // Stato locale per le quantità di ogni prodotto
   const [quantities, setQuantities] = useState({});
@@ -73,6 +73,9 @@ const CartPage = () => {
   // Stato per mostrare/nascondere la form
   const [mostraForm, setMostraForm] = useState(false);
 
+  // Stato per mostrare messaggio di conferma ordine
+  const [ordineEffettuato, setOrdineEffettuato] = useState(false);
+
   // Gestione cambi input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -99,6 +102,16 @@ const CartPage = () => {
       .then((res) => {
         alert("Ordine effettuato con successo!");
         console.log(res.data);
+        clearCart(); // svuota il carrello
+        setForm({
+          nomeCompleto: "",
+          email: "",
+          via: "",
+          numeroCivico: "",
+          citta: "",
+        }); // resetta la form
+        setMostraForm(false); // nasconde la form
+        setOrdineEffettuato(true); // mostra messaggio conferma
       })
       .catch((err) => {
         console.error("Errore nell'invio dell'ordine:", err);
@@ -112,10 +125,16 @@ const CartPage = () => {
           <h1>Il tuo carrello</h1>
         </div>
       </div>
+      {/* Messaggio di conferma ordine */}
+      {ordineEffettuato && (
+        <div className="alert alert-success text-center my-5">
+          Ordine effettuato con successo! Grazie per l'acquisto.
+        </div>
+      )}
       {/* Se non ci sono poster nella wishlist mostro messaggio */}
-      {cart.length === 0 ? (
+      {!ordineEffettuato && cart.length === 0 ? (
         <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
-      ) : (
+      ) : !ordineEffettuato && (
         <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
@@ -171,9 +190,8 @@ const CartPage = () => {
                         </p>
                         <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                           <button
-                            className={`border-0 bg-white ${
-                              isMinusDisabled ? "disabled-class" : ""
-                            }`}
+                            className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
+                              }`}
                             disabled={isMinusDisabled}
                             onClick={() => handleMinus(poster.id)}
                           >
@@ -194,9 +212,8 @@ const CartPage = () => {
                             onClick={() =>
                               handlePlus(poster.id, poster.stock_quantity)
                             }
-                            className={`border-0 bg-white ${
-                              isPlusDisabled ? "disabled-class" : ""
-                            }`}
+                            className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
+                              }`}
                             disabled={isPlusDisabled}
                           >
                             {isPlusDisabled ? (

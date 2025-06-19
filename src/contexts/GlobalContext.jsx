@@ -29,6 +29,11 @@ const GlobalProvider = ({ children }) => {
     setCart(prev => prev.filter(item => item.id !== posterId));
   };
 
+  // Funzione per svuotare il carrello
+  const clearCart = () => {
+    setCart([]);
+  };
+
   // Funzione per aggiungere un poster ai preferiti
   const addToWishlist = (poster) => {
     const isAlreadyIn = wishlist.find(item => item.id === poster.id);
@@ -52,6 +57,7 @@ const GlobalProvider = ({ children }) => {
       cart,
       addCart,
       removeFromCart,
+      clearCart, // aggiunto qui
     }}>
       {children}
     </GlobalContext.Provider>
