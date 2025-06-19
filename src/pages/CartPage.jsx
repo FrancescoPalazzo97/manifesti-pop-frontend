@@ -61,7 +61,7 @@ const CartPage = () => {
       </div>
       {/* Se non ci sono poster nella wishlist mostro messaggio */}
       {cart.length === 0 ? (
-        <h2>Nessun Manifesto nel Carrello.</h2>
+        <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
       ) : (
         <div className="row gx-5">
           <div className="col-lg-6 col-sm-12">

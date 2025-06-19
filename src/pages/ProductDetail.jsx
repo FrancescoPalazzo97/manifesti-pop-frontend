@@ -154,8 +154,8 @@ function ProductDetail() {
                     style={{
                       flex: '1',
                       backgroundColor: 'transparent',
-                      color: '#ffc107',            // giallo 
-                      border: '2px solid #ffc107',
+                      color: '#212529',            // giallo 
+                      border: '2px solid #dc3545',
                       padding: '10px 0',
                       borderRadius: '6px',
                       fontWeight: '600',
@@ -164,15 +164,15 @@ function ProductDetail() {
                     }}
                     // Cambio colore e sfondo al passaggio mouse
                     onMouseEnter={e => {
-                      e.currentTarget.style.backgroundColor = '#ffc107';
-                      e.currentTarget.style.color = '#212529';
+
+                      e.currentTarget.style.color = '#dc3545';
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '#ffc107';
+                      e.currentTarget.style.color = '#212529';
                     }}
                   >
-                      ❤️ Aggiungi ai preferiti
+                    ❤️ Aggiungi ai preferiti
                   </button>
                 </div>
               </div>

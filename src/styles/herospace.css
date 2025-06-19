@@ -1,5 +1,5 @@
 #herospace {
-    background-image: url('/herospace.jpg');
+    background-image: url('/herospace-3.jpg');
     background-position: center;
     background-size: cover;
     height: 700px;
@@ -10,7 +10,6 @@
     position: relative;
     z-index: 2;
     width: calc(100% / 2);
-    font-family: "Lexend Deca", sans-serif;
     padding: 2rem;
     /* background: rgba(255, 255, 255, 0.1); */
     background: rgba(255, 255, 255, 0.03);
