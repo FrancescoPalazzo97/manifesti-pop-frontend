@@ -1,5 +1,5 @@
 import { useGlobalContext } from "../contexts/GlobalContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import axios from "axios";
 import PosterCard from "../components/PosterCard";
 
@@ -17,6 +17,7 @@ const PostersPage = () => {
     const [posters, setPosters] = useState([]);
     const [query, setQuery] = useState("");
     const [filteredPoster, setFilteredPoster] = useState(posters);
+    const [maxPrice, setMaxPrice] = useState(100);
 
     const fetchPoster = () => {
         axios
@@ -38,8 +39,8 @@ const PostersPage = () => {
     }, [posters]);
 
     const debouncedSearch = useRef(
-        debounce((value) => {
-            const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(value)}`;
+        debounce((value, priceValue) => {
+            const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(value)}&minPrice=0&maxPrice=${priceValue}`;
             axios
                 .get(url)
                 .then((res) => setFilteredPoster(res.data.data))
@@ -54,7 +55,7 @@ const PostersPage = () => {
             return setFilteredPoster(posters);
         }
 
-        debouncedSearch(query); // attiva la funzione solo se non viene richiamata di nuovo entro 500ms
+        debouncedSearch(query, maxPrice); // attiva la funzione solo se non viene richiamata di nuovo entro 500ms
     };
 
     // useEffect(() => {
@@ -81,14 +82,36 @@ const PostersPage = () => {
 
             </div>
 
-            <form action="" className="d-flex justify-content-between px-4" onSubmit={handleSubmit}>
-                <div className="d-flex">
-                    <input type="text" className="me-2 p-2" style={{ borderRadius: '20px', border: "1px solid black" }} placeholder="Ricerca" value={query}
-                        onChange={(e) => setQuery(e.target.value)} />
-                    <button type="submit" className="btn btn-primary" style={{ borderRadius: "20px" }}>Cerca</button>
-                </div>
-                <div>
+            <form action="" className="d-flex flex-column px-4" onSubmit={handleSubmit}>
+                <div className="d-flex justify-content-between mb-3">
+                    <input
+                        type="text"
+                        className="me-2 p-2"
+                        style={{ borderRadius: '20px', border: "1px solid black" }}
+                        placeholder="Ricerca"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
 
+                    <div className="d-flex align-items-center">
+
+                        <input
+                            type="range"
+                            id="price"
+                            min={0}
+                            max={100}
+                            step={1}
+                            value={maxPrice}
+                            onChange={(e) => setMaxPrice((e.target.value))}
+                        />
+                        <label htmlFor="price" className="ms-3">Prezzo massimo: {maxPrice}€</label>
+                    </div>
+
+
+                    <input type="text" name="" id="" />
+                </div>
+                <div className="text-center">
+                    <button type="submit" className="btn btn-primary" style={{ borderRadius: "20px" }}>Cerca</button>
                 </div>
             </form>
 
