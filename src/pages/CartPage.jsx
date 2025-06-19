@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const CartPage = () => {
   const { cart, removeFromCart } = useGlobalContext();
@@ -32,12 +34,9 @@ const CartPage = () => {
     }));
   };
 
-
-
-
   const calculateSubtotal = () => {
     return cart.reduce((acc, poster) => {
-      return acc + (poster.price * (quantities[poster.id] || 1));
+      return acc + poster.price * (quantities[poster.id] || 1);
     }, 0);
   };
 
@@ -52,6 +51,47 @@ const CartPage = () => {
 
   const total = subtotal + shipmentCost;
 
+  // Stato per la form address e dati utente
+  const [form, setForm] = useState({
+    nomeCompleto: "",
+    email: "",
+    via: "",
+    numeroCivico: "",
+    citta: "",
+  });
+
+  // Gestione cambi input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Gestione submit form
+  const handleSubmit = (e) => {
+    let array = {
+      name: form.nomeCompleto,
+      email: form.email,
+      address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
+      shipment_costs: shipmentCost,
+      posters: cart.map((poster) => ({
+        id: poster.id,
+        quantity: quantities[poster.id] || 1,
+      })),
+    };
+    e.preventDefault();
+    // Unifica nome e cognome
+    console.log("Dati ordine da inviare:", array);
+    axios
+      .post("http://localhost:3000/order", array)
+      .then((res) => {
+        alert("Ordine effettuato con successo!");
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error("Errore nell'invio dell'ordine:", err);
+      });
+  };
+
   return (
     <>
       <div className="row">
@@ -63,14 +103,17 @@ const CartPage = () => {
       {cart.length === 0 ? (
         <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
       ) : (
-        <div className="row gx-5">
+        <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
               const quantity = quantities[poster.id] || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
               return (
-                <div key={poster.id} className="card border-card-cart border-0 rounded-0 py-4">
+                <div
+                  key={poster.id}
+                  className="card border-card-cart border-0 rounded-0 pb-4"
+                >
                   <div className="row g-0">
                     <div className="col-md-4 col-sm-4">
                       <img
@@ -82,11 +125,14 @@ const CartPage = () => {
                     <div className="col-md-8 col-sm-8 position-relative">
                       <div className="card-body">
                         <h2 className="card-title">{poster.title}</h2>
-                        <p className="card-text mt-4">Prezzo: {poster.price}€</p>
+                        <p className="card-text mt-4">
+                          Prezzo: {poster.price}€
+                        </p>
                         <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                           <button
-                            className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
-                              }`}
+                            className={`border-0 bg-white ${
+                              isMinusDisabled ? "disabled-class" : ""
+                            }`}
                             disabled={isMinusDisabled}
                             onClick={() => handleMinus(poster.id)}
                           >
@@ -96,12 +142,20 @@ const CartPage = () => {
                               <i className="fa-solid fa-minus text-danger button-hover"></i>
                             )}
                           </button>
-                          <span style={{ width: '40px' }} className="text-center">{quantity}</span>
+                          <span
+                            style={{ width: "40px" }}
+                            className="text-center"
+                          >
+                            {quantity}
+                          </span>
                           {console.log(quantity)}
                           <button
-                            onClick={() => handlePlus(poster.id, poster.stock_quantity)}
-                            className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
-                              }`}
+                            onClick={() =>
+                              handlePlus(poster.id, poster.stock_quantity)
+                            }
+                            className={`border-0 bg-white ${
+                              isPlusDisabled ? "disabled-class" : ""
+                            }`}
                             disabled={isPlusDisabled}
                           >
                             {isPlusDisabled ? (
@@ -142,6 +196,71 @@ const CartPage = () => {
                 💳 Acquista Ora
               </button>
             </div>
+            <form onSubmit={handleSubmit}>
+              <div className="my-3">
+                <label className="form-label">Nome e Cognome</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="nomeCompleto"
+                  placeholder="Inserisci nome e cognome"
+                  value={form.nomeCompleto}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="my-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  placeholder="Inserisci la tua mail"
+                  value={form.email}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Via</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="via"
+                  placeholder="ex. Via Roma"
+                  value={form.via}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Numero Civico</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="numeroCivico"
+                  placeholder="ex. 123"
+                  value={form.numeroCivico}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Città</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="citta"
+                  placeholder="ex. Milano"
+                  value={form.citta}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-outline-secondary w-100">
+                🚀 Procedi all'acquisto
+              </button>
+            </form>
           </div>
         </div>
       )}
