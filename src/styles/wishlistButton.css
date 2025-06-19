@@ -1,7 +1,14 @@
 button {
     background: none;
     border: none;
-    font-size: 28px;
     cursor: pointer;
     padding: 5px
+}
+
+i {
+    font-size: 30px;
+}
+
+.red {
+    color: red;
 }

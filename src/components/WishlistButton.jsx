@@ -38,7 +38,11 @@ const WishlistButton = ({ poster }) => {
             onClick={handleClick}
             title={exist ? 'Rimuovi dalla wishlist' : 'Aggiungi alla wishlist'}
         >
-            {exist ? '❤️' : '🤍'}
+            {exist ? (
+                <i class="fa-solid fa-heart red"></i>
+            ) : (
+                <i class="fa-regular fa-heart"></i>
+            )}
         </button>
     )
 }
