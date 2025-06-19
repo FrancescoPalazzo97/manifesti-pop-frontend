@@ -10,8 +10,8 @@ function ProductDetail() {
   //  Estraggo lo slug dalla URL, es: /product/slug-del-prodotto
   const { slug } = useParams();
 
-  //  Estraggo dal context la funzione addToWishlist per aggiungere un prodotto ai preferiti
-  const { addToWishlist } = useGlobalContext();
+  //  Estraggo dal context la funzione per aggiungere ai preferiti e al carrello
+  const { addToWishlist, addCart } = useGlobalContext();
 
   //  Stato locale per il prodotto, inizialmente null perché non caricato
   const [prodotto, setProdotto] = useState(null);
@@ -61,6 +61,11 @@ function ProductDetail() {
     addToWishlist(prodotto);
   };
 
+  //funzione per aggiungere al carrello
+  const handleToCart = () => {
+    addCart(prodotto);
+  }
+
   return (
     <div className="row">
       <div className="col-12">
@@ -94,6 +99,7 @@ function ProductDetail() {
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   {/* Bottone rosso pieno Aggiungi al carrello */}
                   <button
+                    onClick={handleToCart}
                     className="btn"
                     style={{
                       flex: '1',                      // occupa uguale spazio
