@@ -22,6 +22,7 @@ const useLocalStorage = (key, initalValue) => {
             // aggiorno lo stato di value
             setValue(newValue);
             // Salvo nel localStorage convertendo in stringa
+            localStorage.setItem(key, JSON.stringify(newValue));
         } catch (err) {
             console.error(`Errore nel salvare: ${err}`);
         }
@@ -29,3 +30,5 @@ const useLocalStorage = (key, initalValue) => {
 
     return [value, saveValue]
 }
+
+export default useLocalStorage;

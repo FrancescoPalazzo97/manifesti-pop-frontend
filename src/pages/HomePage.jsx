@@ -51,9 +51,7 @@ const HomePage = () => {
     useEffect(() => {
         if (mostRecent && mostSold) {
             setLoading(false)
-            console.log(mostSold, mostRecent)
         }
-        console.log(mostSold, mostRecent)
     }, [mostRecent, mostSold])
 
     return (

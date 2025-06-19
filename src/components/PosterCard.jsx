@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import DiscountLabel from "./DiscountLabel";
+import WishlistButton from "./WishlistButton";
+import "../styles/posterCard.css"
 
 const PosterCard = ({ poster, slider }) => {
   const { title, artist, size, price, image_url, slug, discount } = poster;
@@ -18,8 +20,11 @@ const PosterCard = ({ poster, slider }) => {
   }
 
   return (
-    <Link to={`/posters/${slug}`} className={`text-decoration-none`}>
-      <div className="card poster-card d-flex flex-column position-relative">
+    <div className="card poster-card d-flex flex-column position-relative">
+      <div className="wishlist-button-container">
+        <WishlistButton poster={poster} />
+      </div>
+      <Link to={`/posters/${slug}`} className={`text-decoration-none`}>
         <DiscountLabel discount={discount} />
         <div className="img-container">
           <img src={image_url} className="fix-img" alt={title} />
@@ -43,8 +48,8 @@ const PosterCard = ({ poster, slider }) => {
             </p>
           )}
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

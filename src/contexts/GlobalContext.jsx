@@ -28,7 +28,8 @@ const GlobalProvider = ({ children }) => {
 
   // Funzione di aggiunta
   const addToWishlist = (poster) => {
-    const exist = wishlist.some(item => item.id === poster.id);
+
+    const exist = wishlist.find(item => item.id === poster.id);
 
     if (exist) {
       alert(`Questo poster è già nella tua wishlist`);
@@ -38,7 +39,7 @@ const GlobalProvider = ({ children }) => {
     const newWishlist = [...wishlist, poster];
     setWishlist(newWishlist);
 
-    alert(`${poster.name} aggiunto alla wishlist`)
+    alert(`${poster.title} aggiunto alla wishlist`)
   }
 
   // Funzione di elimina

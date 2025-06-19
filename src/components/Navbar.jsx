@@ -10,6 +10,7 @@ import {
   Button,
 } from "react-bootstrap";
 import Logo from "./Logo";
+import Counter from "./Counter";
 import { useGlobalContext } from "../contexts/GlobalContext";
 
 const navbar = () => {
@@ -75,7 +76,8 @@ const navbar = () => {
             </Nav>
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
-              <NavLink to="/wishlist" className="text-light nav-link">
+              <NavLink to="/wishlist" className="text-light nav-link position-relative">
+                <Counter />
                 <i className="fa-solid fa-heart" style={{ color: "#ffffff" }}></i>
               </NavLink>
               <NavLink to="/cart" className="text-light nav-link">

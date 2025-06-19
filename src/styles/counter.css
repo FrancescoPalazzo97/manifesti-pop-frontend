@@ -1,0 +1,64 @@
+.wishlist-counter {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 20px;
+    height: 20px;
+    /* background-color: #ff4757; */
+    background-color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid white;
+    animation: pulse 0.3s ease-in-out;
+    /* Animazione quando appare o cambia */
+}
+
+.counter-text {
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    position: static;
+    /* Rimuove il posizionamento assoluto */
+    top: auto;
+    left: auto;
+}
+
+/* Animazione quando il counter appere o cambia */
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.nav-link:hover .wishlist-counter {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .wishlist-counter {
+        top: -6px;
+        right: -6px;
+        min-width: 18px;
+        height: 18px;
+        border-width: 1px;
+    }
+
+    .counter-text {
+        font-size: 9px;
+    }
+}
