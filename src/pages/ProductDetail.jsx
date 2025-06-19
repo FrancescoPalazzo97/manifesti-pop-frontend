@@ -166,7 +166,7 @@ function ProductDetail() {
                       e.currentTarget.style.color = '#ffc107';
                     }}
                   >
-                    ⭐ Aggiungi ai preferiti
+                      ❤️ Aggiungi ai preferiti
                   </button>
                 </div>
               </div>
