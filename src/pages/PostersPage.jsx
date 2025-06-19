@@ -78,7 +78,8 @@ const PostersPage = () => {
                         name="size"
                         id="size"
                         value={size}
-                        onChange={(e) => setSize(e.target.value)}>
+                        onChange={(e) => setSize(e.target.value)}
+                    >
 
                         <option value="">Tutte le taglie</option>
                         <option value="sm">sm</option>
@@ -97,6 +98,7 @@ const PostersPage = () => {
                             step={1}
                             value={maxPrice}
                             onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                            className="custom-range"
                         />
 
                     </div>
