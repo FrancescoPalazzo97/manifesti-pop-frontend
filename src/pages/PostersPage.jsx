@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import PosterCard from "../components/PosterCard";
 
@@ -12,49 +13,49 @@ function debounce(func, delay) {
 
 const PostersPage = () => {
     const [posters, setPosters] = useState([]);
-    const [query, setQuery] = useState("");
+    // const [query, setQuery] = useState("");
     const [filteredPoster, setFilteredPoster] = useState([]);
-    const [maxPrice, setMaxPrice] = useState(200);
-    const [size, setSize] = useState("");
+    // const [maxPrice, setMaxPrice] = useState(200);
+    // const [size, setSize] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const fetchPoster = () => {
-        axios
-            .get("http://localhost:3000/posters")
-            .then((resp) => {
-                setPosters(resp.data);
-                setFilteredPoster(resp.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
 
-    useEffect(() => {
-        fetchPoster();
-    }, []);
+    const query = searchParams.get("term");
+    const size = searchParams.get("size") || "";
+    const maxPrice = parseInt(searchParams.get("maxPrice") || "200");
 
-    const debouncedSearch = useRef(
-        debounce((value, priceValue, sizeValue) => {
-            let url = `http://localhost:3000/posters/search?term=${encodeURIComponent(
-                value
-            )}&minPrice=0&maxPrice=${priceValue}`;
-            if (sizeValue) {
-                url += `&size=${sizeValue}`;
-            }
-            axios
-                .get(url)
-                .then((res) => setFilteredPoster(res.data.data))
-                .catch((err) => console.error("Errore:", err));
+    const [tempMaxPrice, setTempMaxPrice] = useState(maxPrice);
+
+    const debouncedFilterChange = useRef(
+        debounce((newSize, newMaxPrice) => {
+            const params = {};
+            if (query) params.term = query;
+            if (newSize) params.size = newSize;
+            if (newMaxPrice !== 200) params.maxPrice = newMaxPrice;
+            setSearchParams(params);
         }, 500)
     ).current;
 
-    useEffect(() => {
-        const term = query.trim();
-        const isFiltering = term !== "" || size !== "" || maxPrice !== 200;
-        if (isFiltering) {
-            debouncedSearch(term, maxPrice, size);
-        }
 
+
+    useEffect(() => {
+        debouncedFilterChange(size, tempMaxPrice);
+    }, [tempMaxPrice]);
+
+    const handleFiltersChange = (newSize, newMaxPrice) => {
+        const params = {};
+        if (query) params.term = query;
+        if (newSize) params.size = newSize;
+        if (newMaxPrice !== 200) params.maxPrice = newMaxPrice;
+        setSearchParams(params);
+    };
+
+
+    useEffect(() => {
+        const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(query)}&minPrice=0&maxPrice=${maxPrice}${size ? `&size=${size}` : ''}`;
+        axios.get(url)
+            .then(res => setPosters(res.data.data || res.data))
+            .catch(err => console.error(err));
     }, [query, maxPrice, size]);
 
     return (
@@ -66,20 +67,13 @@ const PostersPage = () => {
 
             <div className="px-4 form-container">
                 <div className="form-position">
-                    <input
-                        type="text"
-                        className="me-2 p-2"
-                        style={{ borderRadius: "20px", border: "1px solid #d13b3b" }}
-                        placeholder="Ricerca"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
+
 
                     <select
                         name="size"
                         id="size"
                         value={size}
-                        onChange={(e) => setSize(e.target.value)}
+                        onChange={(e) => handleFiltersChange(e.target.value, maxPrice)}
                     >
                         <option value="">Tutte le taglie</option>
                         <option value="sm">sm</option>
@@ -89,27 +83,19 @@ const PostersPage = () => {
 
                     <div className="d-flex align-items-center price">
                         <label htmlFor="price" className="me-3">
-                            max: {maxPrice}€
+                            max: {tempMaxPrice}€
                         </label>
                         <input
                             type="range"
-                            id="price"
                             min={0}
                             max={200}
                             step={1}
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                            className="custom-range"
+                            value={tempMaxPrice}
+                            onChange={(e) => setTempMaxPrice(parseInt(e.target.value))}
                         />
                     </div>
                 </div>
             </div>
-
-            {filteredPoster.length === 0 && (
-                <div className="px-4 d-flex justify-content-center">
-                    <p>😭 Articolo non trovato 😭</p>
-                </div>
-            )}
 
             <div className="col-12">
                 <div className="row gy-4 p-3 align-items-stretch">
@@ -120,6 +106,22 @@ const PostersPage = () => {
                     ))}
                 </div>
             </div>
+
+            <div className="container">
+                <h2>Risultati per: "{query}"</h2>
+                {posters.length === 0 ? (
+                    <p>😭 Nessun manifesto trovato 😭</p>
+                ) : (
+                    <div className="row">
+                        {posters.map((poster) => (
+                            <div key={poster.id} className="col-md-4">
+                                <PosterCard poster={poster} />
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
         </>
     );
 };
