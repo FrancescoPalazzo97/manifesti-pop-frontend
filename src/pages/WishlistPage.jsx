@@ -1,10 +1,76 @@
 import { useGlobalContext } from "../contexts/GlobalContext"; // Prendo dati e funzioni dal context globale
+import React, { useState } from "react";
 
 const WishlistPage = () => {
-
-  const { wishlistData, addCart } = useGlobalContext(); // Estraggo anche addCart
-
+  const { wishlistData, addCart } = useGlobalContext();
   const { wishlist, removeFromWishlist } = wishlistData;
+
+  // Stato per effetto click sui pulsanti
+  const [clickedBtn, setClickedBtn] = useState({});
+
+  // Stato per quantità dei poster in wishlist
+  const [quantities, setQuantities] = useState({});
+
+  // Inizializza quantità a 1 per ogni poster in wishlist
+  React.useEffect(() => {
+    const initialQuantities = {};
+    wishlist.forEach((poster) => {
+      initialQuantities[poster.id] = 1;
+    });
+    setQuantities(initialQuantities);
+  }, [wishlist]);
+
+  // Gestione quantità +
+  const handlePlus = (id, stock) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: prev[id] < stock ? prev[id] + 1 : prev[id],
+    }));
+  };
+
+  // Gestione quantità -
+  const handleMinus = (id) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: prev[id] > 1 ? prev[id] - 1 : prev[id],
+    }));
+  };
+
+  // Gestore click con effetto animazione
+  const handleButtonClick = (type, poster, quantity) => {
+    setClickedBtn({ [type + poster.id]: true }); // Imposta lo stato per effetto click
+    if (type === "cart") addCart({ ...poster, quantity }); // Passa la quantità scelta al carrello
+    if (type === "remove") removeFromWishlist(poster.id); // Rimuove dai preferiti se richiesto
+    setTimeout(() => setClickedBtn({}), 150); // Rimuove effetto click dopo 150ms
+  };
+
+  // Stili per il pulsante carrello, cambia se attivo (click)
+  const cartBtnStyle = (active) => ({
+    padding: "0.3rem 0.5rem",
+    backgroundColor: "#e0e0e0", // Grigio chiaro di base
+    color: "#212529",
+    border: "1px solid #bdbdbd",
+    borderRadius: 4,
+    cursor: "pointer",
+    fontWeight: 600,
+    fontSize: "0.95rem",
+    transition: "background 0.15s, transform 0.1s",
+    outline: "none",
+    ...(active && { backgroundColor: "#bdbdbd", transform: "scale(0.96)" }), // Più scuro e leggermente più piccolo se premuto
+  });
+
+  // Stili per il pulsante rimozione, cambia se attivo (click)
+  const removeBtnStyle = (active) => ({
+    padding: "0.3rem 0.5rem",
+    backgroundColor: "#dc3545", // Rosso di base
+    color: "white",
+    border: "none",
+    borderRadius: 4,
+    cursor: "pointer",
+    fontSize: "0.95rem",
+    transition: "background 0.15s, transform 0.1s",
+    ...(active && { backgroundColor: "#b52a38", transform: "scale(0.96)" }), // Rosso più scuro e leggermente più piccolo se premuto
+  });
 
   return (
     <>
@@ -20,76 +86,105 @@ const WishlistPage = () => {
           <h2 className="text-center my-5">Nessun Manifesto nei preferiti.</h2>
         ) : (
           // Altrimenti mostro ogni poster con immagine, titolo, prezzo e bottoni azione
-          wishlist.map((poster) => (
-            <div
-              key={poster.id}
-              className="d-flex justify-content-center w-100"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                marginBottom: "1.5rem",
-                borderBottom: "1px solid #ddd",
-                paddingBottom: "1rem",
-                maxWidth: 600, 
-              }}
-            >
-              {/* Immagine poster */}
-              <img
-                src={poster.image_url}
-                alt={poster.title}
-                width={200}
-                style={{ borderRadius: 8, boxShadow: "0 2px 6px rgba(0,0,0,0.15)" }}
-              />
+          wishlist.map((poster) => {
+            const quantity = quantities[poster.id] || 1;
+            const isMinusDisabled = quantity <= 1;
+            const isPlusDisabled = poster.stock_quantity ? quantity >= poster.stock_quantity : false;
+            return (
+              <div
+                key={poster.id}
+                className="d-flex justify-content-center w-100"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginBottom: "1.5rem",
+                  borderBottom: "1px solid #ddd",
+                  paddingBottom: "1rem",
+                  maxWidth: 600, 
+                }}
+              >
+                {/* Immagine poster */}
+                <img
+                  src={poster.image_url}
+                  alt={poster.title}
+                  width={200}
+                  style={{ borderRadius: 8, boxShadow: "0 2px 6px rgba(0,0,0,0.15)" }}
+                />
 
-              {/* Contenuto testo e bottoni */}
-              <div style={{ flexGrow: 1 }}>
-                {/* Titolo */}
-                <h3>{poster.title}</h3>
+                {/* Contenuto testo e bottoni */}
+                <div style={{ flexGrow: 1 }}>
+                  {/* Titolo */}
+                  <h3>{poster.title}</h3>
 
-                {/* Prezzo: controllo che sia numero e formatto con 2 decimali */}
-                <p>
-                  Prezzo: €{" "}
-                  {typeof poster.price === "number"
-                    ? poster.price.toFixed(2)
-                    : poster.price || "n.d."}
-                </p>
+                  {/* Prezzo: controllo che sia numero e formatto con 2 decimali */}
+                  <p>
+                    Prezzo: €{" "}
+                    {typeof poster.price === "number"
+                      ? poster.price.toFixed(2) // Mostra due decimali se è un numero
+                      : poster.price || "n.d."} {/* Se non c'è prezzo mostra "n.d." */}
+                  </p>
 
-                {/* Bottoni azione */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
-                  <button
-                    onClick={() => addCart(poster)}
-                    style={{
-                      padding: "0.3rem 0.5rem",
-                      backgroundColor: "#FFFFFF",
-                      color: "#212529",
-                      border: "1px solid #dc3545",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                      fontWeight: 600,
-                      fontSize: "0.95rem"
-                    }}
-                  >
-                    🛒 Aggiungi al carrello
-                  </button>
-                  <button
-                    onClick={() => removeFromWishlist(poster.id)}
-                    style={{
-                      padding: "0.3rem 0.5rem",
-                      backgroundColor: "#dc3545",
-                      color: "white",
-                      border: "none",
-                      borderRadius: 4,
-                      cursor: "pointer",
-                      fontSize: "0.95rem"
-                    }}
-                  >
-                    Rimuovi dai preferiti
-                  </button>
+                  {/* Gestione quantità */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                    <button
+                      onClick={() => handleMinus(poster.id)}
+                      disabled={isMinusDisabled}
+                      style={{
+                        padding: "0.2rem 0.6rem",
+                        border: "1px solid red",
+                        background: "#fff",
+                        borderRadius: 4,
+                        cursor: isMinusDisabled ? "not-allowed" : "pointer",
+                        fontWeight: 600,
+                        fontSize: "1.1rem"
+                      }}
+                    >-</button>
+                    <span style={{ minWidth: 24, textAlign: "center" }}>{quantity}</span>
+                    <button
+                      onClick={() => handlePlus(poster.id, poster.stock_quantity || 99)}
+                      disabled={isPlusDisabled}
+                      style={{
+                        padding: "0.2rem 0.6rem",
+                        border: "1px solid red",
+                        background: "#fff",
+                        borderRadius: 4,
+                        cursor: isPlusDisabled ? "not-allowed" : "pointer",
+                        fontWeight: 600,
+                        fontSize: "1.1rem"
+                      }}
+                    >+</button>
+                  </div>
+
+                  {/* Bottoni azione */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
+                    <button
+                      onClick={() => handleButtonClick("cart", poster, quantity)}
+                      style={cartBtnStyle(clickedBtn["cart" + poster.id])}
+                      onMouseDown={() => setClickedBtn({ ["cart" + poster.id]: true })}
+                      onMouseUp={() => setClickedBtn({})}
+                      onMouseLeave={() => setClickedBtn({})}
+                      onMouseOver={e => e.currentTarget.style.backgroundColor = "#cccccc"}
+                      onMouseOut={e => e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0"}
+                    >
+                      🛒 Aggiungi al carrello
+                    </button>
+                    <button
+                      onClick={() => handleButtonClick("remove", poster)}
+                      style={removeBtnStyle(clickedBtn["remove" + poster.id])}
+                      onMouseDown={() => setClickedBtn({ ["remove" + poster.id]: true })}
+                      onMouseUp={() => setClickedBtn({})}
+                      onMouseLeave={() => setClickedBtn({})}
+                      onMouseOver={e => e.currentTarget.style.backgroundColor = "#b52a38"}
+                      onMouseOut={e => e.currentTarget.style.backgroundColor = clickedBtn["remove" + poster.id] ? "#b52a38" : "#dc3545"}
+                    >
+                      Rimuovi dai preferiti
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </>

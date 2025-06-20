@@ -13,7 +13,7 @@ const CartPage = () => {
   useEffect(() => {
     const initialQuantities = {};
     cart.forEach((poster) => {
-      initialQuantities[poster.id] = 1;
+      initialQuantities[poster.id] = poster.quantity || 1; // Usa quantity se presente
     });
     setQuantities(initialQuantities);
   }, [cart]);
