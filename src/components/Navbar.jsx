@@ -12,6 +12,10 @@ import { useGlobalContext } from "../contexts/GlobalContext";
 import FreeShipment from "./FreeShipment";
 
 const NavbarComponent = () => {
+
+  const { cartData, wishlistData } = useGlobalContext();
+  const { wishlistCount } = wishlistData;
+  const { cartCount } = cartData;
   // cambiamo cartItems in cart, perché nel context si chiama 'cart'
   // Qui usiamo la funzione useGlobalContext() per accedere allo stato globale condiviso.
   // Con il destructuring facciamo:
@@ -82,24 +86,13 @@ const NavbarComponent = () => {
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
               <NavLink to="/wishlist" className="text-light nav-link icon-hover position-relative">
-                <Counter />
+                <Counter count={wishlistCount} />
                 <i className="fa-solid fa-heart"></i>
               </NavLink>
 
-              <NavLink
-                to="/cart"
-                className="text-light nav-link icon-hover position-relative"
-              >
+              <NavLink to="/cart" className="text-light nav-link icon-hover position-relative">
+                <Counter count={cartCount} />
                 <i className="fa-solid fa-cart-shopping"></i>
-                {/*
-                    // Mostra il badge numerico sopra l'icona del carrello solo se ci sono elementi nel carrello.
-                    // cart.length indica quanti poster sono stati aggiunti.
-                    // React aggiorna automaticamente questo numero quando cambia lo stato globale 'cart'.
-                    // Il badge è stilizzato in CSS per apparire come un piccolo cerchio rosso in alto a destra.
-                */}
-                {cart && cart.length > 0 && (
-                  <span className="cart-badge">{cart.length}</span>
-                )}
               </NavLink>
             </Nav>
 

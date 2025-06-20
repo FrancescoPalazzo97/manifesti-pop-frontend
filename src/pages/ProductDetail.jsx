@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from 'react';  
-// Importo React e gli hook useEffect (per gestire effetti collaterali) e useState (per lo stato locale)
-
-import { useParams } from 'react-router-dom';       
-// Importo useParams per leggere parametri dinamici dalla URL (es. slug del prodotto)
-
-import axios from 'axios';                           
-// Importo axios per effettuare richieste HTTP verso il backend o API
-
-import './ProductDetail.css';                        
-// Importo il file CSS specifico per lo stile di questo componente
-
-// Importo il context globale per accedere a funzioni come aggiungere ai preferiti e al carrello
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import './ProductDetail.css';
 import { useGlobalContext } from '../contexts/GlobalContext';
 
-function ProductDetail() {
-  // Estraggo lo slug dalla URL (es: /product/nome-del-prodotto)
+const ProductDetail = () => {
+
   const { slug } = useParams();
 
   // Estraggo dal context globale le funzioni per wishlist e carrello
-  const { addToWishlist, addCart } = useGlobalContext();
+  const { wishlistData, cartData } = useGlobalContext();
+
+  const { addToWishlist, removeFromWishlist, isInWishlist } = wishlistData;
+
+  const { addCart, removeFromCart, isInCart } = cartData;
 
   // Stato locale per contenere i dati del prodotto, inizialmente null (non caricato)
   const [prodotto, setProdotto] = useState(null);
@@ -74,9 +69,28 @@ function ProductDetail() {
   if (!prodotto) return <div className="text-center mt-5">Caricamento in corso...</div>;
 
   // Funzione che gestisce il click su "Aggiungi ai preferiti"
-  const handleAddToWishlist = () => {
-    addToWishlist(prodotto); // Invoca la funzione dal context passando il prodotto attuale
-  };
+  // const handleAddToWishlist = () => {
+  //   addToWishlist(prodotto); // Invoca la funzione dal context passando il prodotto attuale
+  // };
+
+  const existInWishlist = isInWishlist(prodotto.id);
+
+  const handleClickWishlist = (e) => {
+    e.preventDefault;
+    e.stopPropagation();
+
+    existInWishlist ? removeFromWishlist(prodotto.id) : addToWishlist(prodotto);
+  }
+
+  // const existInCart = isInCart(prodotto.id);
+
+  const handleClickCart = e => {
+    e.preventDefault;
+    e.stopPropagation();
+
+    addCart(prodotto)
+    // existInCart ? removeFromCart(prodotto.id) : addCart(prodotto);
+  }
 
   // Funzione che gestisce il click su "Aggiungi al carrello"
   const handleToCart = () => {
@@ -85,12 +99,11 @@ function ProductDetail() {
 
   // Render del componente
   return (
-    <div className="row"> {/* Contenitore esterno con layout a griglia */}
-      <div className="col-12"> {/* Colonna che occupa tutta la larghezza */}
-        <div className="product-detail-container"> {/* Contenitore principale per dettagli prodotto */}
-          <div className="container"> {/* Container bootstrap per margini */}
-            <div className="row align-items-center g-5"> {/* Riga con allineamento verticale e gap */}
-
+    <div className="row">
+      <div className="col-12">
+        <div className="product-detail-container">
+          <div className="container">
+            <div className="row align-items-center g-5">
               {/* Colonna immagine prodotto, centrata */}
               <div className="col-md-6 text-center">
                 <img
@@ -99,14 +112,12 @@ function ProductDetail() {
                   className="img-fluid rounded shadow-lg" // Immagine responsive con angoli arrotondati e ombra
                 />
               </div>
-
               {/* Colonna dettagli prodotto */}
               <div className="col-md-6">
                 <h1 className="mb-3 fw-bold text-rosa">{prodotto.title}</h1> {/* Titolo prodotto */}
-
                 {/* Prezzo prodotto con gestione eventuale sconto */}
                 <h4 className="mb-3">
-                  {prodotto.discount ? ( 
+                  {prodotto.discount ? (
                     // Se c'è sconto mostro prezzo originale barrato e prezzo scontato rosso e in grassetto
                     <>
                       <span style={{ textDecoration: 'line-through', color: 'gray', marginRight: '10px' }}>
@@ -121,20 +132,17 @@ function ProductDetail() {
                     <>€ {productPrice(prodotto.price)}</>
                   )}
                 </h4>
-
                 <p className="text-muted">{prodotto.description}</p> {/* Descrizione prodotto */}
                 <p><strong>Artista:</strong> {prodotto.artist}</p> {/* Nome artista */}
                 <p><strong>Disponibilità:</strong> {prodotto.stock_quantity} pezzi</p> {/* Quantità disponibile */}
-
                 {/* Informazioni sulla taglia del manifesto */}
                 <div className="mb-3">
                   <strong>✨ Taglia Manifesto: {newSize(prodotto.size)}</strong>
                 </div>
-
                 {/* Pulsanti azione per aggiungere al carrello e ai preferiti */}
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   <button
-                    onClick={handleToCart} // Al click aggiunge il prodotto al carrello
+                    onClick={handleClickCart} // Al click aggiunge il prodotto al carrello
                     className="btn"
                     style={{
                       flex: '1', // Pulsante occupa metà spazio orizzontale (flexbox)
@@ -156,7 +164,7 @@ function ProductDetail() {
                   </button>
 
                   <button
-                    onClick={handleAddToWishlist} // Al click aggiunge ai preferiti
+                    onClick={handleClickWishlist} // Al click aggiunge ai preferiti
                     className="btn"
                     style={{
                       flex: '1', // Occupa metà spazio orizzontale

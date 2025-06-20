@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart } = useGlobalContext();
+
+  const { cartData } = useGlobalContext();
+
+  const { cart, removeFromCart, clearCart } = cartData;
 
   // Stato locale per le quantità di ogni prodotto
   const [quantities, setQuantities] = useState({});
@@ -38,7 +41,6 @@ const CartPage = () => {
   // Se il prodotto ha uno sconto, applico la percentuale di sconto al prezzo originale
   // Altrimenti ritorno il prezzo normale
   const getDiscountedPrice = (poster) => {
-    if (!poster.discount) return poster.price;
     return poster.price * (1 - poster.discount / 100);
   };
 
@@ -84,7 +86,7 @@ const CartPage = () => {
 
   // Gestione submit form
   const handleSubmit = (e) => {
-    let array = {
+    let obj = {
       name: form.nomeCompleto,
       email: form.email,
       address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
@@ -96,9 +98,9 @@ const CartPage = () => {
     };
     e.preventDefault();
     // Unifica nome e cognome
-    console.log("Dati ordine da inviare:", array);
+    console.log("Dati ordine da inviare:", obj);
     axios
-      .post("http://localhost:3000/order", array)
+      .post("http://localhost:3000/order", obj)
       .then((res) => {
         alert("Ordine effettuato con successo!");
         console.log(res.data);
@@ -115,6 +117,20 @@ const CartPage = () => {
       })
       .catch((err) => {
         console.error("Errore nell'invio dell'ordine:", err);
+        if (err.response) {
+          // Il server ha risposto con un errore
+          console.error("Errore risposta server:", err.response.data);
+          console.error("Status code:", err.response.status);
+          alert(`Errore del server: ${err.response.data.message || 'Errore sconosciuto'}`);
+        } else if (err.request) {
+          // La richiesta è stata fatta ma non c'è stata risposta
+          console.error("Nessuna risposta dal server:", err.request);
+          alert("Impossibile contattare il server. Controlla la connessione.");
+        } else {
+          // Errore nella configurazione della richiesta
+          console.error("Errore configurazione:", err.message);
+          alert(`Errore: ${err.message}`);
+        }
       });
   };
 

@@ -8,29 +8,43 @@ const GlobalProvider = ({ children }) => {
   // Wishlist
   const [wishlist, setWishlist] = useLocalStorage(`poster-wishlist`, []);
 
+  // cart
+  const [cart, setCart] = useLocalStorage(`poster-cart`, []);
+
   // Filtro di ricerca 
   const [filter, setFilter] = useState("");
 
-  //lista i poster nel carrello
-  const [cart, setCart] = useState([]);
-
   //funzione per aggiungere un poster al carrello
   const addCart = (poster) => {
-    const isAlreadyIn = cart.find(item => item.id === poster.id);
-    if (!isAlreadyIn) {
-      setCart(prev => [...prev, poster]);
-    }
+    const newCart = [...cart, poster];
+    setCart(newCart);
   }
 
   //funzione per rimuovere i poster dal carrello
   const removeFromCart = (posterId) => {
-    setCart(prev => prev.filter(item => item.id !== posterId));
+    const newCart = cart.filter(item => item.id !== posterId);
+    setCart(newCart);
   };
 
   // Funzione per svuotare il carrello
   const clearCart = () => {
     setCart([]);
   };
+
+  const isInCart = (posterId) => {
+    return cart.some(item => item.id === posterId);
+  }
+
+  const cartCount = cart.length;
+
+  const cartData = {
+    cart,
+    addCart,
+    removeFromCart,
+    clearCart,
+    isInCart,
+    cartCount
+  }
 
   // Funzione di aggiunta
   const addToWishlist = (poster) => {
@@ -83,10 +97,7 @@ const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider value={{
       filter,
       setFilter,
-      cart,
-      addCart,
-      removeFromCart,
-      clearCart, // aggiunto qui
+      cartData,
       wishlistData
     }}>
       {children}
