@@ -2,7 +2,7 @@ import { useGlobalContext } from "../contexts/GlobalContext"; // Prendo dati e f
 
 const WishlistPage = () => {
 
-  const { wishlistData } = useGlobalContext(); // Estraggo wishlist e funzione per rimuovere
+  const { wishlistData, addCart } = useGlobalContext(); // Estraggo anche addCart
 
   const { wishlist, removeFromWishlist } = wishlistData;
 
@@ -19,7 +19,7 @@ const WishlistPage = () => {
         {wishlist.length === 0 ? (
           <h2 className="text-center my-5">Nessun Manifesto nei preferiti.</h2>
         ) : (
-          // Altrimenti mostro ogni poster con immagine, titolo, prezzo e bottone rimuovi
+          // Altrimenti mostro ogni poster con immagine, titolo, prezzo e bottoni azione
           wishlist.map((poster) => (
             <div
               key={poster.id}
@@ -31,7 +31,7 @@ const WishlistPage = () => {
                 marginBottom: "1.5rem",
                 borderBottom: "1px solid #ddd",
                 paddingBottom: "1rem",
-                maxWidth: 600, // aggiungi questa riga
+                maxWidth: 600, 
               }}
             >
               {/* Immagine poster */}
@@ -42,7 +42,7 @@ const WishlistPage = () => {
                 style={{ borderRadius: 8, boxShadow: "0 2px 6px rgba(0,0,0,0.15)" }}
               />
 
-              {/* Contenuto testo e bottone */}
+              {/* Contenuto testo e bottoni */}
               <div style={{ flexGrow: 1 }}>
                 {/* Titolo */}
                 <h3>{poster.title}</h3>
@@ -55,20 +55,38 @@ const WishlistPage = () => {
                     : poster.price || "n.d."}
                 </p>
 
-                {/* Bottone rimuovi */}
-                <button
-                  onClick={() => removeFromWishlist(poster.id)}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    backgroundColor: "#dc3545",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                  }}
-                >
-                  Rimuovi dai preferiti
-                </button>
+                {/* Bottoni azione */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
+                  <button
+                    onClick={() => addCart(poster)}
+                    style={{
+                      padding: "0.3rem 0.5rem",
+                      backgroundColor: "#FFFFFF",
+                      color: "#212529",
+                      border: "1px solid #dc3545",
+                      borderRadius: 4,
+                      cursor: "pointer",
+                      fontWeight: 600,
+                      fontSize: "0.95rem"
+                    }}
+                  >
+                    🛒 Aggiungi al carrello
+                  </button>
+                  <button
+                    onClick={() => removeFromWishlist(poster.id)}
+                    style={{
+                      padding: "0.3rem 0.5rem",
+                      backgroundColor: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 4,
+                      cursor: "pointer",
+                      fontSize: "0.95rem"
+                    }}
+                  >
+                    Rimuovi dai preferiti
+                  </button>
+                </div>
               </div>
             </div>
           ))
