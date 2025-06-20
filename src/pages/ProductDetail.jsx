@@ -70,6 +70,37 @@ const ProductDetail = () => {
   }, [slug]); // L'effetto si esegue al montaggio e ogni volta che slug cambia
 
   // =====================================
+  // RENDERING CONDIZIONALE
+  // =====================================
+
+  // Se c'è stato un errore nel caricamento
+  if (errore) {
+    return (
+      <div className="container text-center mt-5">
+        <div className="alert alert-danger">
+          <h4>Errore nel caricamento</h4>
+          <p>Non è stato possibile caricare i dettagli del prodotto.</p>
+          <Link to="/posters" className="btn btn-primary">
+            Torna al catalogo
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Se il prodotto non è ancora caricato (stato di loading)
+  if (!prodotto) {
+    return (
+      <div className="container text-center mt-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Caricamento in corso...</span>
+        </div>
+        <p className="mt-3">Caricamento dettagli prodotto...</p>
+      </div>
+    );
+  }
+
+  // =====================================
   // FUNZIONI HELPER PER FORMATTAZIONE
   // =====================================
 
@@ -111,7 +142,7 @@ const ProductDetail = () => {
   const existInWishlist = isInWishlist(prodotto.id);
 
   const handleClickWishlist = (e) => {
-    e.preventDefault;
+    e.preventDefault();
     e.stopPropagation();
 
     existInWishlist ? removeFromWishlist(prodotto.id) : addToWishlist(prodotto);
@@ -120,42 +151,11 @@ const ProductDetail = () => {
   // const existInCart = isInCart(prodotto.id);
 
   const handleClickCart = e => {
-    e.preventDefault;
+    e.preventDefault();
     e.stopPropagation();
 
     addCart(prodotto)
     // existInCart ? removeFromCart(prodotto.id) : addCart(prodotto);
-  }
-
-  // =====================================
-  // RENDERING CONDIZIONALE
-  // =====================================
-
-  // Se c'è stato un errore nel caricamento
-  if (errore) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="alert alert-danger">
-          <h4>Errore nel caricamento</h4>
-          <p>Non è stato possibile caricare i dettagli del prodotto.</p>
-          <Link to="/posters" className="btn btn-primary">
-            Torna al catalogo
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Se il prodotto non è ancora caricato (stato di loading)
-  if (!prodotto) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Caricamento in corso...</span>
-        </div>
-        <p className="mt-3">Caricamento dettagli prodotto...</p>
-      </div>
-    );
   }
 
   // =====================================
