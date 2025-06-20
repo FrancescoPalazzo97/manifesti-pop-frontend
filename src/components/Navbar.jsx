@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./navbar.css";
 import { NavLink } from "react-router-dom";
 import {
@@ -10,21 +10,24 @@ import Logo from "./Logo";
 import Counter from "./Counter";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import FreeShipment from "./FreeShipment";
+import CartBanner from "./CartBanner";
 
 const NavbarComponent = () => {
-  // cambiamo cartItems in cart, perché nel context si chiama 'cart'
-  // Qui usiamo la funzione useGlobalContext() per accedere allo stato globale condiviso.
-  // Con il destructuring facciamo:
-  // - filter: la stringa usata come filtro di ricerca,
-  // - setFilter: la funzione per aggiornare quel filtro,
-  // - cart: l'array che contiene i poster aggiunti al carrello.
-  //  'cart' perché è il nome esatto usato nel context globale.
-
   const { filter, setFilter, cart } = useGlobalContext();
+  const [showCartBanner, setShowCartBanner] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(filter);
+  };
+
+  const handleCartMouseOver = () => {
+    setShowCartBanner(true);
+  };
+
+  const handleCartBannerMouseLeave = () => {
+    setShowCartBanner(false);
+    console.log("Mouse left the cart banner");
   };
 
   return (
@@ -90,7 +93,11 @@ const NavbarComponent = () => {
                 to="/cart"
                 className="text-light nav-link icon-hover position-relative"
               >
-                <i className="fa-solid fa-cart-shopping"></i>
+                <i
+                  onMouseOver={handleCartMouseOver}
+                  className="fa-solid fa-cart-shopping"
+                  style={{ cursor: 'pointer' }}
+                ></i>
                 {/*
                     // Mostra il badge numerico sopra l'icona del carrello solo se ci sono elementi nel carrello.
                     // cart.length indica quanti poster sono stati aggiunti.
@@ -101,6 +108,13 @@ const NavbarComponent = () => {
                   <span className="cart-badge">{cart.length}</span>
                 )}
               </NavLink>
+              {showCartBanner && (
+                <div
+                  onMouseLeave={handleCartBannerMouseLeave}
+                  style={{ position: 'absolute', top: '60px', right: 0, zIndex: 1000 }}>
+                  <CartBanner onMouseLeave={handleCartBannerMouseLeave} />
+                </div>
+              )}
             </Nav>
 
             {/* Form di ricerca (commentato) */}
@@ -113,7 +127,7 @@ const NavbarComponent = () => {
               onChange={(e) => setFilter(e.target.value)}
             /> */}
           </Navbar.Collapse>
-        </Container>
+        </Container >
       </Navbar>
       <div className="banner-fixed">
         <FreeShipment />

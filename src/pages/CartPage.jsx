@@ -1,42 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart } = useGlobalContext();
-
-  // Stato locale per le quantità di ogni prodotto
-  const [quantities, setQuantities] = useState({});
-
-  // Inizializza le quantità a 1 per ogni prodotto nel carrello
-  useEffect(() => {
-    const initialQuantities = {};
-    cart.forEach((poster) => {
-      initialQuantities[poster.id] = 1;
-    });
-    setQuantities(initialQuantities);
-  }, [cart]);
-
-  // Funzione per aumentare la quantità di un prodotto
-  const handlePlus = (id, stock) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] < stock ? prev[id] + 1 : prev[id],
-    }));
-  };
-
-  // Funzione per diminuire la quantità di un prodotto
-  const handleMinus = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] > 1 ? prev[id] - 1 : prev[id],
-    }));
-  };
+  const { cart, addCart, decrementCart, removeFromCart, clearCart } = useGlobalContext();
 
   // Funzione per calcolare il prezzo scontato di un singolo prodotto
-  // Se il prodotto ha uno sconto, applico la percentuale di sconto al prezzo originale
-  // Altrimenti ritorno il prezzo normale
   const getDiscountedPrice = (poster) => {
     if (!poster.discount) return poster.price;
     return poster.price * (1 - poster.discount / 100);
@@ -44,9 +14,8 @@ const CartPage = () => {
 
   const calculateSubtotal = () => {
     return cart.reduce((acc, poster) => {
-      // Uso il prezzo scontato invece del prezzo normale per il calcolo
       const finalPrice = getDiscountedPrice(poster);
-      return acc + finalPrice * (quantities[poster.id] || 1);
+      return acc + finalPrice * (poster.quantity || 1);
     }, 0);
   };
 
@@ -62,7 +31,7 @@ const CartPage = () => {
   const total = subtotal + shipmentCost;
 
   // Stato per la form address e dati utente
-  const [form, setForm] = useState({
+  const [form, setForm] = React.useState({
     nomeCompleto: "",
     email: "",
     via: "",
@@ -71,10 +40,10 @@ const CartPage = () => {
   });
 
   // Stato per mostrare/nascondere la form
-  const [mostraForm, setMostraForm] = useState(false);
+  const [mostraForm, setMostraForm] = React.useState(false);
 
   // Stato per mostrare messaggio di conferma ordine
-  const [ordineEffettuato, setOrdineEffettuato] = useState(false);
+  const [ordineEffettuato, setOrdineEffettuato] = React.useState(false);
 
   // Gestione cambi input
   const handleInputChange = (e) => {
@@ -91,7 +60,7 @@ const CartPage = () => {
       shipment_costs: shipmentCost,
       posters: cart.map((poster) => ({
         id: poster.id,
-        quantity: quantities[poster.id] || 1,
+        quantity: poster.quantity || 1,
       })),
     };
     e.preventDefault();
@@ -138,13 +107,10 @@ const CartPage = () => {
         <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
-              const quantity = quantities[poster.id] || 1;
+              const quantity = poster.quantity || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
-
-              // Calcolo il prezzo finale (scontato o normale) per questo prodotto
               const finalPrice = getDiscountedPrice(poster);
-
               return (
                 <div
                   key={poster.id}
@@ -161,10 +127,6 @@ const CartPage = () => {
                     <div className="col-md-8 col-sm-8 position-relative">
                       <div className="card-body">
                         <h2 className="card-title">{poster.title}</h2>
-
-                        {/* Mostro il prezzo con la stessa logica del ProductDetail */}
-                        {/* Se c'è uno sconto, mostro prezzo originale barrato e prezzo scontato */}
-                        {/* Altrimenti mostro solo il prezzo normale */}
                         <p className="card-text mt-4">
                           Prezzo:{" "}
                           {poster.discount ? (
@@ -190,10 +152,9 @@ const CartPage = () => {
                         </p>
                         <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                           <button
-                            className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
-                              }`}
+                            className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""}`}
                             disabled={isMinusDisabled}
-                            onClick={() => handleMinus(poster.id)}
+                            onClick={() => isMinusDisabled ? null : decrementCart(poster.id)}
                           >
                             {isMinusDisabled ? (
                               <i className="fa-solid fa-minus text-danger disabled-icon"></i>
@@ -207,13 +168,9 @@ const CartPage = () => {
                           >
                             {quantity}
                           </span>
-                          {console.log(quantity)}
                           <button
-                            onClick={() =>
-                              handlePlus(poster.id, poster.stock_quantity)
-                            }
-                            className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
-                              }`}
+                            onClick={() => isPlusDisabled ? null : addCart(poster)}
+                            className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""}`}
                             disabled={isPlusDisabled}
                           >
                             {isPlusDisabled ? (
