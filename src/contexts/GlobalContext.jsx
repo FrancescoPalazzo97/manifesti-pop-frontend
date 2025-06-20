@@ -16,10 +16,20 @@ const GlobalProvider = ({ children }) => {
 
   //funzione per aggiungere un poster al carrello
   const addCart = (poster) => {
-    const isAlreadyIn = cart.find(item => item.id === poster.id);
-    if (!isAlreadyIn) {
-      setCart(prev => [...prev, poster]);
-    }
+    setCart(prev => {
+      const isAlreadyIn = prev.find(item => item.id === poster.id);
+      if (isAlreadyIn) {
+        // Se già presente, aggiorna la quantità sommando quella nuova
+        return prev.map(item =>
+          item.id === poster.id
+            ? { ...item, quantity: (item.quantity || 1) + (poster.quantity || 1) }
+            : item
+        );
+      } else {
+        // Se non presente, aggiungi con la quantità passata (o 1)
+        return [...prev, { ...poster, quantity: poster.quantity || 1 }];
+      }
+    });
   }
 
   //funzione per rimuovere i poster dal carrello
