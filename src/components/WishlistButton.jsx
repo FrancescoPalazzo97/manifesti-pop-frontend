@@ -29,9 +29,9 @@ const WishlistButton = ({ poster }) => {
             title={exist ? 'Rimuovi dalla wishlist' : 'Aggiungi alla wishlist'}
         >
             {exist ? (
-                <i class="fa-solid fa-heart red"></i>
+                <i className="fa-solid fa-heart red"></i>
             ) : (
-                <i class="fa-solid fa-heart text-light"></i>
+                <i className="fa-solid fa-heart text-light"></i>
             )}
         </button>
     )
