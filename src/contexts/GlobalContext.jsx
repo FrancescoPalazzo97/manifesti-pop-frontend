@@ -14,11 +14,71 @@ const GlobalProvider = ({ children }) => {
   // Filtro di ricerca 
   const [filter, setFilter] = useState("");
 
+  const isInCart = (posterId) => {
+    return cart.some(item => item.id === posterId);
+  }
+
   //funzione per aggiungere un poster al carrello
   const addCart = (poster) => {
-    const newCart = [...cart, poster];
+    const existingItemIndex = cart.findIndex(item => item.id === poster.id);
+
+    if (existingItemIndex === -1) {
+      // Se il poster non esiste nel carrello, aggiungilo con quantità 1
+      const newPoster = {
+        ...poster,
+        quantity: 1
+      };
+      const newCart = [...cart, newPoster];
+      setCart(newCart);
+    } else {
+      // Se il poster esiste già, aumenta la quantità
+      const newCart = cart.map((cartItem, index) => {
+        if (index === existingItemIndex) {
+          return {
+            ...cartItem,
+            quantity: cartItem.quantity + 1
+          };
+        }
+        return cartItem;
+      });
+      setCart(newCart);
+    }
+  }
+
+  const updateQuantity = (posterId, newQuantity) => {
+    if (newQuantity <= 0) {
+      // Se la quantità è 0 o negativa, rimuovi il prodotto
+      removeFromCart(posterId);
+      return;
+    }
+
+    const newCart = cart.map(cartItem => {
+      if (cartItem.id === posterId) {
+        return {
+          ...cartItem,
+          quantity: newQuantity
+        };
+      }
+      return cartItem;
+    });
     setCart(newCart);
   }
+
+  const increaseQuantity = (posterId, maxStock) => {
+    const item = cart.find(cartItem => cartItem.id === posterId);
+    if (item && item.quantity < maxStock) {
+      updateQuantity(posterId, item.quantity + 1);
+    }
+  }
+
+  const decreaseQuantity = (posterId) => {
+    const item = cart.find(cartItem => cartItem.id === posterId);
+    if (item && item.quantity > 1) {
+      updateQuantity(posterId, item.quantity - 1);
+    }
+  }
+
+
 
   //funzione per rimuovere i poster dal carrello
   const removeFromCart = (posterId) => {
@@ -31,10 +91,6 @@ const GlobalProvider = ({ children }) => {
     setCart([]);
   };
 
-  const isInCart = (posterId) => {
-    return cart.some(item => item.id === posterId);
-  }
-
   const cartCount = cart.length;
 
   const cartData = {
@@ -43,7 +99,10 @@ const GlobalProvider = ({ children }) => {
     removeFromCart,
     clearCart,
     isInCart,
-    cartCount
+    cartCount,
+    updateQuantity,
+    increaseQuantity,
+    decreaseQuantity
   }
 
   // Funzione di aggiunta

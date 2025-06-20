@@ -7,63 +7,8 @@ const CartPage = () => {
 
   const { cartData } = useGlobalContext();
 
-  const { cart, removeFromCart, clearCart } = cartData;
+  const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = cartData;
 
-  // Stato locale per le quantità di ogni prodotto
-  const [quantities, setQuantities] = useState({});
-
-  // Inizializza le quantità a 1 per ogni prodotto nel carrello
-  useEffect(() => {
-    const initialQuantities = {};
-    cart.forEach((poster) => {
-      initialQuantities[poster.id] = 1;
-    });
-    setQuantities(initialQuantities);
-  }, [cart]);
-
-  // Funzione per aumentare la quantità di un prodotto
-  const handlePlus = (id, stock) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] < stock ? prev[id] + 1 : prev[id],
-    }));
-  };
-
-  // Funzione per diminuire la quantità di un prodotto
-  const handleMinus = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] > 1 ? prev[id] - 1 : prev[id],
-    }));
-  };
-
-  // Funzione per calcolare il prezzo scontato di un singolo prodotto
-  // Se il prodotto ha uno sconto, applico la percentuale di sconto al prezzo originale
-  // Altrimenti ritorno il prezzo normale
-  const getDiscountedPrice = (poster) => {
-    return poster.price * (1 - poster.discount / 100);
-  };
-
-  const calculateSubtotal = () => {
-    return cart.reduce((acc, poster) => {
-      // Uso il prezzo scontato invece del prezzo normale per il calcolo
-      const finalPrice = getDiscountedPrice(poster);
-      return acc + finalPrice * (quantities[poster.id] || 1);
-    }, 0);
-  };
-
-  const subtotal = calculateSubtotal();
-
-  let shipmentCost;
-  if (subtotal >= 100) {
-    shipmentCost = 0;
-  } else {
-    shipmentCost = 10;
-  }
-
-  const total = subtotal + shipmentCost;
-
-  // Stato per la form address e dati utente
   const [form, setForm] = useState({
     nomeCompleto: "",
     email: "",
@@ -84,19 +29,50 @@ const CartPage = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Funzione per calcolare il prezzo scontato di un singolo prodotto
+  const getDiscountedPrice = (poster) => {
+    return poster.price * (1 - poster.discount / 100);
+  };
+
+  const calculateSubtotal = () => {
+    return cart.reduce((acc, poster) => {
+      const finalPrice = getDiscountedPrice(poster);
+      const quantity = poster.quantity || 1; // Fallback a 1 se undefined
+      return acc + finalPrice * quantity; // Usa poster.quantity dal carrello globale
+    }, 0);
+  };
+
+  const subtotal = calculateSubtotal();
+
+  let shipmentCost;
+  if (subtotal >= 100) {
+    shipmentCost = 0;
+  } else {
+    shipmentCost = 10;
+  }
+
+  const total = subtotal + shipmentCost;
+
   // Gestione submit form
   const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!form.nomeCompleto || !form.email || !form.via || !form.numeroCivico || !form.citta) {
+      alert("Tutti i campi sono obbligatori!");
+      return;
+    }
+
     let obj = {
       name: form.nomeCompleto,
       email: form.email,
       address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
-      shipment_costs: shipmentCost,
+      shipment_costs: parseFloat(shipmentCost),
       posters: cart.map((poster) => ({
         id: poster.id,
-        quantity: quantities[poster.id] || 1,
+        quantity: poster.quantity,
       })),
     };
-    e.preventDefault();
+
     // Unifica nome e cognome
     console.log("Dati ordine da inviare:", obj);
     axios
@@ -154,7 +130,7 @@ const CartPage = () => {
         <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
-              const quantity = quantities[poster.id] || 1;
+              const quantity = poster.quantity || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
 
@@ -209,7 +185,7 @@ const CartPage = () => {
                             className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
                               }`}
                             disabled={isMinusDisabled}
-                            onClick={() => handleMinus(poster.id)}
+                            onClick={() => decreaseQuantity(poster.id)}
                           >
                             {isMinusDisabled ? (
                               <i className="fa-solid fa-minus text-danger disabled-icon"></i>
@@ -225,9 +201,7 @@ const CartPage = () => {
                           </span>
                           {console.log(quantity)}
                           <button
-                            onClick={() =>
-                              handlePlus(poster.id, poster.stock_quantity)
-                            }
+                            onClick={() => increaseQuantity(poster.id, poster.stock_quantity)}
                             className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
                               }`}
                             disabled={isPlusDisabled}
