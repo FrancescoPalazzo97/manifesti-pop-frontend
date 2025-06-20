@@ -18,7 +18,7 @@ const GlobalProvider = ({ children }) => {
     return cart.some(item => item.id === posterId);
   }
 
-  //funzione per aggiungere un poster al carrello
+  // Aggiungi o incrementa quantità
   const addCart = (poster) => {
     const existingItemIndex = cart.findIndex(item => item.id === poster.id);
 
@@ -43,7 +43,7 @@ const GlobalProvider = ({ children }) => {
       });
       setCart(newCart);
     }
-  }
+  };
 
   const updateQuantity = (posterId, newQuantity) => {
     if (newQuantity <= 0) {
@@ -86,7 +86,6 @@ const GlobalProvider = ({ children }) => {
     setCart(newCart);
   };
 
-  // Funzione per svuotare il carrello
   const clearCart = () => {
     setCart([]);
   };
@@ -142,6 +141,14 @@ const GlobalProvider = ({ children }) => {
 
   const wishlistCount = wishlist.length;
 
+  // Calcola il prezzo scontato di un poster
+  const getDiscountedPrice = (poster) => {
+    if (poster.discount && poster.discount > 0) {
+      return (poster.price * (1 - poster.discount / 100));
+    }
+    return poster.price;
+  };
+
   // Metto tutti i dati e le funzioni in un oggetto
   const wishlistData = {
     wishlist,           // Array di tutti i poster nella wishlist
@@ -157,7 +164,8 @@ const GlobalProvider = ({ children }) => {
       filter,
       setFilter,
       cartData,
-      wishlistData
+      wishlistData,
+      getDiscountedPrice
     }}>
       {children}
     </GlobalContext.Provider>

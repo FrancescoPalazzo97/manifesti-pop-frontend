@@ -11,6 +11,7 @@ import Logo from "./Logo";
 import Counter from "./Counter";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import FreeShipment from "./FreeShipment";
+import CartBanner from "./CartBanner";
 
 const NavbarComponent = () => {
 
@@ -25,9 +26,10 @@ const NavbarComponent = () => {
   // - cart: l'array che contiene i poster aggiunti al carrello.
   //  'cart' perché è il nome esatto usato nel context globale.
 
-  const { filter, setFilter, cart } = useGlobalContext();
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
+  const { filter, setFilter, cart } = useGlobalContext();
+  const [showCartBanner, setShowCartBanner] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,6 +40,15 @@ const NavbarComponent = () => {
     // Reindirizza con parametro nell'URL
     navigate(`/posters-list?term=${encodeURIComponent(trimmed)}`);
     setSearch(""); // Resetta campo se vuoi
+  };
+
+  const handleCartMouseOver = () => {
+    setShowCartBanner(true);
+  };
+
+  const handleCartBannerMouseLeave = () => {
+    setShowCartBanner(false);
+    console.log("Mouse left the cart banner");
   };
 
   return (
@@ -114,11 +125,34 @@ const NavbarComponent = () => {
                 <Counter count={wishlistCount} />
                 <i className="fa-solid fa-heart"></i>
               </NavLink>
+              <NavLink
 
-              <NavLink to="/cart" className="text-light nav-link icon-hover position-relative">
+                to="/cart"
+                className="text-light nav-link icon-hover position-relative"
+              >
                 <Counter count={cartCount} />
-                <i className="fa-solid fa-cart-shopping"></i>
+                <i
+                  onMouseOver={handleCartMouseOver}
+                  className="fa-solid fa-cart-shopping"
+                  style={{ cursor: 'pointer' }}
+                ></i>
+                {/*
+                    // Mostra il badge numerico sopra l'icona del carrello solo se ci sono elementi nel carrello.
+                    // cart.length indica quanti poster sono stati aggiunti.
+                    // React aggiorna automaticamente questo numero quando cambia lo stato globale 'cart'.
+                    // Il badge è stilizzato in CSS per apparire come un piccolo cerchio rosso in alto a destra.
+                */}
+                {cart && cart.length > 0 && (
+                  <span className="cart-badge">{cart.length}</span>
+                )}
               </NavLink>
+              {showCartBanner && (
+                <div
+                  onMouseLeave={handleCartBannerMouseLeave}
+                  style={{ position: 'absolute', top: '60px', right: 0, zIndex: 1000 }}>
+                  <CartBanner onMouseLeave={handleCartBannerMouseLeave} />
+                </div>
+              )}
             </Nav>
 
             {/* Form di ricerca (commentato) */}
@@ -131,7 +165,7 @@ const NavbarComponent = () => {
               onChange={(e) => setFilter(e.target.value)}
             /> */}
           </Navbar.Collapse>
-        </Container>
+        </Container >
       </Navbar>
       <div className="banner-fixed">
         <FreeShipment />
