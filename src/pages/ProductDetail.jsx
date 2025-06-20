@@ -324,9 +324,11 @@ function ProductDetail() {
               {correlati.length > 0 && (
                 <div className="mt-5">
                   <hr className="mb-4" />
-                  <h3 className="mb-4 text-center">
-                    Altri poster di <span className="text-rosa">{prodotto.artist}</span>
-                  </h3>
+                  <div className="d-flex align-items-center justify-content-center mb-4 flex-wrap">
+                    <h3 className="mb-0 me-2">Altri poster di</h3>
+                    <span className="text-rosa fw-bold fs-3 me-2">{prodotto.artist}</span>
+                    <h3 className="mb-0">e consigliati</h3>
+                  </div>
                   
                   <div className="row g-4">
                     {correlati.map((poster) => (
@@ -443,20 +445,7 @@ export default ProductDetail;
  *    - Messaggio di errore con link di ritorno
  *    - Fallback per dati mancanti
  * 
- * MIGLIORAMENTI APPORTATI:
- * 
- * - ✅ Rimosso codice duplicato alla fine del file
- * - ✅ Aggiunto stato errore per gestione fallimenti API
- * - ✅ Migliorata accessibilità con alt text descrittivi
- * - ✅ Aggiunta gestione prodotti non disponibili
- * - ✅ Ottimizzata struttura responsive
- * - ✅ Aggiunti effetti hover e transizioni
- * - ✅ Badge visivi per sconti
- * - ✅ Spinner di caricamento più elegante
- * - ✅ Separazione logica delle funzioni helper
- * - ✅ Commenti esaustivi per ogni sezione
- * - ✅ Gestione edge cases (prodotti senza descrizione, etc.)
- * 
+
  * DIPENDENZE:
  * - React (hooks: useState, useEffect)
  * - react-router-dom (useParams, Link)
