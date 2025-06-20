@@ -24,7 +24,7 @@ const PosterCard = ({ poster, slider }) => {
       <div className="wishlist-button-container">
         <WishlistButton poster={poster} />
       </div>
-      <Link to={`/posters/${slug}`} className={`text-decoration-none`}>
+      <Link to={`/posters/${slug}`} className={`text-decoration-none text-dark`}>
         <DiscountLabel discount={discount} />
         <div className="img-container ">
           <img src={image_url} className="fix-img rounded-4" alt={title} />
