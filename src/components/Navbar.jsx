@@ -38,10 +38,6 @@ const NavbarComponent = () => {
     setShowCartBanner(true);
   };
 
-  const handleCartMouseLeave = () => {
-    setShowCartBanner(false);
-  };
-
   const handleCartBannerMouseLeave = () => {
     setShowCartBanner(false);
     console.log("Mouse left the cart banner");
