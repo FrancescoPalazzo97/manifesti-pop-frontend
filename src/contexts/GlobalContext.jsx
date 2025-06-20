@@ -45,7 +45,7 @@ const GlobalProvider = ({ children }) => {
     const newWishlist = [...wishlist, poster];
     setWishlist(newWishlist);
 
-    alert(`${poster.title} aggiunto alla wishlist`)
+    //alert(`${poster.title} aggiunto alla wishlist`)
   }
 
   // Funzione di elimina
@@ -53,7 +53,7 @@ const GlobalProvider = ({ children }) => {
     const newWishlist = wishlist.filter(item => item.id !== posterId);
     setWishlist(newWishlist);
 
-    alert(`poster rimosso`);
+    //alert(`poster rimosso`);
   }
 
   const isInWishlist = (posterId) => {
@@ -63,7 +63,7 @@ const GlobalProvider = ({ children }) => {
   const clearWishlist = () => {
     if (window.confirm('Vuoi davvero svuotare la wishlist?')) {
       setWishlist([]);
-      alert('Wishlist svuotata!');
+      //alert('Wishlist svuotata!');
     }
   };
 
