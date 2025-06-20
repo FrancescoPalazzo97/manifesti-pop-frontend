@@ -8,39 +8,102 @@ const GlobalProvider = ({ children }) => {
   // Wishlist
   const [wishlist, setWishlist] = useLocalStorage(`poster-wishlist`, []);
 
+  // cart
+  const [cart, setCart] = useLocalStorage(`poster-cart`, []);
+
   // Filtro di ricerca 
   const [filter, setFilter] = useState("");
 
-  //lista i poster nel carrello
-  const [cart, setCart] = useState([]);
+  const isInCart = (posterId) => {
+    return cart.some(item => item.id === posterId);
+  }
 
   //funzione per aggiungere un poster al carrello
   const addCart = (poster) => {
-    setCart(prev => {
-      const isAlreadyIn = prev.find(item => item.id === poster.id);
-      if (isAlreadyIn) {
-        // Se già presente, aggiorna la quantità sommando quella nuova
-        return prev.map(item =>
-          item.id === poster.id
-            ? { ...item, quantity: (item.quantity || 1) + (poster.quantity || 1) }
-            : item
-        );
-      } else {
-        // Se non presente, aggiungi con la quantità passata (o 1)
-        return [...prev, { ...poster, quantity: poster.quantity || 1 }];
-      }
-    });
+    const existingItemIndex = cart.findIndex(item => item.id === poster.id);
+
+    if (existingItemIndex === -1) {
+      // Se il poster non esiste nel carrello, aggiungilo con quantità 1
+      const newPoster = {
+        ...poster,
+        quantity: 1
+      };
+      const newCart = [...cart, newPoster];
+      setCart(newCart);
+    } else {
+      // Se il poster esiste già, aumenta la quantità
+      const newCart = cart.map((cartItem, index) => {
+        if (index === existingItemIndex) {
+          return {
+            ...cartItem,
+            quantity: cartItem.quantity + 1
+          };
+        }
+        return cartItem;
+      });
+      setCart(newCart);
+    }
   }
+
+  const updateQuantity = (posterId, newQuantity) => {
+    if (newQuantity <= 0) {
+      // Se la quantità è 0 o negativa, rimuovi il prodotto
+      removeFromCart(posterId);
+      return;
+    }
+
+    const newCart = cart.map(cartItem => {
+      if (cartItem.id === posterId) {
+        return {
+          ...cartItem,
+          quantity: newQuantity
+        };
+      }
+      return cartItem;
+    });
+    setCart(newCart);
+  }
+
+  const increaseQuantity = (posterId, maxStock) => {
+    const item = cart.find(cartItem => cartItem.id === posterId);
+    if (item && item.quantity < maxStock) {
+      updateQuantity(posterId, item.quantity + 1);
+    }
+  }
+
+  const decreaseQuantity = (posterId) => {
+    const item = cart.find(cartItem => cartItem.id === posterId);
+    if (item && item.quantity > 1) {
+      updateQuantity(posterId, item.quantity - 1);
+    }
+  }
+
+
 
   //funzione per rimuovere i poster dal carrello
   const removeFromCart = (posterId) => {
-    setCart(prev => prev.filter(item => item.id !== posterId));
+    const newCart = cart.filter(item => item.id !== posterId);
+    setCart(newCart);
   };
 
   // Funzione per svuotare il carrello
   const clearCart = () => {
     setCart([]);
   };
+
+  const cartCount = cart.length;
+
+  const cartData = {
+    cart,
+    addCart,
+    removeFromCart,
+    clearCart,
+    isInCart,
+    cartCount,
+    updateQuantity,
+    increaseQuantity,
+    decreaseQuantity
+  }
 
   // Funzione di aggiunta
   const addToWishlist = (poster) => {
@@ -93,10 +156,7 @@ const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider value={{
       filter,
       setFilter,
-      cart,
-      addCart,
-      removeFromCart,
-      clearCart, // aggiunto qui
+      cartData,
       wishlistData
     }}>
       {children}

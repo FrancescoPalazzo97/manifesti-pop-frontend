@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetail.css';
 import { useGlobalContext } from '../contexts/GlobalContext';
 
-/**
- * COMPONENTE ProductDetail
- * 
- * Questo componente si occupa di:
- * 1. Mostrare i dettagli completi di un singolo prodotto (poster)
- * 2. Recuperare e visualizzare prodotti correlati dello stesso artista
- * 3. Permettere l'aggiunta del prodotto al carrello e alla wishlist
- * 4. Gestire stati di caricamento e errori
- */
-function ProductDetail() {
-  // =====================================
-  // HOOKS E STATO DEL COMPONENTE
-  // =====================================
-  
-  // Estrae lo slug del prodotto dalla URL (es: /posters/mio-poster-slug)
+const ProductDetail = () => {
+
   const { slug } = useParams();
-  
-  // Funzioni globali per gestire carrello e wishlist
-  const { addToWishlist, addCart } = useGlobalContext();
-  
-  // Stato per il prodotto principale - inizialmente null (non caricato)
+
+  // Estraggo dal context globale le funzioni per wishlist e carrello
+  const { wishlistData, cartData } = useGlobalContext();
+
+  const { addToWishlist, removeFromWishlist, isInWishlist } = wishlistData;
+
+  const { addCart, removeFromCart, isInCart } = cartData;
+
+  // Stato locale per contenere i dati del prodotto, inizialmente null (non caricato)
   const [prodotto, setProdotto] = useState(null);
-  
+
   // Stato per i prodotti correlati - array vuoto inizialmente
   const [correlati, setCorrelati] = useState([]);
-  
+
   // Stato per gestire errori di caricamento
   const [errore, setErrore] = useState(false);
 
   // =====================================
   // EFFETTO PER CARICAMENTO DATI
   // =====================================
-  
+
   useEffect(() => {
     // Se non c'è slug, non fare nulla
     if (!slug) return;
-    
+
     // Reset stati all'inizio del caricamento
     setErrore(false);
     setProdotto(null);
-    
+
     /**
      * FASE 1: Caricamento dettagli prodotto principale
      * Chiamata API per ottenere i dati del prodotto tramite slug
@@ -53,7 +44,7 @@ function ProductDetail() {
       .then(response => {
         const datiProdotto = response.data;
         setProdotto(datiProdotto);
-        
+
         /**
          * FASE 2: Caricamento prodotti correlati
          * Una volta ottenuto il prodotto principale, cerchiamo altri poster
@@ -68,7 +59,7 @@ function ProductDetail() {
           .filter(poster => poster.id !== prodotto?.id) // Esclude prodotto attuale
           .sort(() => Math.random() - 0.5) // Mescola randomicamente
           .slice(0, 4); // Prende solo i primi 4
-        
+
         setCorrelati(correlatiFiltrati);
       })
       .catch(error => {
@@ -76,12 +67,12 @@ function ProductDetail() {
         setErrore(true);
         setCorrelati([]); // Array vuoto in caso di errore
       });
-  }, [slug]); // Si riesegue quando cambia lo slug
+  }, [slug]); // L'effetto si esegue al montaggio e ogni volta che slug cambia
 
   // =====================================
   // FUNZIONI HELPER PER FORMATTAZIONE
   // =====================================
-  
+
   /**
    * Converte i codici taglia in testo leggibile
    * @param {string} size - Codice taglia (sm, md, lg)
@@ -90,7 +81,7 @@ function ProductDetail() {
   const formatTaglia = (size) => {
     const taglie = {
       sm: 'Small (A4)',
-      md: 'Medium (A3)', 
+      md: 'Medium (A3)',
       lg: 'Large (A2)'
     };
     return taglie[size] || 'Taglia non specificata';
@@ -117,30 +108,29 @@ function ProductDetail() {
     return prodotto.price * (1 - prodotto.discount / 100);
   };
 
-  // =====================================
-  // GESTORI EVENTI
-  // =====================================
-  
-  /**
-   * Aggiunge il prodotto corrente alla wishlist
-   * Usa la funzione globale dal context
-   */
-  const handleAggiungiAiPreferiti = () => {
-    addToWishlist(prodotto);
-  };
+  const existInWishlist = isInWishlist(prodotto.id);
 
-  /**
-   * Aggiunge il prodotto corrente al carrello
-   * Usa la funzione globale dal context
-   */
-  const handleAggiungiAlCarrello = () => {
-    addCart(prodotto);
-  };
+  const handleClickWishlist = (e) => {
+    e.preventDefault;
+    e.stopPropagation();
+
+    existInWishlist ? removeFromWishlist(prodotto.id) : addToWishlist(prodotto);
+  }
+
+  // const existInCart = isInCart(prodotto.id);
+
+  const handleClickCart = e => {
+    e.preventDefault;
+    e.stopPropagation();
+
+    addCart(prodotto)
+    // existInCart ? removeFromCart(prodotto.id) : addCart(prodotto);
+  }
 
   // =====================================
   // RENDERING CONDIZIONALE
   // =====================================
-  
+
   // Se c'è stato un errore nel caricamento
   if (errore) {
     return (
@@ -171,17 +161,17 @@ function ProductDetail() {
   // =====================================
   // RENDER PRINCIPALE
   // =====================================
-  
+
   return (
     <div className="container-fluid">
       <div className="row">
         <div className="col-12">
           <div className="product-detail-container">
             <div className="container">
-              
+
               {/* SEZIONE PRINCIPALE: IMMAGINE E DETTAGLI PRODOTTO */}
               <div className="row align-items-center g-5 mb-5">
-                
+
                 {/* COLONNA IMMAGINE */}
                 <div className="col-md-6 text-center">
                   <img
@@ -191,26 +181,26 @@ function ProductDetail() {
                     style={{ maxHeight: '600px', objectFit: 'cover' }}
                   />
                 </div>
-                
+
                 {/* COLONNA DETTAGLI */}
                 <div className="col-md-6">
-                  
+
                   {/* Titolo del prodotto */}
                   <h1 className="mb-3 fw-bold text-rosa">{prodotto.title}</h1>
-                  
+
                   {/* Informazioni artista */}
                   <p className="mb-3">
-                    <strong>Artista:</strong> 
+                    <strong>Artista:</strong>
                     <span className="text-muted ms-2">{prodotto.artist}</span>
                   </p>
-                  
+
                   {/* SEZIONE PREZZO con gestione sconto */}
                   <div className="mb-4">
                     {prodotto.discount && prodotto.discount > 0 ? (
                       // Prezzo con sconto
                       <div>
                         <h4 className="mb-2">
-                          <span 
+                          <span
                             className="text-decoration-line-through text-muted me-3"
                             style={{ fontSize: '1.2rem' }}
                           >
@@ -231,7 +221,7 @@ function ProductDetail() {
                       </h4>
                     )}
                   </div>
-                  
+
                   {/* Descrizione prodotto */}
                   {prodotto.description && (
                     <div className="mb-4">
@@ -239,20 +229,20 @@ function ProductDetail() {
                       <p className="text-muted">{prodotto.description}</p>
                     </div>
                   )}
-                  
+
                   {/* DETTAGLI TECNICI */}
                   <div className="row mb-4">
                     <div className="col-sm-6">
                       <p className="mb-2">
-                        <strong>📏 Taglia:</strong><br/>
+                        <strong>📏 Taglia:</strong><br />
                         <span className="text-muted">{formatTaglia(prodotto.size)}</span>
                       </p>
                     </div>
                     <div className="col-sm-6">
                       <p className="mb-2">
-                        <strong>📦 Disponibilità:</strong><br/>
+                        <strong>📦 Disponibilità:</strong><br />
                         <span className={`fw-bold ${prodotto.stock_quantity > 0 ? 'text-success' : 'text-danger'}`}>
-                          {prodotto.stock_quantity > 0 
+                          {prodotto.stock_quantity > 0
                             ? `${prodotto.stock_quantity} pezzi disponibili`
                             : 'Non disponibile'
                           }
@@ -260,13 +250,13 @@ function ProductDetail() {
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* PULSANTI AZIONE */}
                   <div className="d-flex flex-column flex-sm-row gap-3">
-                    
+
                     {/* Pulsante Aggiungi al Carrello */}
                     <button
-                      onClick={handleAggiungiAlCarrello}
+                      onClick={handleClickCart}
                       disabled={prodotto.stock_quantity <= 0}
                       className="btn btn-lg flex-fill"
                       style={{
@@ -293,10 +283,10 @@ function ProductDetail() {
                     >
                       🛒 {prodotto.stock_quantity > 0 ? 'Aggiungi al carrello' : 'Non disponibile'}
                     </button>
-                    
+
                     {/* Pulsante Aggiungi ai Preferiti */}
                     <button
-                      onClick={handleAggiungiAiPreferiti}
+                      onClick={handleClickWishlist}
                       className="btn btn-outline-danger btn-lg flex-fill"
                       style={{
                         borderRadius: '8px',
@@ -319,7 +309,7 @@ function ProductDetail() {
                   </div>
                 </div>
               </div>
-              
+
               {/* SEZIONE PRODOTTI CORRELATI */}
               {correlati.length > 0 && (
                 <div className="mt-5">
@@ -329,25 +319,25 @@ function ProductDetail() {
                     <span className="text-rosa fw-bold fs-3 me-2">{prodotto.artist}</span>
                     <h3 className="mb-0">e consigliati</h3>
                   </div>
-                  
+
                   <div className="row g-4">
                     {correlati.map((poster) => (
                       <div key={poster.id} className="col-6 col-md-3">
                         <div className="card h-100 shadow-sm border-0 poster-card">
-                          
+
                           {/* Immagine poster correlato */}
                           <div className="position-relative overflow-hidden">
                             <img
                               src={poster.image_url}
                               alt={`Poster ${poster.title}`}
                               className="card-img-top"
-                              style={{ 
-                                objectFit: 'cover', 
+                              style={{
+                                objectFit: 'cover',
                                 height: '200px',
                                 transition: 'transform 0.3s ease'
                               }}
                             />
-                            
+
                             {/* Badge sconto se presente */}
                             {poster.discount && poster.discount > 0 && (
                               <div className="position-absolute top-0 end-0 m-2">
@@ -357,13 +347,13 @@ function ProductDetail() {
                               </div>
                             )}
                           </div>
-                          
+
                           {/* Contenuto card */}
                           <div className="card-body d-flex flex-column">
                             <h6 className="card-title mb-2 fw-bold">
                               {poster.title}
                             </h6>
-                            
+
                             {/* Prezzo poster correlato */}
                             <div className="mb-3 fw-bold">
                               {poster.discount && poster.discount > 0 ? (
@@ -381,7 +371,7 @@ function ProductDetail() {
                                 </span>
                               )}
                             </div>
-                            
+
                             {/* Link ai dettagli del poster correlato */}
                             <Link
                               to={`/posters/${poster.slug}`}
@@ -397,7 +387,7 @@ function ProductDetail() {
                   </div>
                 </div>
               )}
-              
+
             </div>
           </div>
         </div>

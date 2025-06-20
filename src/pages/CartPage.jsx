@@ -4,64 +4,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const CartPage = () => {
-  const { cart, removeFromCart, clearCart } = useGlobalContext();
 
-  // Stato locale per le quantità di ogni prodotto
-  const [quantities, setQuantities] = useState({});
+  const { cartData } = useGlobalContext();
 
-  // Inizializza le quantità a 1 per ogni prodotto nel carrello
-  useEffect(() => {
-    const initialQuantities = {};
-    cart.forEach((poster) => {
-      initialQuantities[poster.id] = poster.quantity || 1; // Usa quantity se presente
-    });
-    setQuantities(initialQuantities);
-  }, [cart]);
+  const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = cartData;
 
-  // Funzione per aumentare la quantità di un prodotto
-  const handlePlus = (id, stock) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] < stock ? prev[id] + 1 : prev[id],
-    }));
-  };
-
-  // Funzione per diminuire la quantità di un prodotto
-  const handleMinus = (id) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] > 1 ? prev[id] - 1 : prev[id],
-    }));
-  };
-
-  // Funzione per calcolare il prezzo scontato di un singolo prodotto
-  // Se il prodotto ha uno sconto, applico la percentuale di sconto al prezzo originale
-  // Altrimenti ritorno il prezzo normale
-  const getDiscountedPrice = (poster) => {
-    if (!poster.discount) return poster.price;
-    return poster.price * (1 - poster.discount / 100);
-  };
-
-  const calculateSubtotal = () => {
-    return cart.reduce((acc, poster) => {
-      // Uso il prezzo scontato invece del prezzo normale per il calcolo
-      const finalPrice = getDiscountedPrice(poster);
-      return acc + finalPrice * (quantities[poster.id] || 1);
-    }, 0);
-  };
-
-  const subtotal = calculateSubtotal();
-
-  let shipmentCost;
-  if (subtotal >= 100) {
-    shipmentCost = 0;
-  } else {
-    shipmentCost = 10;
-  }
-
-  const total = subtotal + shipmentCost;
-
-  // Stato per la form address e dati utente
   const [form, setForm] = useState({
     nomeCompleto: "",
     email: "",
@@ -82,23 +29,54 @@ const CartPage = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Funzione per calcolare il prezzo scontato di un singolo prodotto
+  const getDiscountedPrice = (poster) => {
+    return poster.price * (1 - poster.discount / 100);
+  };
+
+  const calculateSubtotal = () => {
+    return cart.reduce((acc, poster) => {
+      const finalPrice = getDiscountedPrice(poster);
+      const quantity = poster.quantity || 1; // Fallback a 1 se undefined
+      return acc + finalPrice * quantity; // Usa poster.quantity dal carrello globale
+    }, 0);
+  };
+
+  const subtotal = calculateSubtotal();
+
+  let shipmentCost;
+  if (subtotal >= 100) {
+    shipmentCost = 0;
+  } else {
+    shipmentCost = 10;
+  }
+
+  const total = subtotal + shipmentCost;
+
   // Gestione submit form
   const handleSubmit = (e) => {
-    let array = {
+    e.preventDefault();
+
+    if (!form.nomeCompleto || !form.email || !form.via || !form.numeroCivico || !form.citta) {
+      alert("Tutti i campi sono obbligatori!");
+      return;
+    }
+
+    let obj = {
       name: form.nomeCompleto,
       email: form.email,
       address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
-      shipment_costs: shipmentCost,
+      shipment_costs: parseFloat(shipmentCost),
       posters: cart.map((poster) => ({
         id: poster.id,
-        quantity: quantities[poster.id] || 1,
+        quantity: poster.quantity,
       })),
     };
-    e.preventDefault();
+
     // Unifica nome e cognome
-    console.log("Dati ordine da inviare:", array);
+    console.log("Dati ordine da inviare:", obj);
     axios
-      .post("http://localhost:3000/order", array)
+      .post("http://localhost:3000/order", obj)
       .then((res) => {
         alert("Ordine effettuato con successo!");
         console.log(res.data);
@@ -115,6 +93,20 @@ const CartPage = () => {
       })
       .catch((err) => {
         console.error("Errore nell'invio dell'ordine:", err);
+        if (err.response) {
+          // Il server ha risposto con un errore
+          console.error("Errore risposta server:", err.response.data);
+          console.error("Status code:", err.response.status);
+          alert(`Errore del server: ${err.response.data.message || 'Errore sconosciuto'}`);
+        } else if (err.request) {
+          // La richiesta è stata fatta ma non c'è stata risposta
+          console.error("Nessuna risposta dal server:", err.request);
+          alert("Impossibile contattare il server. Controlla la connessione.");
+        } else {
+          // Errore nella configurazione della richiesta
+          console.error("Errore configurazione:", err.message);
+          alert(`Errore: ${err.message}`);
+        }
       });
   };
 
@@ -138,7 +130,7 @@ const CartPage = () => {
         <div className="row gx-4">
           <div className="col-lg-6 col-sm-12">
             {cart.map((poster) => {
-              const quantity = quantities[poster.id] || 1;
+              const quantity = poster.quantity || 1;
               const isMinusDisabled = quantity <= 1;
               const isPlusDisabled = quantity >= poster.stock_quantity;
 
@@ -193,7 +185,7 @@ const CartPage = () => {
                             className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
                               }`}
                             disabled={isMinusDisabled}
-                            onClick={() => handleMinus(poster.id)}
+                            onClick={() => decreaseQuantity(poster.id)}
                           >
                             {isMinusDisabled ? (
                               <i className="fa-solid fa-minus text-danger disabled-icon"></i>
@@ -209,9 +201,7 @@ const CartPage = () => {
                           </span>
                           {console.log(quantity)}
                           <button
-                            onClick={() =>
-                              handlePlus(poster.id, poster.stock_quantity)
-                            }
+                            onClick={() => increaseQuantity(poster.id, poster.stock_quantity)}
                             className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
                               }`}
                             disabled={isPlusDisabled}
