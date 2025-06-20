@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -18,10 +18,10 @@ const CartPage = () => {
   });
 
   // Stato per mostrare/nascondere la form
-  const [mostraForm, setMostraForm] = React.useState(false);
+  const [mostraForm, setMostraForm] = useState(false);
 
   // Stato per mostrare messaggio di conferma ordine
-  const [ordineEffettuato, setOrdineEffettuato] = React.useState(false);
+  const [ordineEffettuato, setOrdineEffettuato] = useState(false);
 
   // Gestione cambi input
   const handleInputChange = (e) => {

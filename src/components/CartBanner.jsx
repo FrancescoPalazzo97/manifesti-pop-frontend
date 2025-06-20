@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import DiscountLabel from './DiscountLabel'
 
 const CartBanner = () => {
-    const { cart, addCart, decrementCart, removeFromCart, getDiscountedPrice } = useGlobalContext()
+    const { getDiscountedPrice, cartData } = useGlobalContext()
+    const { cart, addCart, decrementCart, removeFromCart } = cartData;
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Gestione quantità globale
