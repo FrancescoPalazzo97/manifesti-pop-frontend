@@ -9,29 +9,19 @@ const WishlistButton = ({ poster }) => {
 
     const exist = isInWishlist(poster.id);
 
-    console.log('🔍 DEBUG WishlistButton:');
-    console.log('- Poster ID:', poster.id);
-    console.log('- Poster title:', poster.title);
-    console.log('- Exist (dovrebbe essere true/false):', exist);
-    console.log('- Wishlist completa:', wishlist);
-    console.log('- Wishlist IDs:', wishlist.map(item => item.id));
-    console.log('- isInWishlist result:', exist);
-    console.log('---');
-
     const handleClick = (e) => {
         e.preventDefault;
         e.stopPropagation();
-        console.log('🖱️ Click! Exist prima del click:', exist);
 
-        // exist ? removeFromWishlist(poster.id) : addToWishlist(poster);
+        exist ? removeFromWishlist(poster.id) : addToWishlist(poster);
 
-        if (exist) {
-            console.log('➡️ Rimuovo dalla wishlist');
-            removeFromWishlist(poster.id);
-        } else {
-            console.log('➡️ Aggiungo alla wishlist');
-            addToWishlist(poster);
-        }
+        // if (exist) {
+        //     console.log('➡️ Rimuovo dalla wishlist');
+        //     removeFromWishlist(poster.id);
+        // } else {
+        //     console.log('➡️ Aggiungo alla wishlist');
+        //     addToWishlist(poster);
+        // }
     }
     return (
         <button
@@ -41,7 +31,7 @@ const WishlistButton = ({ poster }) => {
             {exist ? (
                 <i class="fa-solid fa-heart red"></i>
             ) : (
-                <i class="fa-regular fa-heart"></i>
+                <i class="fa-solid fa-heart text-light"></i>
             )}
         </button>
     )
