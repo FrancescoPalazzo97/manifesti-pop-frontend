@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { emailService } from '../services/emailService';
 
 const CartPage = () => {
 
@@ -23,6 +24,10 @@ const CartPage = () => {
   // Stato per mostrare messaggio di conferma ordine
   const [ordineEffettuato, setOrdineEffettuato] = useState(false);
 
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   // Gestione cambi input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +36,10 @@ const CartPage = () => {
 
   // Funzione per calcolare il prezzo scontato di un singolo prodotto
   const getDiscountedPrice = (poster) => {
-    return poster.price * (1 - poster.discount / 100);
+    // Converte sempre a numero per sicurezza
+    const price = parseFloat(poster.price) || 0;
+    const discount = parseFloat(poster.discount) || 0;
+    return price * (1 - discount / 100);
   };
 
   const calculateSubtotal = () => {
@@ -54,15 +62,34 @@ const CartPage = () => {
   const total = subtotal + shipmentCost;
 
   // Gestione submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+    setMessage('');
+    setError('');
 
     if (!form.nomeCompleto || !form.email || !form.via || !form.numeroCivico || !form.citta) {
       alert("Tutti i campi sono obbligatori!");
       return;
     }
 
-    let obj = {
+    try {
+
+      // Procedi con l'ordine
+      await inviaOrdine();
+
+    } catch (err) {
+      console.error('Errore invio email:', err);
+      setError(err.error || 'Errore nell\'invio dell\'email');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Funzione separata per l'ordine:
+  const inviaOrdine = async () => {
+    const obj = {
       name: form.nomeCompleto,
       email: form.email,
       address: `${form.via} ${form.numeroCivico}, ${form.citta}`,
@@ -73,42 +100,88 @@ const CartPage = () => {
       })),
     };
 
-    // Unifica nome e cognome
     console.log("Dati ordine da inviare:", obj);
-    axios
-      .post("http://localhost:3000/order", obj)
-      .then((res) => {
-        alert("Ordine effettuato con successo!");
-        console.log(res.data);
-        clearCart(); // svuota il carrello
-        setForm({
-          nomeCompleto: "",
-          email: "",
-          via: "",
-          numeroCivico: "",
-          citta: "",
-        }); // resetta la form
-        setMostraForm(false); // nasconde la form
-        setOrdineEffettuato(true); // mostra messaggio conferma
-      })
-      .catch((err) => {
-        console.error("Errore nell'invio dell'ordine:", err);
-        if (err.response) {
-          // Il server ha risposto con un errore
-          console.error("Errore risposta server:", err.response.data);
-          console.error("Status code:", err.response.status);
-          alert(`Errore del server: ${err.response.data.message || 'Errore sconosciuto'}`);
-        } else if (err.request) {
-          // La richiesta è stata fatta ma non c'è stata risposta
-          console.error("Nessuna risposta dal server:", err.request);
-          alert("Impossibile contattare il server. Controlla la connessione.");
-        } else {
-          // Errore nella configurazione della richiesta
-          console.error("Errore configurazione:", err.message);
-          alert(`Errore: ${err.message}`);
-        }
+
+    try {
+      // 1. Salva l'ordine
+      const response = await axios.post("http://localhost:3000/order", obj);
+      console.log('Ordine salvato:', response.data);
+
+      // 2. Prepara i dati per l'email di conferma - CON CONVERSIONI SICURE
+      const orderData = {
+        customerEmail: form.email,
+        customerName: form.nomeCompleto,
+        orderId: response.data.orderId || Math.random().toString(36).substr(2, 9).toUpperCase(),
+        orderDate: new Date().toLocaleDateString('it-IT', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        items: cart.map(poster => {
+          // ✅ CONVERSIONI SICURE - converte sempre a numero
+          const originalPrice = parseFloat(poster.price) || 0;
+          const finalPrice = getDiscountedPrice(poster);
+
+          return {
+            title: poster.title || 'Prodotto',
+            quantity: poster.quantity || 1,
+            originalPrice: originalPrice.toFixed(2),  // Ora è sicuro usare toFixed
+            finalPrice: finalPrice.toFixed(2),       // Ora è sicuro usare toFixed
+            discount: parseFloat(poster.discount) || 0,
+            image_url: poster.image_url || ''
+          };
+        }),
+        subtotal: subtotal,
+        shippingCost: shipmentCost,
+        total: total,
+        shippingAddress: `${form.via} ${form.numeroCivico}, ${form.citta}`
+      };
+
+      // 3. Invia email di conferma
+      console.log('Invio email di conferma ordine...', orderData);
+      const emailResult = await emailService.sendOrderConfirmationEmail(orderData);
+
+      if (emailResult.success) {
+        console.log('Email di conferma inviata:', emailResult.messageId);
+        setMessage(`Ordine confermato! Email di conferma inviata a ${form.email}`);
+      } else {
+        console.warn('Errore invio email conferma:', emailResult.error);
+        setMessage('Ordine confermato! (Email di conferma non inviata)');
+      }
+
+      // 4. Successo - reset form e stato
+      alert("Ordine effettuato con successo! Controlla la tua email per la conferma.");
+
+      clearCart();
+      setForm({
+        nomeCompleto: "",
+        email: "",
+        via: "",
+        numeroCivico: "",
+        citta: "",
       });
+      setMostraForm(false);
+      setOrdineEffettuato(true);
+
+    } catch (err) {
+      console.error("Errore nell'invio dell'ordine:", err);
+
+      if (err.response) {
+        console.error("Errore risposta server:", err.response.data);
+        alert(`Errore del server: ${err.response.data.message || 'Errore sconosciuto'}`);
+      } else if (err.request) {
+        console.error("Nessuna risposta dal server:", err.request);
+        alert("Impossibile contattare il server. Controlla la connessione.");
+      } else {
+        console.error("Errore configurazione:", err.message);
+        alert(`Errore: ${err.message}`);
+      }
+      throw err;
+    }
   };
+
 
   return (
     <>
@@ -301,11 +374,23 @@ const CartPage = () => {
                     required
                   />
                 </div>
+                {message && (
+                  <div className="alert alert-success mt-3">
+                    {message}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="alert alert-danger mt-3">
+                    {error}
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="btn btn-outline-secondary w-100"
+                  disabled={loading}
                 >
-                  🚀 Procedi all'acquisto
+                  {loading ? '⏳ Elaborazione in corso...' : '🚀 Procedi all\'acquisto'}
                 </button>
               </form>
             )}

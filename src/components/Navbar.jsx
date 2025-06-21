@@ -1,12 +1,7 @@
-import React, { useState } from "react";
-import "./navbar.css";
-import { NavLink } from "react-router-dom";
-import {
-  Navbar,
-  Nav,
-  Container,
-} from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import "../styles/navbar.css";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import Logo from "./Logo";
 import Counter from "./Counter";
 import { useGlobalContext } from "../contexts/GlobalContext";
@@ -57,25 +52,24 @@ const NavbarComponent = () => {
           {/* Menu collassabile */}
           <Navbar.Collapse id="navbarTogglerDemo02">
 
-            {/* ✅ CORRETTO: Form di ricerca centralizzato */}
-            <div style={{ textAlign: "center" }}>
-              <nav>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    className="me-2 p-2"
-                    style={{ borderRadius: "20px", border: "1px solid #d13b3b" }}
-                    placeholder="Ricerca"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                  <button type="submit">cerca</button>
-                </form>
-              </nav>
-            </div>
-
             {/* Nav destra */}
             <Nav className="ms-auto d-flex flex-row align-items-center me-5 gap-2">
+              {/* ✅ CORRETTO: Form di ricerca centralizzato */}
+              <div style={{ textAlign: "center" }}>
+                <nav>
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      className="searchbar me-2 p-2"
+                      style={{ borderRadius: "20px", border: "1px solid #d13b3b" }}
+                      placeholder="Ricerca"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <button type="submit">cerca</button>
+                  </form>
+                </nav>
+              </div>
 
               {/* ✅ WISHLIST: Funziona correttamente */}
               <NavLink to="/wishlist" className="text-light nav-link icon-hover position-relative">
@@ -84,33 +78,16 @@ const NavbarComponent = () => {
               </NavLink>
 
               {/* ✅ CARRELLO: Gestione migliorata */}
-              <div
-                className="position-relative"
-                onMouseEnter={handleCartMouseEnter}
-              >
-                <NavLink
-                  to="/cart"
-                  className="text-light nav-link icon-hover position-relative"
-                >
+              <div className="position-relative" onMouseEnter={handleCartMouseEnter}>
+                <NavLink to="/cart" className="text-light nav-link icon-hover position-relative">
                   <Counter count={cartCount} />
-                  <i
-                    className="fa-solid fa-cart-shopping"
-                    style={{ cursor: 'pointer' }}
-                  ></i>
+                  <i className="fa-solid fa-cart-shopping"></i>
                 </NavLink>
 
                 {/* ✅ BANNER: Appare solo al hover */}
                 {showCartBanner && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '60px',
-                      right: 0,
-                      zIndex: 1000
-                    }}
-                    onMouseLeave={handleCartBannerMouseLeave}
-                  >
-                    <CartBanner onMouseLeave={handleCartBannerMouseLeave} />
+                  <div className="container-banner bg-light p-3 rounded-3 border" onMouseLeave={handleCartBannerMouseLeave}>
+                    <CartBanner />
                   </div>
                 )}
               </div>
@@ -119,7 +96,7 @@ const NavbarComponent = () => {
         </Container>
       </Navbar>
 
-      <div className="banner-fixed">
+      <div className="row banner-fixed">
         <FreeShipment />
       </div>
     </>

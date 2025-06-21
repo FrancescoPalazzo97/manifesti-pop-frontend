@@ -92,8 +92,7 @@ const HomePage = () => {
                         </div>
                     </div>
                 </>
-            )
-            }
+            )}
         </>
     );
 };
