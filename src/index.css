@@ -50,7 +50,7 @@ body {
 }
 
 .poster-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .poster-card:hover {
