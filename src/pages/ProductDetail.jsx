@@ -353,6 +353,9 @@ const ProductDetail = () => {
                               }}
                             />
 
+                            {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+                            {/* IL PROBLEMA DELLO ZERO È LAGATO ALLO SCONTO BISOGNA SISTEMARE LA PARTE QUI SOTTO */}
+
                             {/* Badge sconto se presente */}
                             {poster.discount && poster.discount > 0 && (
                               <div className="position-absolute top-0 end-0 m-2">
@@ -362,7 +365,7 @@ const ProductDetail = () => {
                               </div>
                             )}
                           </div>
-
+                          {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
                           {/* Contenuto card */}
                           <div className="card-body d-flex flex-column">
                             <h6 className="card-title mb-2 fw-bold">
