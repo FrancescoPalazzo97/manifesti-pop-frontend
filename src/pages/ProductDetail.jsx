@@ -29,45 +29,60 @@ const ProductDetail = () => {
   // =====================================
 
   useEffect(() => {
+    console.log('🔄 useEffect INIZIO - slug:', slug);
+
     // Se non c'è slug, non fare nulla
-    if (!slug) return;
+    if (!slug) {
+      console.log('❌ USCITA EARLY: slug non presente');
+      return;
+    }
 
     // Reset stati all'inizio del caricamento
     setErrore(false);
     setProdotto(null);
+    setCorrelati([]);
+
+    // ✅ VARIABILE CONDIVISA TRA I .then()
+    let prodottoCorrente = null;
 
     /**
      * FASE 1: Caricamento dettagli prodotto principale
-     * Chiamata API per ottenere i dati del prodotto tramite slug
      */
     axios.get(`http://localhost:3000/posters/${slug}`)
       .then(response => {
         const datiProdotto = response.data;
+        console.log('📦 Dati prodotto ricevuti:', datiProdotto);
+
+        // ✅ SALVA IL PRODOTTO NELLA VARIABILE CONDIVISA
+        prodottoCorrente = datiProdotto;
+
         setProdotto(datiProdotto);
 
         /**
          * FASE 2: Caricamento prodotti correlati
-         * Una volta ottenuto il prodotto principale, cerchiamo altri poster
-         * dello stesso artista per mostrarli come "correlati"
          */
         return axios.get(`http://localhost:3000/posters?artist=${encodeURIComponent(datiProdotto.artist)}`);
       })
       .then(response => {
-        // Filtra i prodotti correlati escludendo quello attuale
         const tuttiDelArtista = response.data;
-        const correlatiFiltrati = tuttiDelArtista
-          .filter(poster => poster.id !== prodotto?.id) // Esclude prodotto attuale
-          .sort(() => Math.random() - 0.5) // Mescola randomicamente
-          .slice(0, 4); // Prende solo i primi 4
+        console.log('📦 Tutti prodotti artista:', tuttiDelArtista);
+        console.log('📦 ID prodotto da escludere:', prodottoCorrente?.id);
 
+        // ✅ ORA POSSIAMO USARE prodottoCorrente.id
+        const correlatiFiltrati = tuttiDelArtista
+          .filter(poster => poster.id !== prodottoCorrente?.id) // ✅ CORRETTO
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 4);
+
+        console.log('📦 Prodotti correlati filtrati:', correlatiFiltrati);
         setCorrelati(correlatiFiltrati);
       })
       .catch(error => {
-        console.error('Errore nel caricamento:', error);
+        console.error('❌ Errore nel caricamento:', error);
         setErrore(true);
-        setCorrelati([]); // Array vuoto in caso di errore
+        setCorrelati([]);
       });
-  }, [slug]); // L'effetto si esegue al montaggio e ogni volta che slug cambia
+  }, [slug]);
 
   // =====================================
   // RENDERING CONDIZIONALE
@@ -311,7 +326,7 @@ const ProductDetail = () => {
               </div>
 
               {/* SEZIONE PRODOTTI CORRELATI */}
-              {correlati.length > 0 && (
+              {!!correlati.length && (
                 <div className="mt-5">
                   <hr className="mb-4" />
                   <div className="d-flex align-items-center justify-content-center mb-4 flex-wrap">
