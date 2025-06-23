@@ -32,7 +32,7 @@ const PosterCard = ({ poster }) => {
       {/* Contenitore per i bottoni cuoricino e carrello */}
       <div
         className="wishlist-button-container d-flex align-items-center"
-        style={{ gap: "8px", zIndex: 10, position: "absolute", top: "10px", right: "10px" }}
+        style={{ gap: "8px", zIndex: 1, position: "absolute", top: "10px", right: "10px" }}
       >
         {/* Bottone wishlist (cuoricino) */}
         <WishlistButton poster={poster} />
