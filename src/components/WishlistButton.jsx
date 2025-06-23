@@ -10,7 +10,7 @@ const WishlistButton = ({ poster }) => {
     const exist = isInWishlist(poster.id);
 
     const handleClick = (e) => {
-        e.preventDefault;
+        e.preventDefault();
         e.stopPropagation();
 
         exist ? removeFromWishlist(poster.id) : addToWishlist(poster);
