@@ -294,38 +294,48 @@ const CartPage = () => {
             </div>
             <hr />
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 mb-2">
                 <h6>
                   <b>La consegna avverrà entro 10 giorni lavorativi</b>
                 </h6>
               </div>
-              <div className="col-12">
-                <div className="card mb-3" style={{ maxWidth: "540px" }}>
-                  <div className="row g-0">
-                    <div className="col-md-4">
-                      <img
-                        src={orderData.prodotti[0].image_url}
-                        className="img-fluid rounded-start"
-                        alt="immagine del manifesto"
-                      />
-                    </div>
-                    <div className="col-md-8">
-                      <div className="card-body mt-5">
-                        <h5 className="card-title">
-                          <b>{orderData.prodotti[0].titolo}</b>
-                        </h5>
-                        <p className="card-text">
-                          quantit&agrave;: {orderData.prodotti[0].quantita}
-                        </p>
-                        <p className="card-text">
-                          &euro;{" "}
-                          {orderData.prodotti[0].prezzo_finale.toFixed(2)}
-                        </p>
+
+              {orderData.prodotti.map((poster, idx) => (
+                <div className="col-6">
+                  <div
+                    className="card mb-3 order-summary-card"
+                    style={{
+                      maxWidth: "540px",
+                      minHeight: "200px",
+                    }}
+                    key={idx}
+                  >
+                    <div className="row g-0 h-100">
+                      <div className="col-md-4">
+                        <img
+                          src={poster.image_url}
+                          className="img-fluid rounded-start h-100"
+                          style={{ objectFit: "cover", minHeight: "200px" }}
+                          alt={`immagine del manifesto ${poster.titolo}`}
+                        />
+                      </div>
+                      <div className="col-md-8">
+                        <div className="card-body mt-5">
+                          <h5 className="card-title">
+                            <b>{poster.titolo}</b>
+                          </h5>
+                          <p className="card-text">
+                            quantità: {poster.quantita}
+                          </p>
+                          <p className="card-text">
+                            &euro; {poster.prezzo_finale.toFixed(2)}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
             <hr />
             <div className="row">

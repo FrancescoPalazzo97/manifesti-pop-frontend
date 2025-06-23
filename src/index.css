@@ -206,3 +206,13 @@ select {
 }
 
 /* ----------------------------------------------- */
+
+.order-summary-card {
+  min-height: 230px;
+}
+.order-summary-card .img-fluid {
+width: 100% !important;
+height: 230px !important;
+object-fit: cover !important;
+
+}
