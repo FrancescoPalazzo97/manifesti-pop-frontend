@@ -23,20 +23,22 @@ const GlobalProvider = ({ children }) => {
     const existingItemIndex = cart.findIndex(item => item.id === poster.id);
 
     if (existingItemIndex === -1) {
-      // Se il poster non esiste nel carrello, aggiungilo con quantità 1
+      // Se il poster non esiste nel carrello, aggiungilo con la quantità richiesta (se presente)
       const newPoster = {
         ...poster,
-        quantity: 1
+        quantity: poster.forceQuantity ? poster.quantity : 1
       };
       const newCart = [...cart, newPoster];
       setCart(newCart);
     } else {
-      // Se il poster esiste già, aumenta la quantità
+      // Se il poster esiste già, aumenta la quantità (solo se non forzato)
       const newCart = cart.map((cartItem, index) => {
         if (index === existingItemIndex) {
           return {
             ...cartItem,
-            quantity: cartItem.quantity + 1
+            quantity: poster.forceQuantity
+              ? cartItem.quantity // non modificare se già presente
+              : cartItem.quantity + 1
           };
         }
         return cartItem;
