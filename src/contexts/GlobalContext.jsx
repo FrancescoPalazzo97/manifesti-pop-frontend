@@ -29,6 +29,7 @@ const GlobalProvider = ({ children }) => {
       // Se il poster non esiste nel carrello, aggiungilo con la quantità richiesta (se presente)
       const newPoster = {
         ...poster,
+        quantity: poster.forceQuantity ? poster.quantity : 1,
       };
       const newCart = [...cart, newPoster];
       setCart(newCart);
@@ -40,6 +41,7 @@ const GlobalProvider = ({ children }) => {
             ...cartItem,
             quantity: poster.forceQuantity
               ? cartItem.quantity // non modificare se già presente
+              : cartItem.quantity + 1,
           };
         }
         return cartItem;
