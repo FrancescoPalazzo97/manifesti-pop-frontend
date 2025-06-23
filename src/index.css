@@ -75,12 +75,23 @@ body {
 }
 
 .button-hover:hover {
-    transform: scale(1.09);
+    transform: scale(1.40);
 }
 
 .button-hover {
     transition: transform 0.3s ease;
     cursor: pointer;
+}
+
+.button-hover-cancell {
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+.button-hover-cancell:hover {
+    background-color: #b8b8b8;
+    /* puoi aggiungere anche un leggero scale se vuoi */
+    /* transform: scale(1.08); */
 }
 
 .card-price {
@@ -202,6 +213,12 @@ select {
     .form-container {
         display: flex;
         justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-banner-mobile-hide {
+        display: none !important;
     }
 }
 

@@ -5,7 +5,7 @@ import DiscountLabel from './DiscountLabel'
 
 const CartBanner = ({ onMouseLeave }) => {
     const { getDiscountedPrice, cartData } = useGlobalContext()
-    const { cart, addCart, decrementCart, removeFromCart } = cartData;
+    const { cart, addCart, decreaseQuantity, removeFromCart } = cartData;
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Gestione quantità globale
@@ -15,7 +15,7 @@ const CartBanner = ({ onMouseLeave }) => {
 
     const handleMinus = (poster) => {
         if ((poster.quantity || 1) > 1) {
-            decrementCart(poster.id);
+            decreaseQuantity(poster.id);
         } else {
             removeFromCart(poster.id);
         }
@@ -23,7 +23,7 @@ const CartBanner = ({ onMouseLeave }) => {
 
     return (
         <>
-            {cart && cart.length > 0 && (
+            {cart && cart.length > 0 ? (
                 <div style={{ overflowY: 'auto', maxHeight: '400px' }}>
                     {cart.map((poster, idx) => {
                         const quantity = poster.quantity || 1;
@@ -51,7 +51,7 @@ const CartBanner = ({ onMouseLeave }) => {
                                                 Prezzo: {hasDiscount ? (
                                                     <>
                                                         <span className="text-decoration-line-through text-danger me-2">{poster.price}€</span>
-                                                        <span className="fw-bold text-success">{discountedPrice}€</span>
+                                                        <span className="fw-bold">{discountedPrice}€</span>
                                                     </>
                                                 ) : (
                                                     <span>{poster.price}€</span>
@@ -90,7 +90,7 @@ const CartBanner = ({ onMouseLeave }) => {
                                             <div className="position-absolute top-0 end-0">
                                                 <i
                                                     onClick={() => removeFromCart(poster.id)}
-                                                    className="fa-solid fa-x p-3 button-hover"
+                                                    className="fa-solid fa-x p-2 button-hover-cancell"
                                                 ></i>
                                             </div>
                                         </div>
@@ -99,6 +99,10 @@ const CartBanner = ({ onMouseLeave }) => {
                             </div>
                         )
                     })}
+                </div>
+            ) : (
+                <div className="text-center py-4">
+                    <h2>Il carrello è vuoto!</h2>
                 </div>
             )}
             <div className="col-12 my-3">

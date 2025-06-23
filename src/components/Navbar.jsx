@@ -86,7 +86,7 @@ const NavbarComponent = () => {
 
                 {/* ✅ BANNER: Appare solo al hover */}
                 {showCartBanner && (
-                  <div className="container-banner bg-light p-3 rounded-3 border" onMouseLeave={handleCartBannerMouseLeave}>
+                  <div className="container-banner bg-light p-3 rounded-3 border cart-banner-mobile-hide" onMouseLeave={handleCartBannerMouseLeave}>
                     <CartBanner />
                   </div>
                 )}
