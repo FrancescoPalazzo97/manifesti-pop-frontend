@@ -280,7 +280,7 @@ const CartPage = () => {
                         <div className="position-absolute top-0 end-0">
                           <i
                             onClick={() => removeFromCart(poster.id)}
-                            className="fa-solid fa-x p-3 button-hover"
+                            className="fa-solid fa-x p-3 button-hover-cancell"
                           ></i>
                         </div>
                       </div>
