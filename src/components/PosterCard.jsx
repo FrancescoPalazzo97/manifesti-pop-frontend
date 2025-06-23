@@ -32,7 +32,7 @@ const PosterCard = ({ poster }) => {
       {/* Contenitore per i bottoni cuoricino e carrello */}
       <div
         className="wishlist-button-container d-flex align-items-center"
-        style={{ gap: "8px" }} // Spazio tra cuoricino e carrello
+        style={{ gap: "8px", zIndex: 10, position: "absolute", top: "10px", right: "10px" }}
       >
         {/* Bottone wishlist (cuoricino) */}
         <WishlistButton poster={poster} />
@@ -44,8 +44,13 @@ const PosterCard = ({ poster }) => {
         {/* Etichetta sconto se presente */}
         <DiscountLabel discount={discount} />
         {/* Immagine del poster */}
-        <div className="img-container ">
+        <div className="img-container position-relative">
           <img src={image_url} className="fix-img rounded-4" alt={title} />
+          {poster.stock_quantity === 0 && (
+            <div className="card-overlay-unavailable">
+              Manifesto al momento non disponibile 😭
+            </div>
+          )}
         </div>
         {/* Corpo della card con titolo, artista, taglia e prezzo */}
         <div className="card-body text-center d-flex flex-column justify-content-between mt-2 border-card">
