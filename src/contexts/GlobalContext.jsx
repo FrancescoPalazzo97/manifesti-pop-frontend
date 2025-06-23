@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import useLocalStorage from "../hooks/LocalStorage"
+import useLocalStorage from "../hooks/LocalStorage";
 import axios from "axios";
 
 const GlobalContext = createContext();
@@ -11,22 +11,24 @@ const GlobalProvider = ({ children }) => {
   // cart
   const [cart, setCart] = useLocalStorage(`poster-cart`, []);
 
-  // Filtro di ricerca 
+  // Filtro di ricerca
   const [filter, setFilter] = useState("");
 
+  // Dati inseriti per l'ordine
+  const [orderData, setOrderData] = useState(null);
+
   const isInCart = (posterId) => {
-    return cart.some(item => item.id === posterId);
-  }
+    return cart.some((item) => item.id === posterId);
+  };
 
   // Aggiungi o incrementa quantità
   const addCart = (poster) => {
-    const existingItemIndex = cart.findIndex(item => item.id === poster.id);
+    const existingItemIndex = cart.findIndex((item) => item.id === poster.id);
 
     if (existingItemIndex === -1) {
       // Se il poster non esiste nel carrello, aggiungilo con la quantità richiesta (se presente)
       const newPoster = {
         ...poster,
-        quantity: poster.forceQuantity ? poster.quantity : 1
       };
       const newCart = [...cart, newPoster];
       setCart(newCart);
@@ -38,7 +40,6 @@ const GlobalProvider = ({ children }) => {
             ...cartItem,
             quantity: poster.forceQuantity
               ? cartItem.quantity // non modificare se già presente
-              : cartItem.quantity + 1
           };
         }
         return cartItem;
@@ -54,37 +55,35 @@ const GlobalProvider = ({ children }) => {
       return;
     }
 
-    const newCart = cart.map(cartItem => {
+    const newCart = cart.map((cartItem) => {
       if (cartItem.id === posterId) {
         return {
           ...cartItem,
-          quantity: newQuantity
+          quantity: newQuantity,
         };
       }
       return cartItem;
     });
     setCart(newCart);
-  }
+  };
 
   const increaseQuantity = (posterId, maxStock) => {
-    const item = cart.find(cartItem => cartItem.id === posterId);
+    const item = cart.find((cartItem) => cartItem.id === posterId);
     if (item && item.quantity < maxStock) {
       updateQuantity(posterId, item.quantity + 1);
     }
-  }
+  };
 
   const decreaseQuantity = (posterId) => {
-    const item = cart.find(cartItem => cartItem.id === posterId);
+    const item = cart.find((cartItem) => cartItem.id === posterId);
     if (item && item.quantity > 1) {
       updateQuantity(posterId, item.quantity - 1);
     }
-  }
-
-
+  };
 
   //funzione per rimuovere i poster dal carrello
   const removeFromCart = (posterId) => {
-    const newCart = cart.filter(item => item.id !== posterId);
+    const newCart = cart.filter((item) => item.id !== posterId);
     setCart(newCart);
   };
 
@@ -103,13 +102,12 @@ const GlobalProvider = ({ children }) => {
     cartCount,
     updateQuantity,
     increaseQuantity,
-    decreaseQuantity
-  }
+    decreaseQuantity,
+  };
 
   // Funzione di aggiunta
   const addToWishlist = (poster) => {
-
-    const exist = wishlist.find(item => item.id === poster.id);
+    const exist = wishlist.find((item) => item.id === poster.id);
 
     if (exist) {
       alert(`Questo poster è già nella tua wishlist`);
@@ -120,22 +118,22 @@ const GlobalProvider = ({ children }) => {
     setWishlist(newWishlist);
 
     //alert(`${poster.title} aggiunto alla wishlist`)
-  }
+  };
 
   // Funzione di elimina
   const removeFromWishlist = (posterId) => {
-    const newWishlist = wishlist.filter(item => item.id !== posterId);
+    const newWishlist = wishlist.filter((item) => item.id !== posterId);
     setWishlist(newWishlist);
 
     //alert(`poster rimosso`);
-  }
+  };
 
   const isInWishlist = (posterId) => {
-    return wishlist.some(item => item.id === posterId);
+    return wishlist.some((item) => item.id === posterId);
   };
 
   const clearWishlist = () => {
-    if (window.confirm('Vuoi davvero svuotare la wishlist?')) {
+    if (window.confirm("Vuoi davvero svuotare la wishlist?")) {
       setWishlist([]);
       //alert('Wishlist svuotata!');
     }
@@ -146,29 +144,33 @@ const GlobalProvider = ({ children }) => {
   // Calcola il prezzo scontato di un poster
   const getDiscountedPrice = (poster) => {
     if (poster.discount && poster.discount > 0) {
-      return (poster.price * (1 - poster.discount / 100));
+      return poster.price * (1 - poster.discount / 100);
     }
     return poster.price;
   };
 
   // Metto tutti i dati e le funzioni in un oggetto
   const wishlistData = {
-    wishlist,           // Array di tutti i poster nella wishlist
-    addToWishlist,      // Funzione per aggiungere
+    wishlist, // Array di tutti i poster nella wishlist
+    addToWishlist, // Funzione per aggiungere
     removeFromWishlist, // Funzione per rimuovere
-    isInWishlist,       // Funzione per controllare se esiste
-    clearWishlist,      // Funzione per svuotare tutto
-    wishlistCount       // Numero di poster nella wishlist
+    isInWishlist, // Funzione per controllare se esiste
+    clearWishlist, // Funzione per svuotare tutto
+    wishlistCount, // Numero di poster nella wishlist
   };
 
   return (
-    <GlobalContext.Provider value={{
-      filter,
-      setFilter,
-      cartData,
-      wishlistData,
-      getDiscountedPrice
-    }}>
+    <GlobalContext.Provider
+      value={{
+        filter,
+        setFilter,
+        cartData,
+        wishlistData,
+        getDiscountedPrice,
+        orderData,
+        setOrderData,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );
