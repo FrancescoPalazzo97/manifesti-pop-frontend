@@ -2,6 +2,7 @@
     top: 20px;
     background-color: #dd0000;
     padding: 5px 10px;
+    z-index: 1;
 }
 
 .discount-label span {
