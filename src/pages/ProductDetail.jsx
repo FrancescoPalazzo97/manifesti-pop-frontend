@@ -231,7 +231,7 @@ const ProductDetail = () => {
                       </div>
                     ) : (
                       // Prezzo normale senza sconto
-                      <h4 className="text-primary fw-bold">
+                      <h4 className="text-dark fw-bold">
                         € {formatPrezzo(prodotto.price)}
                       </h4>
                     )}
