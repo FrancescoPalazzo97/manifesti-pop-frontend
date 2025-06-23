@@ -24,7 +24,7 @@ const CartBanner = ({ onMouseLeave }) => {
     return (
         <>
             {cart && cart.length > 0 ? (
-                <div style={{ overflowY: 'auto', maxHeight: '400px' }}>
+                <div style={{ overflowY: 'auto', maxHeight: '400px', zIndex: 1000, }}>
                     {cart.map((poster, idx) => {
                         const quantity = poster.quantity || 1;
                         const isMinusDisabled = quantity <= 1;
@@ -42,7 +42,7 @@ const CartBanner = ({ onMouseLeave }) => {
                                 <div className="row g-0 ">
                                     <div className="col-4 position-relative">
                                         <img src={poster.image_url} className="rounded-start img-fluid " alt={poster.title || '...'} />
-                                        {hasDiscount && <DiscountLabel discount={poster.discount} />}
+                                        {hasDiscount ? (<DiscountLabel discount={poster.discount} />) : (<></>)}
                                     </div>
                                     <div className="col-8">
                                         <div className="card-body">
