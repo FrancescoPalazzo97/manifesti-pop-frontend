@@ -6,6 +6,7 @@ import ProductDetail from "./pages/ProductDetail";
 import CartPage from "./pages/CartPage";
 import PostersPage from "./pages/PostersPage";
 import WishlistPage from "./pages/WishlistPage";
+import NotFound from "./pages/NotFound";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/posters-list" element={<PostersPage />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
