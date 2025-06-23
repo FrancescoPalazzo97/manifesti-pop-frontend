@@ -2,8 +2,10 @@ import { useGlobalContext } from "../contexts/GlobalContext"; // Prendo dati e f
 import React, { useState } from "react";
 
 const WishlistPage = () => {
-  const { wishlistData, addCart } = useGlobalContext();
+  // Usa cartData per accedere a addCart
+  const { wishlistData, cartData } = useGlobalContext();
   const { wishlist, removeFromWishlist } = wishlistData;
+  const { addCart } = cartData; // <-- usa cartData.addCart
 
   // Stato per effetto click sui pulsanti
   const [clickedBtn, setClickedBtn] = useState({});
@@ -38,10 +40,13 @@ const WishlistPage = () => {
 
   // Gestore click con effetto animazione
   const handleButtonClick = (type, poster, quantity) => {
-    setClickedBtn({ [type + poster.id]: true }); // Imposta lo stato per effetto click
-    if (type === "cart") addCart({ ...poster, quantity }); // Passa la quantità scelta al carrello
-    if (type === "remove") removeFromWishlist(poster.id); // Rimuove dai preferiti se richiesto
-    setTimeout(() => setClickedBtn({}), 150); // Rimuove effetto click dopo 150ms
+    setClickedBtn({ [type + poster.id]: true });
+    if (type === "cart") {
+      // Aggiungi al carrello con quantità corretta (se già presente incrementa)
+      addCart({ ...poster, quantity: quantity || 1 });
+    }
+    if (type === "remove") removeFromWishlist(poster.id);
+    setTimeout(() => setClickedBtn({}), 150);
   };
 
   // Stili per il pulsante carrello, cambia se attivo (click)
