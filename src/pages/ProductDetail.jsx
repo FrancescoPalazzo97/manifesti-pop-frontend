@@ -330,9 +330,9 @@ const ProductDetail = () => {
                 <div className="mt-5">
                   <hr className="mb-4" />
                   <div className="d-flex align-items-center justify-content-center mb-4 flex-wrap">
-                    <h3 className="mb-0 me-2">Altri poster di</h3>
-                    <span className="text-rosa fw-bold fs-3 me-2">{prodotto.artist}</span>
-                    <h3 className="mb-0">e consigliati</h3>
+                    <h3 className="mb-0 me-2">Altri poster</h3>
+                    
+                    <h3 className="mb-0"> consigliati</h3>
                   </div>
 
                   <div className="row g-4">
@@ -356,8 +356,8 @@ const ProductDetail = () => {
                             {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
                             {/* IL PROBLEMA DELLO ZERO È LAGATO ALLO SCONTO BISOGNA SISTEMARE LA PARTE QUI SOTTO */}
 
-                            {/* Badge sconto se presente */}
-                            {poster.discount && poster.discount > 0 && (
+                             {/* Badge sconto se presente */}
+                            {poster.discount > 0 && (
                               <div className="position-absolute top-0 end-0 m-2">
                                 <span className="badge bg-danger">
                                   -{poster.discount}%
@@ -378,13 +378,16 @@ const ProductDetail = () => {
                                 <>
                                   <span className="text-decoration-line-through text-muted me-2 small">
                                     €{formatPrezzo(poster.price)}
+
                                   </span>
+
                                   <span className="text-danger">
+
                                     €{formatPrezzo(calcolaPrezzoScontato(poster))}
                                   </span>
                                 </>
                               ) : (
-                                <span className="text-primary">
+                                <span className="text-dark">
                                   €{formatPrezzo(poster.price)}
                                 </span>
                               )}
