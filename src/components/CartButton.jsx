@@ -14,15 +14,17 @@ const CartButton = ({ poster }) => {
     return (
         <button
             type="button"
-            onClick={handleClick} // Al click aggiunge al carrello e colora l'icona
+            onClick={handleClick}
+            disabled={poster.stock_quantity === 0}
             style={{
-                background: "none", // Nessuno sfondo
-                border: "none",     // Nessun bordo
+                background: "none",
+                border: "none",
                 padding: 0,
-                cursor: "pointer",
-                color: exist ? "#FFD600" : "#fff" // Giallo se cliccato, bianco altrimenti
+                cursor: poster.stock_quantity === 0 ? "not-allowed" : "pointer",
+                color: exist ? "#FFD600" : "#fff",
+                opacity: poster.stock_quantity === 0 ? 0.5 : 1
             }}
-            title="Aggiungi al carrello"
+            title={poster.stock_quantity === 0 ? "Non disponibile" : "Aggiungi al carrello"}
         >
             <i className="fa-solid fa-cart-shopping"></i>
         </button>
