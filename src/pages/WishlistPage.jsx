@@ -99,6 +99,7 @@ const WishlistPage = () => {
             const isMinusDisabled = quantity <= 1;
             const isPlusDisabled = poster.stock_quantity ? quantity >= poster.stock_quantity : false;
             const alreadyInCart = isInCart(poster.id);
+            const isOutOfStock = poster.stock_quantity === 0;
             return (
               <div
                 key={poster.id}
@@ -110,7 +111,7 @@ const WishlistPage = () => {
                   marginBottom: "1.5rem",
                   borderBottom: "1px solid #ddd",
                   paddingBottom: "1rem",
-                  maxWidth: 600, 
+                  maxWidth: 600,
                 }}
               >
                 {/* Immagine poster */}
@@ -138,13 +139,13 @@ const WishlistPage = () => {
                   <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
                     <button
                       onClick={() => handleMinus(poster.id)}
-                      disabled={isMinusDisabled}
+                      disabled={isMinusDisabled || isOutOfStock}
                       style={{
                         padding: "0.2rem 0.6rem",
                         border: "1px solid red",
                         background: "#fff",
                         borderRadius: 4,
-                        cursor: isMinusDisabled ? "not-allowed" : "pointer",
+                        cursor: isMinusDisabled || isOutOfStock ? "not-allowed" : "pointer",
                         fontWeight: 600,
                         fontSize: "1.1rem"
                       }}
@@ -152,13 +153,13 @@ const WishlistPage = () => {
                     <span style={{ minWidth: 24, textAlign: "center" }}>{quantity}</span>
                     <button
                       onClick={() => handlePlus(poster.id, poster.stock_quantity || 99)}
-                      disabled={isPlusDisabled}
+                      disabled={isPlusDisabled || isOutOfStock}
                       style={{
                         padding: "0.2rem 0.6rem",
                         border: "1px solid red",
                         background: "#fff",
                         borderRadius: 4,
-                        cursor: isPlusDisabled ? "not-allowed" : "pointer",
+                        cursor: isPlusDisabled || isOutOfStock ? "not-allowed" : "pointer",
                         fontWeight: 600,
                         fontSize: "1.1rem"
                       }}
@@ -169,19 +170,20 @@ const WishlistPage = () => {
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
                     <button
                       onClick={() => handleButtonClick("cart", poster, quantity)}
-                      style={cartBtnStyle(clickedBtn["cart" + poster.id], alreadyInCart)}
+                      style={cartBtnStyle(clickedBtn["cart" + poster.id], alreadyInCart || isOutOfStock)}
                       onMouseDown={() => setClickedBtn({ ["cart" + poster.id]: true })}
                       onMouseUp={() => setClickedBtn({})}
                       onMouseLeave={() => setClickedBtn({})}
                       onMouseOver={e => {
-                        if (!alreadyInCart) e.currentTarget.style.backgroundColor = "#cccccc";
+                        if (!alreadyInCart && !isOutOfStock) e.currentTarget.style.backgroundColor = "#cccccc";
                       }}
                       onMouseOut={e => {
-                        if (!alreadyInCart) e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0";
+                        if (!alreadyInCart && !isOutOfStock) e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0";
                       }}
-                      disabled={alreadyInCart}
+                      disabled={alreadyInCart || isOutOfStock}
+                      title={isOutOfStock ? "Prodotto non disponibile" : alreadyInCart ? "Già nel carrello" : "Aggiungi al carrello"}
                     >
-                      🛒 {alreadyInCart ? "Già nel carrello" : "Aggiungi al carrello"}
+                      🛒 {alreadyInCart ? "Già nel carrello" : isOutOfStock ? "Non disponibile" : "Aggiungi al carrello"}
                     </button>
                     <button
                       onClick={() => handleButtonClick("remove", poster)}
