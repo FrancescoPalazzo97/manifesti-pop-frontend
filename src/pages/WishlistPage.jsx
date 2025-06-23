@@ -2,10 +2,10 @@ import { useGlobalContext } from "../contexts/GlobalContext"; // Prendo dati e f
 import React, { useState } from "react";
 
 const WishlistPage = () => {
-  // Usa cartData per accedere a addCart
+  // Usa cartData per accedere a addCart e isInCart
   const { wishlistData, cartData } = useGlobalContext();
   const { wishlist, removeFromWishlist } = wishlistData;
-  const { addCart } = cartData; // <-- usa cartData.addCart
+  const { addCart, isInCart } = cartData; // <-- usa anche isInCart
 
   // Stato per effetto click sui pulsanti
   const [clickedBtn, setClickedBtn] = useState({});
@@ -42,26 +42,29 @@ const WishlistPage = () => {
   const handleButtonClick = (type, poster, quantity) => {
     setClickedBtn({ [type + poster.id]: true });
     if (type === "cart") {
-      // Aggiungi al carrello con quantità corretta (se già presente incrementa)
-      addCart({ ...poster, quantity: quantity || 1 });
+      // Se il prodotto è già nel carrello, non aggiungere di nuovo
+      if (!isInCart(poster.id)) {
+        // Aggiungi al carrello con la quantità scelta
+        addCart({ ...poster, quantity: quantity || 1, forceQuantity: true });
+      }
     }
     if (type === "remove") removeFromWishlist(poster.id);
     setTimeout(() => setClickedBtn({}), 150);
   };
 
   // Stili per il pulsante carrello, cambia se attivo (click)
-  const cartBtnStyle = (active) => ({
+  const cartBtnStyle = (active, disabled) => ({
     padding: "0.3rem 0.5rem",
-    backgroundColor: "#e0e0e0", // Grigio chiaro di base
+    backgroundColor: disabled ? "#bdbdbd" : "#e0e0e0",
     color: "#212529",
     border: "1px solid #bdbdbd",
     borderRadius: 4,
-    cursor: "pointer",
+    cursor: disabled ? "not-allowed" : "pointer",
     fontWeight: 600,
     fontSize: "0.95rem",
     transition: "background 0.15s, transform 0.1s",
     outline: "none",
-    ...(active && { backgroundColor: "#bdbdbd", transform: "scale(0.96)" }), // Più scuro e leggermente più piccolo se premuto
+    ...(active && !disabled && { backgroundColor: "#bdbdbd", transform: "scale(0.96)" }),
   });
 
   // Stili per il pulsante rimozione, cambia se attivo (click)
@@ -74,7 +77,7 @@ const WishlistPage = () => {
     cursor: "pointer",
     fontSize: "0.95rem",
     transition: "background 0.15s, transform 0.1s",
-    ...(active && { backgroundColor: "#b52a38", transform: "scale(0.96)" }), // Rosso più scuro e leggermente più piccolo se premuto
+    ...(active && { backgroundColor: "#b52a38", transform: "scale(0.96)" }),
   });
 
   return (
@@ -95,6 +98,7 @@ const WishlistPage = () => {
             const quantity = quantities[poster.id] || 1;
             const isMinusDisabled = quantity <= 1;
             const isPlusDisabled = poster.stock_quantity ? quantity >= poster.stock_quantity : false;
+            const alreadyInCart = isInCart(poster.id);
             return (
               <div
                 key={poster.id}
@@ -126,8 +130,8 @@ const WishlistPage = () => {
                   <p>
                     Prezzo: €{" "}
                     {typeof poster.price === "number"
-                      ? poster.price.toFixed(2) // Mostra due decimali se è un numero
-                      : poster.price || "n.d."} {/* Se non c'è prezzo mostra "n.d." */}
+                      ? poster.price.toFixed(2)
+                      : poster.price || "n.d."}
                   </p>
 
                   {/* Gestione quantità */}
@@ -165,14 +169,19 @@ const WishlistPage = () => {
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
                     <button
                       onClick={() => handleButtonClick("cart", poster, quantity)}
-                      style={cartBtnStyle(clickedBtn["cart" + poster.id])}
+                      style={cartBtnStyle(clickedBtn["cart" + poster.id], alreadyInCart)}
                       onMouseDown={() => setClickedBtn({ ["cart" + poster.id]: true })}
                       onMouseUp={() => setClickedBtn({})}
                       onMouseLeave={() => setClickedBtn({})}
-                      onMouseOver={e => e.currentTarget.style.backgroundColor = "#cccccc"}
-                      onMouseOut={e => e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0"}
+                      onMouseOver={e => {
+                        if (!alreadyInCart) e.currentTarget.style.backgroundColor = "#cccccc";
+                      }}
+                      onMouseOut={e => {
+                        if (!alreadyInCart) e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0";
+                      }}
+                      disabled={alreadyInCart}
                     >
-                      🛒 Aggiungi al carrello
+                      🛒 {alreadyInCart ? "Già nel carrello" : "Aggiungi al carrello"}
                     </button>
                     <button
                       onClick={() => handleButtonClick("remove", poster)}
