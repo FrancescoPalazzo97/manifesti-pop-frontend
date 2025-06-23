@@ -14,7 +14,7 @@ function debounce(func, delay) {
 const PostersPage = () => {
     const [posters, setPosters] = useState([]);
     // const [query, setQuery] = useState("");
-    const [filteredPoster, setFilteredPoster] = useState([]);
+    // const [filteredPoster, setFilteredPoster] = useState([]);
     // const [maxPrice, setMaxPrice] = useState(200);
     // const [size, setSize] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
@@ -23,15 +23,20 @@ const PostersPage = () => {
     const query = searchParams.get("term");
     const size = searchParams.get("size") || "";
     const maxPrice = parseInt(searchParams.get("maxPrice") || "200");
+    const orderBy = searchParams.get("orderBy") || "";
+    const orderDirection = searchParams.get("orderDirection") || "desc";
+
 
     const [tempMaxPrice, setTempMaxPrice] = useState(maxPrice);
 
     const debouncedFilterChange = useRef(
-        debounce((newSize, newMaxPrice) => {
+        debounce((newQuery, newSize, newMaxPrice, newOrderBy, newOrderDirection) => {
             const params = {};
-            if (query) params.term = query;
+            if (newQuery) params.term = newQuery;
             if (newSize) params.size = newSize;
             if (newMaxPrice !== 200) params.maxPrice = newMaxPrice;
+            if (newOrderBy) params.orderBy = newOrderBy;
+            if (newOrderDirection) params.orderDirection = newOrderDirection;
             setSearchParams(params);
         }, 500)
     ).current;
@@ -39,24 +44,28 @@ const PostersPage = () => {
 
 
     useEffect(() => {
-        debouncedFilterChange(size, tempMaxPrice);
-    }, [tempMaxPrice]);
+        debouncedFilterChange(query, size, tempMaxPrice, orderBy, orderDirection);
+    }, [query, size, tempMaxPrice, orderBy, orderDirection]);
 
-    const handleFiltersChange = (newSize, newMaxPrice) => {
+    const handleFiltersChange = (newSize, newMaxPrice, newOrderBy, newOrderDirection) => {
         const params = {};
         if (query) params.term = query;
         if (newSize) params.size = newSize;
         if (newMaxPrice !== 200) params.maxPrice = newMaxPrice;
+        if (newOrderBy) params.orderBy = newOrderBy;
+        if (newOrderDirection) params.orderDirection = newOrderDirection;
         setSearchParams(params);
     };
 
 
+
     useEffect(() => {
-        const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(query)}&minPrice=0&maxPrice=${maxPrice}${size ? `&size=${size}` : ''}`;
+        const url = `http://localhost:3000/posters/search?term=${encodeURIComponent(query)}&minPrice=0&maxPrice=${maxPrice}${size ? `&size=${size}` : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${orderDirection ? `&orderDirection=${orderDirection}` : ''}`;
         axios.get(url)
             .then(res => setPosters(res.data.data || res.data))
             .catch(err => console.error(err));
-    }, [query, maxPrice, size]);
+    }, [query, maxPrice, size, orderBy, orderDirection]);
+
 
     return (
         <>
@@ -76,7 +85,9 @@ const PostersPage = () => {
                                 name="size"
                                 id="size"
                                 value={size}
-                                onChange={(e) => handleFiltersChange(e.target.value, maxPrice)}
+                                onChange={(e) =>
+                                    handleFiltersChange(e.target.value, tempMaxPrice, orderBy, orderDirection)
+                                }
                             >
                                 <option value="">Tutte le taglie</option>
                                 <option value="sm">sm</option>
@@ -97,6 +108,34 @@ const PostersPage = () => {
                                     onChange={(e) => setTempMaxPrice(parseInt(e.target.value))}
                                 />
                             </div>
+
+                            <div>
+                                <select
+                                    name="orderBy"
+                                    value={orderBy}
+                                    onChange={(e) =>
+                                        handleFiltersChange(size, tempMaxPrice, e.target.value, orderDirection)
+                                    }
+                                >
+                                    <option value="">Nessun Ordinamento</option>
+                                    <option value="title">Titolo</option>
+                                    <option value="price">Prezzo</option>
+                                    <option value="creation_date">Data</option>
+                                </select>
+
+                                <select
+                                    name="orderDirection"
+                                    value={orderDirection}
+                                    onChange={(e) =>
+                                        handleFiltersChange(size, tempMaxPrice, orderBy, e.target.value)
+                                    }
+                                >
+                                    <option value="desc">Discendente</option>
+                                    <option value="asc">Ascendente</option>
+                                </select>
+
+                            </div>
+
                         </div>
 
                     </div>
