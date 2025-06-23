@@ -90,8 +90,7 @@ body {
 
 .button-hover-cancell:hover {
     background-color: #b8b8b8;
-    /* puoi aggiungere anche un leggero scale se vuoi */
-    /* transform: scale(1.08); */
+    border-radius: 10px;
 }
 
 .card-price {
@@ -202,6 +201,8 @@ select {
     color: #d13b3b;
 }
 
+
+/* media query per modificare PosterPage.jsx */
 @media screen and (max-width: 900px) {
     .form-position {
         flex-direction: column;
@@ -216,7 +217,9 @@ select {
     }
 }
 
-@media (max-width: 768px) {
+
+/* media query per il cartBanner, che scompare quando siamo in versione mobile-tablet  */
+@media (max-width: 1600px) {
     .cart-banner-mobile-hide {
         display: none !important;
     }
