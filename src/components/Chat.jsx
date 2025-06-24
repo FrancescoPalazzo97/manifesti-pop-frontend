@@ -98,6 +98,7 @@ const Chat = () => {
                     e.target.style.transform = 'scale(1)';
                     e.target.style.backgroundColor = '#D13B3B';
                 }}
+                aria-label={isOpen ? 'Chiudi chat' : 'Apri chat'}
             >
                 {isOpen ? (
                     <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
@@ -117,16 +118,16 @@ const Chat = () => {
                         position: 'fixed',
                         bottom: '90px',
                         right: '20px',
-                        width: '350px',
-                        height: '500px',
+                        width: '380px',
+                        height: '550px',
                         backgroundColor: 'white',
-                        borderRadius: '12px',
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                        borderRadius: '16px',
+                        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
                         zIndex: 999,
                         display: 'flex',
                         flexDirection: 'column',
                         overflow: 'hidden',
-                        border: '1px solid #e0e0e0'
+                        border: '1px solid #e8e8e8'
                     }}
                 >
                     {/* Header */}
@@ -134,39 +135,49 @@ const Chat = () => {
                         style={{
                             backgroundColor: '#D13B3B',
                             color: 'white',
-                            padding: '15px 20px',
+                            padding: '18px 20px',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            fontSize: '16px',
-                            fontWeight: '600'
+                            fontSize: '17px',
+                            fontWeight: '600',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                         }}
                     >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div
                                 style={{
-                                    width: '8px',
-                                    height: '8px',
-                                    backgroundColor: '#28a745',
-                                    borderRadius: '50%'
+                                    width: '10px',
+                                    height: '10px',
+                                    backgroundColor: '#4CAF50',
+                                    borderRadius: '50%',
+                                    boxShadow: '0 0 8px rgba(76, 175, 80, 0.6)'
                                 }}
                             ></div>
-                            Chatta con la nostra IA
+                            <span>Chatta con la nostra IA</span>
                         </div>
                         <button
                             onClick={clearChat}
                             style={{
-                                background: 'none',
+                                background: 'rgba(255, 255, 255, 0.2)',
                                 border: 'none',
                                 color: 'white',
                                 cursor: 'pointer',
-                                padding: '4px',
-                                borderRadius: '4px',
-                                fontSize: '12px'
+                                padding: '6px 8px',
+                                borderRadius: '6px',
+                                fontSize: '14px',
+                                transition: 'background-color 0.2s',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px'
                             }}
-                            title="Pulisci chat"
+                            onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
+                            aria-label="Pulisci chat"
                         >
-                            🗑️
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                            </svg>
                         </button>
                     </div>
 
@@ -174,25 +185,33 @@ const Chat = () => {
                     {error && (
                         <div
                             style={{
-                                backgroundColor: '#f8d7da',
-                                color: '#721c24',
-                                padding: '10px 15px',
+                                backgroundColor: '#FFEBEE',
+                                color: '#C62828',
+                                padding: '12px 16px',
                                 fontSize: '14px',
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                borderBottom: '1px solid #FFCDD2',
+                                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
                             }}
                         >
-                            <span>{error}</span>
+                            <span style={{ lineHeight: '1.5' }}>{error}</span>
                             <button
                                 onClick={clearError}
                                 style={{
                                     background: 'none',
                                     border: 'none',
-                                    color: '#721c24',
+                                    color: '#C62828',
                                     cursor: 'pointer',
-                                    fontSize: '16px'
+                                    fontSize: '18px',
+                                    padding: '0 4px',
+                                    borderRadius: '4px',
+                                    transition: 'background-color 0.2s'
                                 }}
+                                onMouseEnter={(e) => e.target.backgroundColor = 'rgba(198, 40, 40, 0.1)'}
+                                onMouseLeave={(e) => e.target.backgroundColor = 'transparent'}
+                                aria-label="Chiudi messaggio di errore"
                             >
                                 ×
                             </button>
@@ -204,20 +223,27 @@ const Chat = () => {
                         style={{
                             flex: 1,
                             overflowY: 'auto',
-                            padding: '15px',
-                            backgroundColor: '#f8f9fa'
+                            padding: '20px',
+                            backgroundColor: '#f5f5f5',
+                            backgroundImage: 'linear-gradient(to bottom, #fafafa 1px, transparent 1px)',
+                            backgroundSize: '100% 10px'
                         }}
                     >
                         {messages.length === 0 && (
                             <div
                                 style={{
                                     textAlign: 'center',
-                                    color: '#6c757d',
+                                    color: '#757575',
                                     fontStyle: 'italic',
-                                    marginTop: '50px'
+                                    marginTop: '50px',
+                                    padding: '20px',
+                                    lineHeight: '1.6',
+                                    fontSize: '15px'
                                 }}
                             >
-                                👋 Ciao! Come posso aiutarti oggi?
+                                <div style={{ marginBottom: '12px', fontSize: '24px' }}>👋</div>
+                                <div style={{ fontWeight: '500', marginBottom: '8px' }}>Ciao! Sono qui per aiutarti.</div>
+                                <div style={{ fontSize: '14px' }}>Fammi qualsiasi domanda e ti risponderò al meglio delle mie capacità.</div>
                             </div>
                         )}
 
@@ -225,23 +251,24 @@ const Chat = () => {
                             <div
                                 key={index}
                                 style={{
-                                    marginBottom: '15px',
+                                    marginBottom: '16px',
                                     display: 'flex',
                                     justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start'
                                 }}
                             >
                                 <div
                                     style={{
-                                        maxWidth: '80%',
-                                        padding: '10px 12px',
-                                        borderRadius: '18px',
+                                        maxWidth: '85%',
+                                        padding: '12px 16px',
+                                        borderRadius: msg.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                                         backgroundColor: msg.role === 'user' ? '#D13B3B' : 'white',
-                                        color: msg.role === 'user' ? 'white' : '#333',
-                                        fontSize: '14px',
-                                        lineHeight: '1.4',
+                                        color: msg.role === 'user' ? 'white' : '#424242',
+                                        fontSize: '15px',
+                                        lineHeight: '1.5',
                                         whiteSpace: 'pre-wrap',
-                                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                                        border: msg.role === 'assistant' ? '1px solid #e0e0e0' : 'none'
+                                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.08)',
+                                        border: msg.role === 'assistant' ? '1px solid #e0e0e0' : 'none',
+                                        wordBreak: 'break-word'
                                     }}
                                 >
                                     {msg.content}
@@ -254,32 +281,38 @@ const Chat = () => {
                                 style={{
                                     display: 'flex',
                                     justifyContent: 'flex-start',
-                                    marginBottom: '15px'
+                                    marginBottom: '16px'
                                 }}
                             >
                                 <div
                                     style={{
-                                        padding: '10px 12px',
-                                        borderRadius: '18px',
+                                        padding: '12px 16px',
+                                        borderRadius: '18px 18px 18px 4px',
                                         backgroundColor: 'white',
                                         border: '1px solid #e0e0e0',
-                                        fontSize: '14px',
-                                        color: '#6c757d',
+                                        fontSize: '15px',
+                                        color: '#616161',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '8px'
+                                        gap: '10px',
+                                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
                                     }}
                                 >
-                                    <div
-                                        style={{
-                                            width: '8px',
-                                            height: '8px',
-                                            borderRadius: '50%',
-                                            backgroundColor: '#D13B3B',
-                                            animation: 'pulse 1.5s infinite'
-                                        }}
-                                    ></div>
-                                    Gemini sta scrivendo...
+                                    <div style={{ display: 'flex', gap: '6px' }}>
+                                        {[...Array(3)].map((_, i) => (
+                                            <div
+                                                key={i}
+                                                style={{
+                                                    width: '8px',
+                                                    height: '8px',
+                                                    borderRadius: '50%',
+                                                    backgroundColor: '#D13B3B',
+                                                    animation: `pulse 1.4s ${i * 0.2}s infinite`
+                                                }}
+                                            ></div>
+                                        ))}
+                                    </div>
+                                    <span>Sto elaborando la risposta...</span>
                                 </div>
                             </div>
                         )}
@@ -288,12 +321,13 @@ const Chat = () => {
                     {/* Input area */}
                     <div
                         style={{
-                            padding: '15px',
+                            padding: '16px',
                             backgroundColor: 'white',
-                            borderTop: '1px solid #e0e0e0'
+                            borderTop: '1px solid #e8e8e8',
+                            boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.03)'
                         }}
                     >
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={input}
@@ -303,34 +337,57 @@ const Chat = () => {
                                 placeholder="Scrivi un messaggio..."
                                 style={{
                                     flex: 1,
-                                    padding: '10px 12px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '20px',
-                                    fontSize: '14px',
+                                    padding: '12px 16px',
+                                    border: '1px solid #e0e0e0',
+                                    borderRadius: '24px',
+                                    fontSize: '15px',
                                     outline: 'none',
-                                    transition: 'border-color 0.2s',
+                                    transition: 'all 0.2s',
+                                    backgroundColor: loading ? '#f5f5f5' : 'white',
+                                    color: '#424242'
                                 }}
-                                onFocus={(e) => e.target.style.borderColor = '#D13B3B'}
-                                onBlur={(e) => e.target.style.borderColor = '#ddd'}
+                                onFocus={(e) => {
+                                    e.target.style.borderColor = '#D13B3B';
+                                    e.target.style.boxShadow = '0 0 0 2px rgba(209, 59, 59, 0.2)';
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderColor = '#e0e0e0';
+                                    e.target.style.boxShadow = 'none';
+                                }}
+                                aria-label="Messaggio"
                             />
                             <button
                                 onClick={sendMessage}
                                 disabled={loading || !input.trim()}
                                 style={{
-                                    width: '40px',
-                                    height: '40px',
+                                    width: '44px',
+                                    height: '44px',
                                     borderRadius: '50%',
                                     border: 'none',
-                                    backgroundColor: loading || !input.trim() ? '#ddd' : '#D13B3B',
+                                    backgroundColor: loading || !input.trim() ? '#e0e0e0' : '#D13B3B',
                                     color: 'white',
                                     cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    transition: 'background-color 0.2s'
+                                    transition: 'all 0.2s',
+                                    transform: loading || !input.trim() ? 'none' : 'scale(1.05)'
                                 }}
+                                onMouseEnter={(e) => {
+                                    if (!loading && input.trim()) {
+                                        e.target.style.backgroundColor = '#B22A2A';
+                                        e.target.style.transform = 'scale(1.1)';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!loading && input.trim()) {
+                                        e.target.style.backgroundColor = '#D13B3B';
+                                        e.target.style.transform = 'scale(1.05)';
+                                    }
+                                }}
+                                aria-label="Invia messaggio"
                             >
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                                 </svg>
                             </button>
@@ -342,12 +399,12 @@ const Chat = () => {
             {/* CSS per l'animazione */}
             <style jsx>{`
                 @keyframes pulse {
-                    0%, 70%, 100% {
+                    0%, 60%, 100% {
                         transform: scale(1);
                         opacity: 1;
                     }
-                    35% {
-                        transform: scale(1.3);
+                    30% {
+                        transform: scale(1.2);
                         opacity: 0.7;
                     }
                 }
@@ -356,4 +413,4 @@ const Chat = () => {
     );
 };
 
-export default Chat
+export default Chat;
