@@ -174,7 +174,7 @@ select {
 
 
 /* media query per il cartBanner, che scompare quando siamo in versione mobile-tablet  */
-@media (max-width: 1600px) {
+@media (max-width: 1200px) {
     .cart-banner-mobile-hide {
         display: none !important;
     }
@@ -211,15 +211,17 @@ select {
     max-width: 500px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 .order-summary-card .img-fluid {
-width: 100% !important;
-height: 230px !important;
-object-fit: cover !important;
+    width: 100% !important;
+    height: 230px !important;
+    object-fit: cover !important;
 }
+
 .navbar-fixed {
     z-index: 1040;
 }
 
 .order-summary-card {
-  min-height: 230px;
+    min-height: 230px;
 }
