@@ -86,24 +86,6 @@ const CartPage = () => {
       setLoading(false);
       return;
     }
-    // const datiOrdine = {
-    //   nome: form.nomeCompleto,
-    //   email: form.email,
-    //   indirizzo: `${form.via} ${form.numeroCivico}, ${form.citta}`,
-    //   prodotti: cart.map((poster) => ({
-    //     id: poster.id,
-    //     titolo: poster.title,
-    //     quantita: poster.quantity || 1,
-    //     prezzo_unitario: parseFloat(poster.price) || 0,
-    //     sconto: parseFloat(poster.discount) || 0,
-    //     prezzo_finale: getDiscountedPrice(poster),
-    //     image_url: poster.image_url,
-    //   })),
-    //   spedizione: shipmentCost,
-    //   totale: total,
-    //   // altri dati se servono
-    // };
-    // setOrderData(datiOrdine);
 
     try {
       // Procedi con l'ordine
@@ -235,7 +217,8 @@ const CartPage = () => {
       if (err.response) {
         console.error("Errore risposta server:", err.response.data);
         alert(
-          `Errore del server: ${err.response.data.message || "Errore sconosciuto"
+          `Errore del server: ${
+            err.response.data.message || "Errore sconosciuto"
           }`
         );
       } else if (err.request) {
@@ -251,51 +234,52 @@ const CartPage = () => {
 
   return (
     <>
-      <div className="row">
-        <div className="col-12 p-3">
-          <h1>Il tuo carrello</h1>
-        </div>
-      </div>
       {/* Messaggio di conferma ordine */}
       {ordineEffettuato && orderData && (
         <>
           <div className="container">
-            <div className="row">
-              <div className="col-12 mb-4">
-                <h4>
-                  <b>Ciao {orderData.nome},</b>
+            <div className="row mb-4">
+              <div className="col-12 my-4 ">
+                <h4 className="mb-2">
+                  <b>
+                    Ciao <span className="text-danger">{orderData.nome}</span>,
+                  </b>
                 </h4>
-                <p>
+                <p className="fs-5">
                   Siamo contenti che tu abbia trovato il tuo poster!
                   <br /> Abbiamo ricevuto il tuo ordine e stiamo elaborando la
-                  tua richiesta, presto riceverai un'email di conferma con i
+                  tua richiesta, presto riceverai un'
+                  <span className="text-danger">email di conferma</span> con i
                   dettagli del tuo acquisto.
                 </p>
               </div>
               <div className="col-6">
-                <h4>
+                <h3>
                   <b>Indirizzo di spedizione</b>
-                </h4>
-                <p>Nome: {orderData.nome}</p>
-                <p>Email: {orderData.email}</p>
-                <p>Indirizzo: {orderData.indirizzo}</p>
+                </h3>
+                <p className="fs-5 m-1">Nome: {orderData.nome}</p>
+                <p className="fs-5 m-1">Email: {orderData.email}</p>
+                <p className="fs-5 m-1">Indirizzo: {orderData.indirizzo}</p>
               </div>
               <div className="col-6 text-end">
-                <h5>
+                <h3 className="mb-2">
                   <b>Ordine numero:</b>
-                </h5>
-                <p>{orderData.orderId}</p>
+                </h3>
+                <p className="lh-lg mb-1">{orderData.orderId}</p>
                 <h5>
-                  <b>Data ordine:</b>
+                  <b>Data:</b>
                 </h5>
                 <p>{orderData.orderDate}</p>
               </div>
             </div>
             <hr />
-            <div className="row">
-              <div className="col-12 mb-2">
+            <div className="row mt-4">
+              <div className="col-12 mb-3">
                 <h6>
-                  <b>La consegna avverrà entro 10 giorni lavorativi</b>
+                  <b>
+                    La consegna avverrà entro{" "}
+                    <span className="text-danger">10 giorni lavorativi</span>
+                  </b>
                 </h6>
               </div>
 
@@ -340,11 +324,13 @@ const CartPage = () => {
             <div className="row">
               <div className="col-12 mb-3">
                 <h4>Riepilogo Ordine</h4>
-                <p>
-                  Subtotale: {orderData.subtotal}&euro;
-                  <br />
-                  Spedizione: {orderData.spedizione}&euro;
-                  <br />
+                <p className="my-2">
+                  Subtotale: {orderData.subtotal.toFixed(2)}&euro;
+                </p>
+                <p className="my-2">
+                  Spedizione: {orderData.spedizione.toFixed(2)}&euro;
+                </p>
+                <p className="my-2">
                   Totale: {orderData.totale.toFixed(2)}&euro;
                 </p>
               </div>
@@ -353,211 +339,220 @@ const CartPage = () => {
         </>
       )}
       {/* Se non ci sono poster nella wishlist mostro messaggio */}
-      {!ordineEffettuato && cart.length === 0 ? (
-        <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
-      ) : (
-        !ordineEffettuato && (
-          <div className="row gx-4">
-            <div className="col-lg-6 col-sm-12">
-              {cart.map((poster) => {
-                const quantity = poster.quantity || 1;
-                const isMinusDisabled = quantity <= 1;
-                const isPlusDisabled = quantity >= poster.stock_quantity;
-                const finalPrice = getDiscountedPrice(poster);
-                return (
-                  <div
-                    key={poster.id}
-                    className="card border-card-cart border-0 rounded-0 pb-4"
-                  >
-                    <div className="row g-0">
-                      <div className="col-md-4 col-sm-4">
-                        <img
-                          className="img-fluid"
-                          src={poster.image_url}
-                          alt={`immagine del manifesto ${poster.title}`}
-                        />
-                      </div>
-                      <div className="col-md-8 col-sm-8 position-relative">
-                        <div className="card-body">
-                          <h2 className="card-title">{poster.title}</h2>
-                          <p className="card-text mt-4">
-                            Prezzo:{" "}
-                            {poster.discount ? (
-                              <>
-                                <span
-                                  style={{
-                                    textDecoration: "line-through",
-                                    color: "gray",
-                                    marginRight: "10px",
-                                  }}
-                                >
-                                  {poster.price}€
-                                </span>
-                                <span
-                                  style={{ color: "red", fontWeight: "bold" }}
-                                >
-                                  {finalPrice.toFixed(2)}€
-                                </span>
-                              </>
-                            ) : (
-                              <>{poster.price}€</>
-                            )}
-                          </p>
-                          <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
-                            <button
-                              className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
-                                }`}
-                              disabled={isMinusDisabled}
-                              onClick={() => decreaseQuantity(poster.id)}
-                            >
-                              {isMinusDisabled ? (
-                                <i className="fa-solid fa-minus text-danger disabled-icon"></i>
+      {!ordineEffettuato && (
+        <>
+          <div className="row">
+            <div className="col-12 p-3">
+              <h1>Il tuo carrello</h1>
+            </div>
+          </div>
+          {cart.length === 0 ? (
+            <h2 className="text-center my-5">Nessun Manifesto nel Carrello.</h2>
+          ) : (
+            <div className="row gx-4">
+              <div className="col-lg-6 col-sm-12">
+                {cart.map((poster) => {
+                  const quantity = poster.quantity || 1;
+                  const isMinusDisabled = quantity <= 1;
+                  const isPlusDisabled = quantity >= poster.stock_quantity;
+                  const finalPrice = getDiscountedPrice(poster);
+                  return (
+                    <div
+                      key={poster.id}
+                      className="card border-card-cart border-0 rounded-0 pb-4"
+                    >
+                      <div className="row g-0">
+                        <div className="col-md-4 col-sm-4">
+                          <img
+                            className="img-fluid"
+                            src={poster.image_url}
+                            alt={`immagine del manifesto ${poster.title}`}
+                          />
+                        </div>
+                        <div className="col-md-8 col-sm-8 position-relative">
+                          <div className="card-body">
+                            <h2 className="card-title">{poster.title}</h2>
+                            <p className="card-text mt-4">
+                              Prezzo:{" "}
+                              {poster.discount ? (
+                                <>
+                                  <span
+                                    style={{
+                                      textDecoration: "line-through",
+                                      color: "gray",
+                                      marginRight: "10px",
+                                    }}
+                                  >
+                                    {poster.price}€
+                                  </span>
+                                  <span
+                                    style={{ color: "red", fontWeight: "bold" }}
+                                  >
+                                    {finalPrice.toFixed(2)}€
+                                  </span>
+                                </>
                               ) : (
-                                <i className="fa-solid fa-minus text-danger button-hover"></i>
+                                <>{poster.price}€</>
                               )}
-                            </button>
-                            <span
-                              style={{ width: "40px" }}
-                              className="text-center"
-                            >
-                              {quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                increaseQuantity(
-                                  poster.id,
-                                  poster.stock_quantity
-                                )
-                              }
-                              className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
+                            </p>
+                            <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
+                              <button
+                                className={`border-0 bg-white ${
+                                  isMinusDisabled ? "disabled-class" : ""
                                 }`}
-                              disabled={isPlusDisabled}
-                            >
-                              {isPlusDisabled ? (
-                                <i className="fa-solid fa-plus  text-danger disabled-icon"></i>
-                              ) : (
-                                <i className="fa-solid fa-plus text-danger button-hover "></i>
-                              )}
-                            </button>
-                          </div>
-                          <div className="position-absolute top-0 end-0">
-                            <i
-                              onClick={() => removeFromCart(poster.id)}
-                              className="fa-solid fa-x p-3 button-hover-cancell"
-                            ></i>
+                                disabled={isMinusDisabled}
+                                onClick={() => decreaseQuantity(poster.id)}
+                              >
+                                {isMinusDisabled ? (
+                                  <i className="fa-solid fa-minus text-danger disabled-icon"></i>
+                                ) : (
+                                  <i className="fa-solid fa-minus text-danger button-hover"></i>
+                                )}
+                              </button>
+                              <span
+                                style={{ width: "40px" }}
+                                className="text-center"
+                              >
+                                {quantity}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  increaseQuantity(
+                                    poster.id,
+                                    poster.stock_quantity
+                                  )
+                                }
+                                className={`border-0 bg-white ${
+                                  isPlusDisabled ? "disabled-class" : ""
+                                }`}
+                                disabled={isPlusDisabled}
+                              >
+                                {isPlusDisabled ? (
+                                  <i className="fa-solid fa-plus  text-danger disabled-icon"></i>
+                                ) : (
+                                  <i className="fa-solid fa-plus text-danger button-hover "></i>
+                                )}
+                              </button>
+                            </div>
+                            <div className="position-absolute top-0 end-0">
+                              <i
+                                onClick={() => removeFromCart(poster.id)}
+                                className="fa-solid fa-x p-3 button-hover-cancell"
+                              ></i>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="col-lg-6 col-sm-12 mb-3">
-              <div className="card p-3 card-price d-flex flex-column justify-content-between">
-                <div className="d-flex justify-content-between">
-                  <h6>Subtotale</h6>
-                  <span>{subtotal.toFixed(2)}&euro;</span>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <h6>Spedizione</h6>
-                  <span>{shipmentCost}&euro;</span>
-                </div>
-                <div className="d-flex justify-content-between">
-                  <h6>Totale</h6>
-                  <span>{total.toFixed(2)}&euro;</span>
-                </div>
-                <button
-                  className="btn btn-outline-secondary mt-2 w-100"
-                  onClick={() => setMostraForm(true)}
-                  type="button"
-                >
-                  💳 Acquista Ora
-                </button>
+                  );
+                })}
               </div>
-              {mostraForm && (
-                <form onSubmit={handleSubmit}>
-                  <div className="my-3">
-                    <label className="form-label">Nome e Cognome</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="nomeCompleto"
-                      placeholder="Inserisci nome e cognome"
-                      value={form.nomeCompleto}
-                      onChange={handleInputChange}
-                      required
-                    />
+              <div className="col-lg-6 col-sm-12 mb-3">
+                <div className="card p-3 card-price d-flex flex-column justify-content-between">
+                  <div className="d-flex justify-content-between">
+                    <h6>Subtotale</h6>
+                    <span>{subtotal.toFixed(2)}&euro;</span>
                   </div>
-                  <div className="my-3">
-                    <label className="form-label">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      placeholder="Inserisci la tua mail"
-                      value={form.email}
-                      onChange={handleInputChange}
-                      required
-                    />
+                  <div className="d-flex justify-content-between">
+                    <h6>Spedizione</h6>
+                    <span>{shipmentCost}&euro;</span>
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">Via</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="via"
-                      placeholder="ex. Via Roma"
-                      value={form.via}
-                      onChange={handleInputChange}
-                      required
-                    />
+                  <div className="d-flex justify-content-between">
+                    <h6>Totale</h6>
+                    <span>{total.toFixed(2)}&euro;</span>
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">Numero Civico</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="numeroCivico"
-                      placeholder="ex. 123"
-                      value={form.numeroCivico}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Città</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="citta"
-                      placeholder="ex. Milano"
-                      value={form.citta}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  {message && (
-                    <div className="alert alert-success mt-3">{message}</div>
-                  )}
-
-                  {error && (
-                    <div className="alert alert-danger mt-3">{error}</div>
-                  )}
                   <button
-                    type="submit"
-                    className="btn btn-outline-secondary w-100"
-                    disabled={loading}
+                    className="btn btn-outline-secondary mt-2 w-100"
+                    onClick={() => setMostraForm(true)}
+                    type="button"
                   >
-                    {loading
-                      ? "⏳ Elaborazione in corso..."
-                      : "🚀 Procedi all'acquisto"}
+                    💳 Acquista Ora
                   </button>
-                </form>
-              )}
+                </div>
+                {mostraForm && (
+                  <form onSubmit={handleSubmit}>
+                    <div className="my-3">
+                      <label className="form-label">Nome e Cognome</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="nomeCompleto"
+                        placeholder="Inserisci nome e cognome"
+                        value={form.nomeCompleto}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="my-3">
+                      <label className="form-label">Email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        name="email"
+                        placeholder="Inserisci la tua mail"
+                        value={form.email}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Via</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="via"
+                        placeholder="ex. Via Roma"
+                        value={form.via}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Numero Civico</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="numeroCivico"
+                        placeholder="ex. 123"
+                        value={form.numeroCivico}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Città</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="citta"
+                        placeholder="ex. Milano"
+                        value={form.citta}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    {message && (
+                      <div className="alert alert-success mt-3">{message}</div>
+                    )}
+
+                    {error && (
+                      <div className="alert alert-danger mt-3">{error}</div>
+                    )}
+                    <button
+                      type="submit"
+                      className="btn btn-outline-secondary w-100"
+                      disabled={loading}
+                    >
+                      {loading
+                        ? "⏳ Elaborazione in corso..."
+                        : "🚀 Procedi all'acquisto"}
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
-          </div>
-        )
+          )}
+        </>
       )}
     </>
   );
