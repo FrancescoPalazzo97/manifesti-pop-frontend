@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGlobalContext } from "../contexts/globalContext";
+import { useGlobalContext } from "../contexts/GlobalContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { emailService } from "../services/emailService";
@@ -235,8 +235,7 @@ const CartPage = () => {
       if (err.response) {
         console.error("Errore risposta server:", err.response.data);
         alert(
-          `Errore del server: ${
-            err.response.data.message || "Errore sconosciuto"
+          `Errore del server: ${err.response.data.message || "Errore sconosciuto"
           }`
         );
       } else if (err.request) {
@@ -406,9 +405,8 @@ const CartPage = () => {
                           </p>
                           <div className="d-inline-flex align-items-center border p-1 position-absolute bottom-0 mb-5">
                             <button
-                              className={`border-0 bg-white ${
-                                isMinusDisabled ? "disabled-class" : ""
-                              }`}
+                              className={`border-0 bg-white ${isMinusDisabled ? "disabled-class" : ""
+                                }`}
                               disabled={isMinusDisabled}
                               onClick={() => decreaseQuantity(poster.id)}
                             >
@@ -431,9 +429,8 @@ const CartPage = () => {
                                   poster.stock_quantity
                                 )
                               }
-                              className={`border-0 bg-white ${
-                                isPlusDisabled ? "disabled-class" : ""
-                              }`}
+                              className={`border-0 bg-white ${isPlusDisabled ? "disabled-class" : ""
+                                }`}
                               disabled={isPlusDisabled}
                             >
                               {isPlusDisabled ? (
