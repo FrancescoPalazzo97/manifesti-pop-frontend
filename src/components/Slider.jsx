@@ -19,7 +19,7 @@ const Slider = ({ postersData }) => {
                     slidesPerView: 1,
                     spaceBetween: 10,
                 },
-                800: {
+                768: {
                     slidesPerView: 2,
                     spaceBetween: 20,
                 },
@@ -27,7 +27,7 @@ const Slider = ({ postersData }) => {
                     slidesPerView: 3,
                     spaceBetween: 30,
                 },
-                1600: {
+                1400: {
                     slidesPerView: 4,
                     spaceBetween: 30,
                 }
