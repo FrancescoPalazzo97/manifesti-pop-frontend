@@ -177,6 +177,22 @@ select {
     padding-top: 100px;
 }
 
+@media (max-width: 620px) {
+    .form-position {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .p-responsive {
+        padding-top: 70px;
+    }
+}
+
+@media (max-width: 542px) {
+    .form-container {
+        padding-top: 70px;
+    }
+}
 
 /* media query per il cartBanner, che scompare quando siamo in versione mobile-tablet  */
 @media (max-width: 1200px) {
@@ -230,4 +246,3 @@ select {
 .order-summary-card {
     min-height: 230px;
 }
-
