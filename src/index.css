@@ -168,6 +168,11 @@ select {
     background-color: #fff;
 }
 
+.form-position select {
+    padding: 5px;
+    margin-right: 5px;
+}
+
 .pt-50 {
     padding-top: 100px;
 }
