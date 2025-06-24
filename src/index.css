@@ -170,7 +170,7 @@ select {
 
 .form-position select {
     padding: 5px;
-    margin-right: 5px;
+    margin: 0 5px;
 }
 
 .pt-50 {
