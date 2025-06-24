@@ -140,7 +140,7 @@ const PostersPage = () => {
 
                     </div>
                     <div className="col-12 pt-50">
-                        <div className="container">
+                        <div className="container p-responsive">
                             <h2 className="pt-2">Risultati per: "{query}"</h2>
                             {posters.length === 0 ? (
                                 <p>😭 Nessun manifesto trovato 😭</p>
