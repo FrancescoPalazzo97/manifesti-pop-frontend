@@ -190,9 +190,16 @@ select {
 
 @media (max-width: 542px) {
     .form-container {
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 542px) {
+    .form-container {
         padding-top: 70px;
     }
 }
+
 
 /* media query per il cartBanner, che scompare quando siamo in versione mobile-tablet  */
 @media (max-width: 1200px) {
