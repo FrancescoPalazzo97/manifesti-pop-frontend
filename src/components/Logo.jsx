@@ -17,7 +17,7 @@ const Logo = ({ where }) => {
             <div className="d-flex align-items-center">
                 <img src={renderLogo(where).logo} alt="" className={renderLogo(where).imageSize} />
                 {renderLogo(where).span ? (
-                    <div className="ms-3 title-style">Manifesti Pop</div>
+                    <div className="ms-3 title-style d-none d-md-block">Manifesti Pop</div>
                 ) : (null)}
             </div>
         </NavLink>
