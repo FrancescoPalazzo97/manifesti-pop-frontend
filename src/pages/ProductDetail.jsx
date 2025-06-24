@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import './ProductDetail.css';
+import '../styles/ProductDetail.css';
 import { useGlobalContext } from '../contexts/GlobalContext';
 
 const ProductDetail = () => {
@@ -331,7 +331,7 @@ const ProductDetail = () => {
                   <hr className="mb-4" />
                   <div className="d-flex align-items-center justify-content-center mb-4 flex-wrap">
                     <h3 className="mb-0 me-2">Altri poster</h3>
-                    
+
                     <h3 className="mb-0"> consigliati</h3>
                   </div>
 
@@ -356,7 +356,7 @@ const ProductDetail = () => {
                             {/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
                             {/* IL PROBLEMA DELLO ZERO È LAGATO ALLO SCONTO BISOGNA SISTEMARE LA PARTE QUI SOTTO */}
 
-                             {/* Badge sconto se presente */}
+                            {/* Badge sconto se presente */}
                             {poster.discount > 0 && (
                               <div className="position-absolute top-0 end-0 m-2">
                                 <span className="badge bg-danger">
