@@ -237,9 +237,9 @@ const CartPage = () => {
       {/* Messaggio di conferma ordine */}
       {ordineEffettuato && orderData && (
         <>
-          <div className="container">
-            <div className="row mb-4">
-              <div className="col-12 my-4 ">
+          <div className="container mt-5">
+            <div className="row my-4">
+              <div className="col-12">
                 <h4 className="mb-2">
                   <b>
                     Ciao <span className="text-danger">{orderData.nome}</span>,
@@ -253,7 +253,10 @@ const CartPage = () => {
                   dettagli del tuo acquisto.
                 </p>
               </div>
-              <div className="col-6">
+            </div>
+            <hr />
+            <div className="row my-4 gy-2">
+              <div className="col-sm-12 col-md-6 text-md-start">
                 <h3>
                   <b>Indirizzo di spedizione</b>
                 </h3>
@@ -261,7 +264,7 @@ const CartPage = () => {
                 <p className="fs-5 m-1">Email: {orderData.email}</p>
                 <p className="fs-5 m-1">Indirizzo: {orderData.indirizzo}</p>
               </div>
-              <div className="col-6 text-end">
+              <div className="col-sm-12 col-md-6 text-md-end">
                 <h3 className="mb-2">
                   <b>Ordine numero:</b>
                 </h3>
@@ -282,16 +285,16 @@ const CartPage = () => {
                   </b>
                 </h6>
               </div>
-
+            </div>
+            <div className="row">
               {orderData.prodotti.map((poster, idx) => (
-                <div className="col-6">
+                <div className="col-md-12 col-lg-6" key={idx}>
                   <div
                     className="card mb-3 order-summary-card"
                     style={{
                       maxWidth: "540px",
                       minHeight: "200px",
                     }}
-                    key={idx}
                   >
                     <div className="row g-0 h-100">
                       <div className="col-md-4">
@@ -321,9 +324,9 @@ const CartPage = () => {
               ))}
             </div>
             <hr />
-            <div className="row">
+            <div className="row mb-4">
               <div className="col-12 mb-3">
-                <h4>Riepilogo Ordine</h4>
+                <h4 className="text-danger">Riepilogo Ordine</h4>
                 <p className="my-2">
                   Subtotale: {orderData.subtotal.toFixed(2)}&euro;
                 </p>
