@@ -281,7 +281,7 @@ const CartPage = () => {
                 <h6>
                   <b>
                     La consegna avverrà entro{" "}
-                    <span className="text-danger">10 giorni lavorativi</span>
+                    <span className="text-danger">7 giorni lavorativi</span>
                   </b>
                 </h6>
               </div>
