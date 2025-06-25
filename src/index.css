@@ -253,3 +253,7 @@ select {
 .order-summary-card {
     min-height: 230px;
 }
+
+.height-card-body {
+    height: 200px;
+}
