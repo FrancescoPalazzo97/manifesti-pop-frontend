@@ -13,11 +13,11 @@ const WishlistPage = () => {
   // Stato per quantità dei poster in wishlist
   const [quantities, setQuantities] = useState({});
 
-  // Inizializza quantità a 1 per ogni poster in wishlist
+  // Inizializza quantità a 0 per ogni poster in wishlist
   React.useEffect(() => {
     const initialQuantities = {};
     wishlist.forEach((poster) => {
-      initialQuantities[poster.id] = 1;
+      initialQuantities[poster.id] = 0;
     });
     setQuantities(initialQuantities);
   }, [wishlist]);
@@ -34,7 +34,7 @@ const WishlistPage = () => {
   const handleMinus = (id) => {
     setQuantities((prev) => ({
       ...prev,
-      [id]: prev[id] > 1 ? prev[id] - 1 : prev[id],
+      [id]: prev[id] > 0 ? prev[id] - 1 : prev[id],
     }));
   };
 
@@ -43,7 +43,7 @@ const WishlistPage = () => {
     setClickedBtn({ [type + poster.id]: true });
     if (type === "cart") {
       // Se il prodotto è già nel carrello, non aggiungere di nuovo
-      if (!isInCart(poster.id)) {
+      if (!isInCart(poster.id) && quantity > 0) {
         // Aggiungi al carrello con la quantità scelta
         addCart({ ...poster, quantity: quantity || 1, forceQuantity: true });
       }
@@ -95,8 +95,8 @@ const WishlistPage = () => {
         ) : (
           // Altrimenti mostro ogni poster con immagine, titolo, prezzo e bottoni azione
           wishlist.map((poster) => {
-            const quantity = quantities[poster.id] || 1;
-            const isMinusDisabled = quantity <= 1;
+            const quantity = quantities[poster.id] || 0;
+            const isMinusDisabled = quantity <= 0;
             const isPlusDisabled = poster.stock_quantity ? quantity >= poster.stock_quantity : false;
             const alreadyInCart = isInCart(poster.id);
             const isOutOfStock = poster.stock_quantity === 0;
@@ -170,20 +170,20 @@ const WishlistPage = () => {
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 180 }}>
                     <button
                       onClick={() => handleButtonClick("cart", poster, quantity)}
-                      style={cartBtnStyle(clickedBtn["cart" + poster.id], alreadyInCart || isOutOfStock)}
+                      style={cartBtnStyle(clickedBtn["cart" + poster.id], alreadyInCart || isOutOfStock || quantity === 0)}
                       onMouseDown={() => setClickedBtn({ ["cart" + poster.id]: true })}
                       onMouseUp={() => setClickedBtn({})}
                       onMouseLeave={() => setClickedBtn({})}
                       onMouseOver={e => {
-                        if (!alreadyInCart && !isOutOfStock) e.currentTarget.style.backgroundColor = "#cccccc";
+                        if (!alreadyInCart && !isOutOfStock && quantity > 0) e.currentTarget.style.backgroundColor = "#cccccc";
                       }}
                       onMouseOut={e => {
-                        if (!alreadyInCart && !isOutOfStock) e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0";
+                        if (!alreadyInCart && !isOutOfStock && quantity > 0) e.currentTarget.style.backgroundColor = clickedBtn["cart" + poster.id] ? "#bdbdbd" : "#e0e0e0";
                       }}
-                      disabled={alreadyInCart || isOutOfStock}
-                      title={isOutOfStock ? "Prodotto non disponibile" : alreadyInCart ? "Già nel carrello" : "Aggiungi al carrello"}
+                      disabled={alreadyInCart || isOutOfStock || quantity === 0}
+                      title={isOutOfStock ? "Prodotto non disponibile" : alreadyInCart ? "Già nel carrello" : quantity === 0 ? "Seleziona una quantità" : "Aggiungi al carrello"}
                     >
-                      🛒 {alreadyInCart ? "Già nel carrello" : isOutOfStock ? "Non disponibile" : "Aggiungi al carrello"}
+                      🛒 {alreadyInCart ? "Già nel carrello" : isOutOfStock ? "Non disponibile" : quantity === 0 ? "Seleziona quantità" : "Aggiungi al carrello"}
                     </button>
                     <button
                       onClick={() => handleButtonClick("remove", poster)}
