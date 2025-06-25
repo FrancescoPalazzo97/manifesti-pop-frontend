@@ -26,7 +26,7 @@ const NavbarComponent = () => {
 
         // Reindirizza con parametro nell'URL
         navigate(`/posters-list?term=${encodeURIComponent(trimmed)}`);
-        setSearch(""); // Resetta campo se vuoi
+        // setSearch(""); // Resetta campo se vuoi
     };
 
     const handleCartMouseEnter = () => {
